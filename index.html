@@ -962,10 +962,16 @@ async function loadExcelAndInit() {
       for (let r = hdr + 1; r < data.length; r++) {
         const row = data[r];
         if (!row[0]) continue;
+        // Skip row if any expected column is missing or non-numeric (e.g. Sources footer)
+        const hasAllCols = EXCEL_COLS.every(c => {
+          const v = row[c.col + 2]; // +2: saltar Period y Geographic area
+          return v !== null && v !== undefined && isFinite(+v);
+        });
+        if (!hasAllCols) continue;
         periods.push(String(row[0]));
         EXCEL_COLS.forEach(c => {
           const v = row[c.col + 2]; // +2: saltar Period y Geographic area
-          colData[c.col].push((v !== null && v !== undefined) ? +v : null);
+          colData[c.col].push(+v);
         });
       }
       return { periods, colData };
