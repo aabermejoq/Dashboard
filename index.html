@@ -961,17 +961,12 @@ async function loadExcelAndInit() {
       const periods = [];
       for (let r = hdr + 1; r < data.length; r++) {
         const row = data[r];
-        if (!row[0]) continue;
-        // Skip row if any expected column is missing or non-numeric (e.g. Sources footer)
-        const hasAllCols = EXCEL_COLS.every(c => {
-          const v = row[c.col + 2]; // +2: saltar Period y Geographic area
-          return v !== null && v !== undefined && isFinite(+v);
-        });
-        if (!hasAllCols) continue;
+        // Only accept rows whose first cell matches the YYYY/MM date format
+        if (!row[0] || !/^\d{4}\/\d{2}$/.test(String(row[0]))) continue;
         periods.push(String(row[0]));
         EXCEL_COLS.forEach(c => {
           const v = row[c.col + 2]; // +2: saltar Period y Geographic area
-          colData[c.col].push(+v);
+          colData[c.col].push((v !== null && v !== undefined) ? +v : null);
         });
       }
       return { periods, colData };
