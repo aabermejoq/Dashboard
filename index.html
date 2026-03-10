@@ -1029,40 +1029,57 @@
 let RAW;           // Main data from Excel
 let ESTRUCTURA;    // Structure data for contributions (value in pesos)
 
-const EXCEL_COLS = [
-  {col:0,  scian:'IMAI',  name:'Total Actividad Industrial',                         sector:'total'},
-  {col:1,  scian:'21',    name:'Total Mineria',                                      sector:'mineria'},
-  {col:2,  scian:'211',   name:'Extraccion de petroleo y gas',                       sector:'mineria'},
-  {col:3,  scian:'212',   name:'Mineria metalica y no metalica',                     sector:'mineria'},
-  {col:4,  scian:'213',   name:'Servicios relacionados con la mineria',              sector:'mineria'},
-  {col:5,  scian:'22',    name:'Energia electrica, agua y gas',                      sector:'energia'},
-  {col:7,  scian:'23',    name:'Total Construccion',                                 sector:'construccion'},
-  {col:8,  scian:'236',   name:'Edificacion',                                        sector:'construccion'},
-  {col:9,  scian:'237',   name:'Construccion de obras de ingenieria civil',          sector:'construccion'},
-  {col:10, scian:'238',   name:'Trabajos especializados para la construccion',       sector:'construccion'},
-  {col:11, scian:'31-33', name:'Total Manufacturas',                                 sector:'manufactura'},
-  {col:12, scian:'311',   name:'Industria alimentaria',                              sector:'manufactura'},
-  {col:13, scian:'312',   name:'Industria de las bebidas y del tabaco',              sector:'manufactura'},
-  {col:14, scian:'313',   name:'Insumos textiles y acabado de textiles',             sector:'manufactura'},
-  {col:15, scian:'314',   name:'Productos textiles excepto prendas de vestir',       sector:'manufactura'},
-  {col:16, scian:'315',   name:'Fabricacion de prendas de vestir',                   sector:'manufactura'},
-  {col:17, scian:'316',   name:'Curtido y acabado de cuero y piel',                  sector:'manufactura'},
-  {col:18, scian:'321',   name:'Industria de la madera',                             sector:'manufactura'},
-  {col:19, scian:'322',   name:'Industria del papel',                                sector:'manufactura'},
-  {col:20, scian:'323',   name:'Impresion e industrias conexas',                     sector:'manufactura'},
-  {col:21, scian:'324',   name:'Productos derivados del petroleo y carbon',          sector:'manufactura'},
-  {col:22, scian:'325',   name:'Industria quimica',                                  sector:'manufactura'},
-  {col:23, scian:'326',   name:'Industria del plastico y del hule',                  sector:'manufactura'},
-  {col:24, scian:'327',   name:'Fabricacion de productos de minerales no metalicos', sector:'manufactura'},
-  {col:25, scian:'331',   name:'Industrias metalicas basicas',                       sector:'manufactura'},
-  {col:26, scian:'332',   name:'Fabricacion de productos metalicos',                 sector:'manufactura'},
-  {col:27, scian:'333',   name:'Fabricacion de maquinaria y equipo',                 sector:'manufactura'},
-  {col:28, scian:'334',   name:'Fabricacion de equipo de computo y comunicacion',    sector:'manufactura'},
-  {col:29, scian:'335',   name:'Fabricacion de accesorios y aparatos electricos',    sector:'manufactura'},
-  {col:30, scian:'336',   name:'Fabricacion de equipo de transporte',                sector:'manufactura'},
-  {col:31, scian:'337',   name:'Fabricacion de muebles, colchones y persianas',      sector:'manufactura'},
-  {col:32, scian:'339',   name:'Otras industrias manufactureras',                    sector:'manufactura'},
+/**
+ * SERIES_CONFIG: Maps SCIAN codes to column indices in Excel sheets
+ * 
+ * CRITICAL: ORG sheet has 35 columns (includes subsector 221)
+ *           DES/TEND sheets have 34 columns (no subsector 221)
+ * 
+ * colOrg = column index in ORG sheet (0-based, after Period and Area columns)
+ * colDes = column index in DES/TEND sheets (0-based, after Period and Area columns)
+ *          null means this series doesn't exist in DES/TEND
+ * colEst = column index in Estructura sheet (uses same structure as ORG)
+ */
+const SERIES_CONFIG = [
+  // Series where ORG and DES have same column index (before the 221 gap)
+  {scian:'IMAI',  colOrg:0,  colDes:0,  colEst:0,  name:'Total Actividad Industrial',                         sector:'total'},
+  {scian:'21',    colOrg:1,  colDes:1,  colEst:1,  name:'Total Mineria',                                      sector:'mineria'},
+  {scian:'211',   colOrg:2,  colDes:2,  colEst:2,  name:'Extraccion de petroleo y gas',                       sector:'mineria'},
+  {scian:'212',   colOrg:3,  colDes:3,  colEst:3,  name:'Mineria metalica y no metalica',                     sector:'mineria'},
+  {scian:'213',   colOrg:4,  colDes:4,  colEst:4,  name:'Servicios relacionados con la mineria',              sector:'mineria'},
+  {scian:'22',    colOrg:5,  colDes:5,  colEst:5,  name:'Energia electrica, agua y gas',                      sector:'energia'},
+  // NOTE: Subsector 221 (colOrg:6) exists ONLY in ORG - not in DES/TEND, so we skip it
+  // Series where DES column = ORG column - 1 (after the 221 gap)
+  {scian:'23',    colOrg:7,  colDes:6,  colEst:7,  name:'Total Construccion',                                 sector:'construccion'},
+  {scian:'236',   colOrg:8,  colDes:7,  colEst:8,  name:'Edificacion',                                        sector:'construccion'},
+  {scian:'237',   colOrg:9,  colDes:8,  colEst:9,  name:'Construccion de obras de ingenieria civil',          sector:'construccion'},
+  {scian:'238',   colOrg:10, colDes:9,  colEst:10, name:'Trabajos especializados para la construccion',       sector:'construccion'},
+  {scian:'31-33', colOrg:11, colDes:10, colEst:11, name:'Total Manufacturas',                                 sector:'manufactura'},
+  {scian:'311',   colOrg:12, colDes:11, colEst:12, name:'Industria alimentaria',                              sector:'manufactura'},
+  {scian:'312',   colOrg:13, colDes:12, colEst:13, name:'Industria de las bebidas y del tabaco',              sector:'manufactura'},
+  {scian:'313',   colOrg:14, colDes:13, colEst:14, name:'Insumos textiles y acabado de textiles',             sector:'manufactura'},
+  {scian:'314',   colOrg:15, colDes:14, colEst:15, name:'Productos textiles excepto prendas de vestir',       sector:'manufactura'},
+  {scian:'315',   colOrg:16, colDes:15, colEst:16, name:'Fabricacion de prendas de vestir',                   sector:'manufactura'},
+  {scian:'316',   colOrg:17, colDes:16, colEst:17, name:'Curtido y acabado de cuero y piel',                  sector:'manufactura'},
+  {scian:'321',   colOrg:18, colDes:17, colEst:18, name:'Industria de la madera',                             sector:'manufactura'},
+  {scian:'322',   colOrg:19, colDes:18, colEst:19, name:'Industria del papel',                                sector:'manufactura'},
+  {scian:'323',   colOrg:20, colDes:19, colEst:20, name:'Impresion e industrias conexas',                     sector:'manufactura'},
+  {scian:'324',   colOrg:21, colDes:20, colEst:21, name:'Productos derivados del petroleo y carbon',          sector:'manufactura'},
+  {scian:'325',   colOrg:22, colDes:21, colEst:22, name:'Industria quimica',                                  sector:'manufactura'},
+  {scian:'326',   colOrg:23, colDes:22, colEst:23, name:'Industria del plastico y del hule',                  sector:'manufactura'},
+  {scian:'327',   colOrg:24, colDes:23, colEst:24, name:'Fabricacion de productos de minerales no metalicos', sector:'manufactura'},
+  {scian:'331',   colOrg:25, colDes:24, colEst:25, name:'Industrias metalicas basicas',                       sector:'manufactura'},
+  {scian:'332',   colOrg:26, colDes:25, colEst:26, name:'Fabricacion de productos metalicos',                 sector:'manufactura'},
+  {scian:'333',   colOrg:27, colDes:26, colEst:27, name:'Fabricacion de maquinaria y equipo',                 sector:'manufactura'},
+  {scian:'334',   colOrg:28, colDes:27, colEst:28, name:'Fabricacion de equipo de computo y comunicacion',    sector:'manufactura'},
+  {scian:'335',   colOrg:29, colDes:28, colEst:29, name:'Fabricacion de accesorios y aparatos electricos',    sector:'manufactura'},
+  {scian:'336',   colOrg:30, colDes:29, colEst:30, name:'Fabricacion de equipo de transporte',                sector:'manufactura'},
+  {scian:'337',   colOrg:31, colDes:30, colEst:31, name:'Fabricacion de muebles, colchones y persianas',      sector:'manufactura'},
+  {scian:'339',   colOrg:32, colDes:31, colEst:32, name:'Otras industrias manufactureras',                    sector:'manufactura'},
 ];
+
+// For backwards compatibility, keep EXCEL_COLS as a reference (deprecated)
+const EXCEL_COLS = SERIES_CONFIG;
 
 const SECTOR_COLORS = { total:'#002060', mineria:'#9B7D3A', energia:'#007B5E', construccion:'#C0001D', manufactura:'#002060' };
 const SECTOR_LABELS = { total:'Actividad Industrial Total', mineria:'Mineria', energia:'Energia electrica, agua y gas', construccion:'Construccion', manufactura:'Industrias Manufactureras' };
@@ -1108,48 +1125,113 @@ async function loadExcelAndInit() {
     const buf = await resp.arrayBuffer();
     const wb = XLSX.read(buf, {type:'array'});
 
-    function parseSheet(sheetName) {
+    /**
+     * Normalize date strings to YYYY/MM format
+     * Handles: "YYYY/MM", "YYYY-MM-DD", "YYYY-MM", Excel serial numbers
+     */
+    function normalizeDate(val) {
+      if (val == null) return null;
+      const str = String(val).trim();
+      
+      // Already YYYY/MM format
+      if (/^\d{4}\/\d{2}$/.test(str)) return str;
+      
+      // ISO format YYYY-MM-DD -> YYYY/MM
+      if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+        return str.substring(0, 4) + '/' + str.substring(5, 7);
+      }
+      
+      // YYYY-MM format -> YYYY/MM
+      if (/^\d{4}-\d{2}$/.test(str)) {
+        return str.replace('-', '/');
+      }
+      
+      // Excel serial number (numeric) -> YYYY/MM
+      if (!isNaN(val) && +val > 30000 && +val < 60000) {
+        // Excel date serial: days since 1899-12-30
+        const d = new Date((+val - 25569) * 86400 * 1000);
+        const y = d.getUTCFullYear();
+        const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+        return y + '/' + m;
+      }
+      
+      return null; // Invalid format
+    }
+
+    /**
+     * Parse a sheet with column mapping based on sheet type
+     * @param {string} sheetName - Name of the sheet
+     * @param {string} colKey - 'colOrg' for ORG sheet, 'colDes' for DES/TEND sheets
+     */
+    function parseSheet(sheetName, colKey) {
       const ws = wb.Sheets[sheetName];
       if (!ws) return null;
       const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+      
+      // Find header row (contains 'Period')
       let hdr = -1;
       for (let i = 0; i < data.length; i++) {
-        if (data[i][0] === 'Period') { hdr = i; break; }
+        if (data[i][0] === 'Period' || String(data[i][0]).toLowerCase().includes('period')) { 
+          hdr = i; 
+          break; 
+        }
       }
       if (hdr < 0) return null;
       
-      const colData = {};
-      EXCEL_COLS.forEach(c => { colData[c.col] = []; });
+      // Build SCIAN-indexed data
+      const scianData = {};
+      SERIES_CONFIG.forEach(c => { 
+        const colIdx = c[colKey];
+        if (colIdx != null) {
+          scianData[c.scian] = []; 
+        }
+      });
       const periods = [];
       
       for (let r = hdr + 1; r < data.length; r++) {
         const row = data[r];
-        if (!row[0] || !/^\d{4}\/\d{2}$/.test(String(row[0]))) continue;
-        periods.push(String(row[0]));
-        EXCEL_COLS.forEach(c => {
-          const v = row[c.col + 2];
-          colData[c.col].push((v !== null && v !== undefined) ? +v : null);
+        const dateStr = normalizeDate(row[0]);
+        if (!dateStr) continue;
+        
+        periods.push(dateStr);
+        
+        SERIES_CONFIG.forEach(c => {
+          const colIdx = c[colKey];
+          if (colIdx == null) return; // This series doesn't exist in this sheet
+          
+          const v = row[colIdx + 2]; // +2 for Period and Area columns
+          if (scianData[c.scian]) {
+            scianData[c.scian].push((v !== null && v !== undefined && !isNaN(+v)) ? +v : null);
+          }
         });
       }
-      return { periods, colData };
+      return { periods, scianData };
     }
 
-    // Parse main data sheets
-    const org = parseSheet(wb.SheetNames[0]);
-    const des = parseSheet(wb.SheetNames[1]);
-    const tend = parseSheet(wb.SheetNames[2]);
+    // Parse main data sheets with correct column mappings
+    const org = parseSheet(wb.SheetNames[0], 'colOrg');   // ORG uses colOrg
+    const des = parseSheet(wb.SheetNames[1], 'colDes');   // DES uses colDes  
+    const tend = parseSheet(wb.SheetNames[2], 'colDes');  // TEND uses colDes (same structure as DES)
 
+    // Build RAW data by matching series by SCIAN code
     RAW = {
       periods: org.periods,
-      series: EXCEL_COLS.map(c => ({
-        name: c.name,
-        scian: c.scian,
-        sector: c.sector,
-        org: org.colData[c.col],
-        des: des.colData[c.col],
-        tend: tend.colData[c.col],
-      }))
+      series: SERIES_CONFIG.map(c => {
+        const hasDesData = des.scianData[c.scian] != null;
+        return {
+          name: c.name,
+          scian: c.scian,
+          sector: c.sector,
+          org: org.scianData[c.scian] || [],
+          des: hasDesData ? des.scianData[c.scian] : null,
+          tend: hasDesData ? tend.scianData[c.scian] : null,
+          hasDesData: hasDesData  // Flag to indicate if DES/TEND data exists
+        };
+      })
     };
+
+    console.log('Data loaded:', RAW.periods.length, 'periods,', RAW.series.length, 'series');
+    console.log('Series without DES data:', RAW.series.filter(s => !s.hasDesData).map(s => s.scian));
 
     // Parse estructura sheet if available
     const estructuraSheet = wb.SheetNames.find(n => n.toLowerCase().includes('estructura'));
@@ -1170,40 +1252,88 @@ async function loadExcelAndInit() {
 
 /**
  * Parse the estructura sheet - reads production values by SCIAN
- * Expected format: Same column order as other sheets
+ * Estructura sheet uses same column structure as ORG (includes 221)
+ * Dates can be in various formats: YYYY/MM, YYYY-MM-DD (ISO), datetime objects
  */
 function parseEstructura(ws, sheetIdx) {
   const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+  
+  // Find header row (Period or PERIODO)
   let hdr = -1;
   for (let i = 0; i < data.length; i++) {
-    if (data[i][0] === 'Period' || String(data[i][0]).includes('Period')) { hdr = i; break; }
+    const firstCell = String(data[i][0] || '').toLowerCase();
+    if (firstCell === 'period' || firstCell === 'periodo' || firstCell.includes('period')) { 
+      hdr = i; 
+      break; 
+    }
   }
   
   ESTRUCTURA = { periods: [], data: {} };
   
   // Initialize data arrays for each SCIAN code
-  EXCEL_COLS.forEach(c => { ESTRUCTURA.data[c.scian] = []; });
+  SERIES_CONFIG.forEach(c => { ESTRUCTURA.data[c.scian] = []; });
   
   const startRow = hdr >= 0 ? hdr + 1 : 1;
+  
+  /**
+   * Normalize date to YYYY/MM format
+   * Handles: datetime objects, "YYYY-MM-DD", "YYYY/MM", Excel serial numbers
+   */
+  function normalizeDateEstructura(val) {
+    if (val == null) return null;
+    
+    // Handle JavaScript Date objects (from openpyxl datetime)
+    if (val instanceof Date) {
+      const y = val.getFullYear();
+      const m = String(val.getMonth() + 1).padStart(2, '0');
+      return y + '/' + m;
+    }
+    
+    const str = String(val).trim();
+    
+    // Already YYYY/MM format
+    if (/^\d{4}\/\d{2}$/.test(str)) return str;
+    
+    // ISO format YYYY-MM-DD -> YYYY/MM
+    if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+      return str.substring(0, 4) + '/' + str.substring(5, 7);
+    }
+    
+    // YYYY-MM format -> YYYY/MM
+    if (/^\d{4}-\d{2}$/.test(str)) {
+      return str.replace('-', '/');
+    }
+    
+    // Excel serial number
+    if (!isNaN(val) && +val > 30000 && +val < 60000) {
+      const d = new Date((+val - 25569) * 86400 * 1000);
+      const y = d.getUTCFullYear();
+      const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+      return y + '/' + m;
+    }
+    
+    return null;
+  }
   
   for (let r = startRow; r < data.length; r++) {
     const row = data[r];
     if (!row[0]) continue;
     
-    // Accept YYYY/MM format
-    const periodStr = String(row[0]);
-    if (!/^\d{4}\/\d{2}$/.test(periodStr)) continue;
+    const periodStr = normalizeDateEstructura(row[0]);
+    if (!periodStr) continue;
     
     ESTRUCTURA.periods.push(periodStr);
     
-    EXCEL_COLS.forEach((c, idx) => {
-      // Column offset: +2 to skip Period and Geographic area
-      const v = row[c.col + 2];
+    SERIES_CONFIG.forEach(c => {
+      // Estructura uses colEst (same structure as ORG)
+      const colIdx = c.colEst;
+      const v = row[colIdx + 2]; // +2 for Period and Area columns
       ESTRUCTURA.data[c.scian].push((v !== null && v !== undefined && !isNaN(+v)) ? +v : null);
     });
   }
   
   console.log('Estructura loaded:', ESTRUCTURA.periods.length, 'periods');
+  console.log('Estructura date range:', ESTRUCTURA.periods[0], '-', ESTRUCTURA.periods[ESTRUCTURA.periods.length-1]);
 }
 
 /**
@@ -1222,7 +1352,7 @@ function createSyntheticEstructura() {
   };
   
   ESTRUCTURA = { periods: RAW.periods.slice(), data: {} };
-  EXCEL_COLS.forEach(c => {
+  SERIES_CONFIG.forEach(c => {
     const w = weights[c.scian] || 1;
     ESTRUCTURA.data[c.scian] = RAW.periods.map(() => w);
   });
@@ -1236,6 +1366,8 @@ const fmtP = v => (v != null && isFinite(v)) ? ((v >= 0 ? '+' : '') + v.toFixed(
 const chgCls = v => v == null ? 'neu' : v > 0.05 ? 'pos' : v < -0.05 ? 'neg' : 'neu';
 
 function getLastValid(arr) {
+  // Handle null/undefined array
+  if (!arr || !Array.isArray(arr)) return {val: null, idx: -1};
   for (let i = arr.length - 1; i >= 0; i--) if (arr[i] != null) return {val: arr[i], idx: i};
   return {val: null, idx: -1};
 }
@@ -1360,6 +1492,9 @@ function varPeriodArrWithLookback(vals, periods, fullVals, fullPeriods, freq) {
 // HISTORICAL STATS
 // ══════════════════════════════════════════════════════════════════════════════
 function getHistStats(des, lastIdx) {
+  // Handle null/undefined des array
+  if (!des || !Array.isArray(des)) return null;
+  
   const cur = des[lastIdx];
   if (cur == null) return null;
   const validVals = des.slice(0, lastIdx + 1).filter(v => v != null);
@@ -1404,16 +1539,20 @@ function getHistStats(des, lastIdx) {
   };
 }
 
+/**
+ * Format context message for series status
+ * Shows exact number of months (never approximations)
+ * @param {Object} st - Status object with isMax, isMin, varM, abv, blw, pctMax
+ */
 function fmtCtx(st) {
   if (!st) return {text: '—', cls: ''};
   if (st.isMax) return {text: 'Maximo historico', cls: 'highlight'};
   if (st.isMin) return {text: 'Minimo historico', cls: 'lowlight'};
 
+  // Always show exact months - no approximations
   function fmtMonths(n) {
     if (n <= 0) return null;
-    if (n < 24) return n + ' meses';
-    if (n < 120) return '~' + Math.round(n / 12) + ' anos';
-    return 'mas de ' + Math.round(n / 12) + ' anos';
+    return n + ' meses';
   }
 
   if (st.varM >= 0) {
@@ -1429,7 +1568,55 @@ function fmtCtx(st) {
 // ══════════════════════════════════════════════════════════════════════════════
 // SIGNAL ENGINE
 // ══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Count consecutive months with positive/negative variation
+ * @param {Array} des - Deseasonalized series (can be null)
+ * @param {number} upToIdx - Index up to which to count
+ * @returns {Object} - {consecutive: number, direction: 'up'|'down'|'mixed'}
+ */
+function countConsecutive(des, upToIdx) {
+  // Handle null/undefined des array
+  if (!des || !Array.isArray(des)) {
+    return { consecutive: 0, direction: 'mixed' };
+  }
+  
+  const U = 0.10; // Threshold for positive/negative
+  let count = 0;
+  let direction = null;
+  
+  for (let i = upToIdx; i >= 1; i--) {
+    const v = calcVarMensM(des, i);
+    if (v == null) break;
+    
+    if (v > U) {
+      if (direction === null) direction = 'up';
+      if (direction === 'up') count++;
+      else break;
+    } else if (v < -U) {
+      if (direction === null) direction = 'down';
+      if (direction === 'down') count++;
+      else break;
+    } else {
+      break; // Mixed/neutral
+    }
+  }
+  
+  return { consecutive: count, direction: direction || 'mixed' };
+}
+
+/**
+ * Determine signal/dynamic for a series based on recent variations
+ * All messages are calculated dynamically from the data
+ * @param {Array} des - Deseasonalized series (can be null for series without DES data)
+ * @param {number} upToIdx - Index of the last observation to use
+ */
 function getSignal(des, upToIdx) {
+  // Handle null/undefined des array (series without deseasonalized data)
+  if (!des || !Array.isArray(des)) {
+    return {label: 'Sin datos desest.', color: '#888', sub: 'serie solo original'};
+  }
+  
   const ch = [];
   for (let i = Math.max(1, upToIdx - 8); i <= upToIdx; i++) {
     const v = calcVarMensM(des, i);
@@ -1444,18 +1631,57 @@ function getSignal(des, upToIdx) {
   const a6 = c6.length >= 3 ? c6.reduce((a, b) => a + b) / c6.length : a3;
   const p3 = c3.filter(pos).length, n3 = c3.filter(neg).length;
   
-  if (c6.length === 6 && c6.every(pos)) return {label: 'Expansion sostenida', color: '#145C38', sub: '6 meses al alza'};
-  if (c6.length === 6 && c6.every(neg)) return {label: 'Contraccion sostenida', color: '#C0001D', sub: '6 meses a la baja'};
-  if (pos(m0) && pos(m1) && pos(m2)) return {label: 'Dinamica positiva', color: '#2E7D32', sub: '3 meses consecutivos al alza'};
-  if (neg(m0) && neg(m1) && neg(m2)) return {label: 'Dinamica negativa', color: '#C0001D', sub: '3 meses consecutivos a la baja'};
-  if (pos(m0) && pos(m1) && a3 > a6 + 0.20 && a3 > 0.25) return {label: 'Aceleracion', color: '#1B5E20', sub: 'ritmo en aumento'};
-  if (a6 > 0.20 && a3 < a6 * 0.40 && !pos(m0)) return {label: 'Desaceleracion', color: '#E65100', sub: 'impulso perdiendo fuerza'};
-  if (a6 < -0.15 && pos(m0) && pos(m1)) return {label: 'Recuperacion incipiente', color: '#558B2F', sub: 'rebote tras contraccion'};
-  if (a6 > 0.15 && neg(m0) && neg(m1)) return {label: 'Caida', color: '#D32F2F', sub: 'caida tras periodo de alza'};
-  if (p3 === 2 && neg(m0)) return {label: 'Senal de alerta', color: '#D32F2F', sub: 'ultimo mes negativo'};
-  if (n3 === 2 && pos(m0)) return {label: 'Senal de mejora', color: '#388E3C', sub: 'ultimo mes positivo'};
-  if (Math.abs(a3) <= 0.15) return {label: 'Atonia', color: '#78909C', sub: 'sin tendencia clara'};
-  return {label: 'Variacion mixta', color: '#546E7A', sub: 'p3:' + a3.toFixed(2) + '% p6:' + a6.toFixed(2) + '%'};
+  // Count consecutive months dynamically
+  const {consecutive, direction} = countConsecutive(des, upToIdx);
+  
+  // Sustained expansion/contraction (6+ consecutive)
+  if (consecutive >= 6 && direction === 'up') {
+    return {label: 'Expansion sostenida', color: '#145C38', sub: consecutive + ' meses consecutivos al alza'};
+  }
+  if (consecutive >= 6 && direction === 'down') {
+    return {label: 'Contraccion sostenida', color: '#C0001D', sub: consecutive + ' meses consecutivos a la baja'};
+  }
+  
+  // Positive/negative dynamic (3+ consecutive)
+  if (pos(m0) && pos(m1) && pos(m2)) {
+    return {label: 'Dinamica positiva', color: '#2E7D32', sub: consecutive + ' meses consecutivos al alza'};
+  }
+  if (neg(m0) && neg(m1) && neg(m2)) {
+    return {label: 'Dinamica negativa', color: '#C0001D', sub: consecutive + ' meses consecutivos a la baja'};
+  }
+  
+  // Acceleration/deceleration
+  if (pos(m0) && pos(m1) && a3 > a6 + 0.20 && a3 > 0.25) {
+    return {label: 'Aceleracion', color: '#1B5E20', sub: 'ritmo en aumento'};
+  }
+  if (a6 > 0.20 && a3 < a6 * 0.40 && !pos(m0)) {
+    return {label: 'Desaceleracion', color: '#E65100', sub: 'impulso perdiendo fuerza'};
+  }
+  
+  // Recovery/fall
+  if (a6 < -0.15 && pos(m0) && pos(m1)) {
+    return {label: 'Recuperacion incipiente', color: '#558B2F', sub: 'rebote tras contraccion'};
+  }
+  if (a6 > 0.15 && neg(m0) && neg(m1)) {
+    return {label: 'Caida', color: '#D32F2F', sub: 'caida tras periodo de alza'};
+  }
+  
+  // Alert/improvement signals
+  if (p3 === 2 && neg(m0)) {
+    return {label: 'Senal de alerta', color: '#D32F2F', sub: 'ultimo mes negativo'};
+  }
+  if (n3 === 2 && pos(m0)) {
+    return {label: 'Senal de mejora', color: '#388E3C', sub: 'ultimo mes positivo'};
+  }
+  
+  // Stagnation
+  if (Math.abs(a3) <= 0.15) {
+    return {label: 'Atonia', color: '#78909C', sub: 'sin tendencia clara'};
+  }
+  
+  // Mixed variation - show last 3 monthly variations
+  const varStr = 'm1: ' + m0.toFixed(2) + '% | m2: ' + m1.toFixed(2) + '% | m3: ' + m2.toFixed(2) + '%';
+  return {label: 'Variacion mixta', color: '#546E7A', sub: varStr};
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -2471,8 +2697,8 @@ function updateContribChips() {
 
 /**
  * FIXED: Render contributions chart with correct calculation
- * Formula: contribution = var_anual_component * estructura_pct_t-1 * 100
- * Sum of contributions should equal total variation
+ * Formula: contribution = var_anual_component * estructura_pct_t-1
+ * Sum of contributions should equal total variation (verified in console)
  */
 function renderContribuciones() {
   const ctx = document.getElementById('contribCanvas');
@@ -2501,6 +2727,49 @@ function renderContribuciones() {
   // Calculate annual variation with lookback
   const mainVarAnual = varAnualArrWithLookback(mainVals, aggPeriods, fullMainAgg, fullMainPeriods, currentFreq);
 
+  /**
+   * CRITICAL: Map aggregated period to correct RAW monthly index
+   * - For monthly: direct lookup
+   * - For quarterly (YYYY/Q#): use last month of quarter (03, 06, 09, 12)
+   * - For annual (YYYY): use December (12)
+   */
+  function getRawIdxForAggPeriod(aggPeriod, useT1 = false) {
+    let targetPeriod = aggPeriod;
+    
+    // Handle quarterly periods (e.g., "2024/Q1" -> "2024/03")
+    const qMatch = aggPeriod.match(/^(\d{4})\/Q(\d)$/);
+    if (qMatch) {
+      const year = qMatch[1];
+      const quarter = parseInt(qMatch[2]);
+      const month = String(quarter * 3).padStart(2, '0'); // Q1->03, Q2->06, Q3->09, Q4->12
+      targetPeriod = year + '/' + month;
+    }
+    
+    // Handle annual periods (e.g., "2024" -> "2024/12")
+    if (/^\d{4}$/.test(aggPeriod)) {
+      targetPeriod = aggPeriod + '/12';
+    }
+    
+    let idx = RAW.periods.indexOf(targetPeriod);
+    
+    // For t-1: we need the previous period's structure
+    // This means going back 12 months for annual var, but structure from t-1 (previous month/quarter/year)
+    if (useT1) {
+      if (currentFreq === 'M') {
+        // Monthly: go back 1 month
+        idx = idx > 0 ? idx - 1 : -1;
+      } else if (currentFreq === 'T') {
+        // Quarterly: go back 3 months (to previous quarter end)
+        idx = idx >= 3 ? idx - 3 : -1;
+      } else if (currentFreq === 'A') {
+        // Annual: go back 12 months (to previous year's December)
+        idx = idx >= 12 ? idx - 12 : -1;
+      }
+    }
+    
+    return idx;
+  }
+
   // Get parent info
   const parentIndicators = [
     {scian: 'IMAI', components: ['21', '22', '23', '31-33']},
@@ -2524,6 +2793,7 @@ function renderContribuciones() {
 
   /**
    * Calculate contribution for each component
+   * Formula: contribution_t = var_anual_component_t × estructura_pct_{t-1}
    */
   function calcComponentContributions(scian, colorIdx) {
     const s = RAW.series.find(x => x.scian === scian);
@@ -2540,20 +2810,20 @@ function renderContribuciones() {
     const contributions = compVarAnual.map((va, i) => {
       if (va == null) return null;
       
-      // Find the RAW index for t-1
       const currentPeriod = aggPeriods[i];
-      const currentRawIdx = RAW.periods.indexOf(currentPeriod);
       
-      if (currentRawIdx < 1) return null;
+      // Get RAW index for t-1 (previous period for structure weight)
+      const prevRawIdx = getRawIdxForAggPeriod(currentPeriod, true);
       
-      // Get structure weight at t-1 (previous period)
-      const prevRawIdx = currentRawIdx - 1;
+      if (prevRawIdx < 0) return null;
+      
+      // Get structure weight at t-1
       const weight = getStructureWeight(scian, prevRawIdx, contribMainIndicator);
       
       if (weight == null) return null;
       
-      // contribution = var_anual * peso * 100 (to convert to pp)
-      // But since va is already in %, we just multiply by weight
+      // contribution = var_anual (%) * peso (decimal)
+      // Result is in percentage points (pp)
       return va * weight;
     });
 
@@ -2612,6 +2882,44 @@ function renderContribuciones() {
 
   // Build datasets
   const datasets = [];
+
+  // VERIFICATION: Check that sum of contributions equals total variation
+  // Log to console for debugging
+  const verificationResults = aggPeriods.map((period, i) => {
+    const totalVar = mainVarAnual[i];
+    if (totalVar == null) return null;
+    
+    let sumContrib = 0;
+    let allComponentsHaveData = true;
+    
+    componentData.forEach(comp => {
+      if (comp.contributions[i] != null) {
+        sumContrib += comp.contributions[i];
+      } else {
+        allComponentsHaveData = false;
+      }
+    });
+    
+    if (!allComponentsHaveData) return null;
+    
+    const diff = Math.abs(totalVar - sumContrib);
+    return {
+      period,
+      totalVar: totalVar.toFixed(2),
+      sumContrib: sumContrib.toFixed(2),
+      diff: diff.toFixed(4),
+      match: diff < 0.5 // Allow 0.5 pp tolerance for rounding
+    };
+  }).filter(x => x != null);
+  
+  // Log verification summary
+  const matchCount = verificationResults.filter(r => r.match).length;
+  console.log(`Contribuciones: ${matchCount}/${verificationResults.length} periodos verificados correctamente`);
+  
+  // Log any periods with significant mismatch
+  verificationResults.filter(r => !r.match).forEach(r => {
+    console.warn(`Contribuciones mismatch en ${r.period}: Total=${r.totalVar}%, Suma=${r.sumContrib}%, Diff=${r.diff}`);
+  });
 
   // Stacked bars for contributions
   componentData.forEach((comp) => {
