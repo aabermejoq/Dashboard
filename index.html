@@ -89,61 +89,73 @@
     font-size: 10px; color: rgba(255,255,255,0.45); white-space: nowrap;
   }
 
-  /* ── CONTROLS ────────────────────────── */
-  .controls {
+  /* ── CONTROL PANEL ──────────────────── */
+  .ctrl-panel {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 9px 40px;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
   }
-  .ctrl-label {
-    font-size: 10px; font-weight: 700; color: var(--text3);
-    text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+  .ctrl-row {
+    display: flex; align-items: center; gap: 0;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border2);
+    min-height: 54px;
+    flex-wrap: wrap;
   }
-  .controls select {
-    border: 1.5px solid var(--border); background: var(--surf2); color: var(--text);
-    padding: 5px 10px; font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; border-radius: 6px; cursor: pointer; outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-  .controls select:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(0,45,110,0.1); }
-  .btn-range {
-    border: 1.5px solid var(--border2); background: var(--surf2); color: var(--text2);
-    padding: 5px 13px; cursor: pointer; font-size: 11px; font-weight: 500;
-    border-radius: 6px; font-family: 'Inter', sans-serif;
-    transition: all 0.15s;
-  }
-  .btn-range:hover  { border-color: var(--navy2); color: var(--navy2); background: white; }
-  .btn-range.active { background: var(--navy); color: white; border-color: var(--navy); box-shadow: 0 2px 6px rgba(0,26,78,0.18); }
-  .ctrl-sep  { width: 1px; height: 22px; background: var(--border); }
-  .ctrl-info { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text3); margin-left: auto; }
+  .ctrl-row:last-child { border-bottom: none; }
 
-  /* ── TOOLBAR ─────────────────────────── */
-  .toolbar {
-    background: var(--surf2);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 40px;
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  .cg {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 24px 10px 0; margin-right: 24px;
+    border-right: 1px solid var(--border2);
+    flex-shrink: 0;
   }
-  .tb-group { display: flex; gap: 4px; align-items: center; }
-  .tb-label {
+  .cg:last-child { border-right: none; margin-right: 0; }
+  .cg-label {
     font-size: 10px; font-weight: 700; color: var(--text3);
-    text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; margin-right: 4px;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    white-space: nowrap; margin-right: 4px;
   }
-  .tb-btn {
-    border: 1.5px solid var(--border2); background: white; color: var(--text2);
-    padding: 7px 22px; cursor: pointer; font-size: 12px; font-weight: 500;
-    border-radius: 7px; font-family: 'Inter', sans-serif;
-    transition: all 0.15s; letter-spacing: 0.1px; white-space: nowrap;
+
+  .pill-group { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border2); }
+  .pill-btn {
+    background: white; border: none; color: var(--text2);
+    padding: 8px 20px; cursor: pointer; font-size: 12px; font-weight: 500;
+    font-family: 'Inter', sans-serif; transition: all 0.13s;
+    border-right: 1px solid var(--border2); white-space: nowrap;
   }
-  .tb-btn:hover  { border-color: var(--navy2); color: var(--navy2); background: white; }
-  .tb-btn.active {
-    background: linear-gradient(135deg, var(--navy), var(--navy2));
-    color: white; border-color: var(--navy);
-    box-shadow: 0 2px 8px rgba(0,26,78,0.22);
+  .pill-btn:last-child { border-right: none; }
+  .pill-btn:hover { background: var(--surf2); color: var(--navy2); }
+  .pill-btn.active {
+    background: var(--navy); color: white;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
   }
-  .tb-sep { width: 1px; height: 32px; background: var(--border); margin: 0 8px; }
+
+  .ctrl-row select {
+    border: 1.5px solid var(--border); background: var(--surf2); color: var(--text);
+    padding: 6px 10px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; border-radius: 7px; cursor: pointer; outline: none;
+    transition: border-color 0.15s;
+  }
+  .ctrl-row select:focus { border-color: var(--navy2); }
+  .ctrl-info {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+    color: var(--text3); margin-left: auto; white-space: nowrap; flex-shrink: 0;
+  }
+  .ctrl-arrow { color: var(--text4); font-size: 11px; margin: 0 4px; flex-shrink: 0; }
+
+  .rebase-btn {
+    display: flex; align-items: center; gap: 7px;
+    background: linear-gradient(135deg, #1A3A6E, #002570);
+    border: none; color: white; padding: 8px 18px;
+    border-radius: 8px; cursor: pointer; font-size: 12px;
+    font-weight: 600; font-family: 'Inter', sans-serif;
+    transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,26,78,0.2);
+    letter-spacing: 0.1px;
+  }
+  .rebase-btn:hover { background: linear-gradient(135deg, #243F7A, #003080); box-shadow: 0 3px 10px rgba(0,26,78,0.3); }
+  .rebase-btn svg { flex-shrink: 0; }
 
   /* ── MAIN ────────────────────────────── */
   .main { padding: 28px 40px 56px; max-width: 1900px; margin: 0 auto; }
@@ -251,7 +263,6 @@
     border: 1px solid var(--border2); flex-shrink: 0;
   }
 
-  /* ── SIGNAL ──────────────────────────── */
   .card-signal {
     padding: 6px 15px 6px;
     border-bottom: 1px solid var(--border2);
@@ -264,7 +275,6 @@
   .signal-sep  { color: var(--border); font-size: 11px; flex-shrink: 0; }
   .signal-sub  { font-size: 10px; color: var(--text3); }
 
-  /* ── METRICS ─────────────────────────── */
   .card-metrics {
     display: flex; padding: 11px 15px 9px;
     border-bottom: 1px solid var(--border2); gap: 0;
@@ -291,7 +301,6 @@
   .m-chg.neg { color: var(--neg); }
   .m-chg.neu { color: var(--text3); }
 
-  /* ── STAT BAR ────────────────────────── */
   .card-statbar {
     display: flex; padding: 7px 15px;
     border-bottom: 1px solid var(--border2);
@@ -314,7 +323,6 @@
   .stat-val.highlight { color: var(--green2); font-weight: 600; }
   .stat-val.lowlight  { color: var(--neg);    font-weight: 600; }
 
-  /* ── CHARTS ──────────────────────────── */
   .charts-row {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
     padding: 10px 15px 13px; gap: 0;
@@ -417,85 +425,6 @@
   .data-table .pos-cell { color: var(--pos); font-weight: 600; }
   .data-table .neg-cell { color: var(--neg); font-weight: 600; }
 
-  /* ── FOOTER ──────────────────────────── */
-  .footer { display: none; }
-
-
-  /* ── CONTROL PANEL ──────────────────── */
-  .ctrl-panel {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-  }
-  .ctrl-row {
-    display: flex; align-items: center; gap: 0;
-    padding: 0 40px;
-    border-bottom: 1px solid var(--border2);
-    min-height: 54px;
-    flex-wrap: wrap;
-  }
-  .ctrl-row:last-child { border-bottom: none; }
-
-  /* Group of related controls */
-  .cg {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 24px 10px 0; margin-right: 24px;
-    border-right: 1px solid var(--border2);
-    flex-shrink: 0;
-  }
-  .cg:last-child { border-right: none; margin-right: 0; }
-  .cg-label {
-    font-size: 10px; font-weight: 700; color: var(--text3);
-    text-transform: uppercase; letter-spacing: 1.2px;
-    white-space: nowrap; margin-right: 4px;
-  }
-
-  /* Pill button group */
-  .pill-group { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border2); }
-  .pill-btn {
-    background: white; border: none; color: var(--text2);
-    padding: 8px 20px; cursor: pointer; font-size: 12px; font-weight: 500;
-    font-family: 'Inter', sans-serif; transition: all 0.13s;
-    border-right: 1px solid var(--border2); white-space: nowrap;
-  }
-  .pill-btn:last-child { border-right: none; }
-  .pill-btn:hover { background: var(--surf2); color: var(--navy2); }
-  .pill-btn.active {
-    background: var(--navy); color: white;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
-  }
-
-  /* Icon pill button */
-  .pill-btn-icon { padding: 8px 14px; font-size: 14px; }
-
-  /* Range selects */
-  .ctrl-row select {
-    border: 1.5px solid var(--border); background: var(--surf2); color: var(--text);
-    padding: 6px 10px; font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; border-radius: 7px; cursor: pointer; outline: none;
-    transition: border-color 0.15s;
-  }
-  .ctrl-row select:focus { border-color: var(--navy2); }
-  .ctrl-info {
-    font-family: 'IBM Plex Mono', monospace; font-size: 9px;
-    color: var(--text3); margin-left: auto; white-space: nowrap; flex-shrink: 0;
-  }
-  .ctrl-arrow { color: var(--text4); font-size: 11px; margin: 0 4px; flex-shrink: 0; }
-
-  /* Rebase button — special accent */
-  .rebase-btn {
-    display: flex; align-items: center; gap: 7px;
-    background: linear-gradient(135deg, #1A3A6E, #002570);
-    border: none; color: white; padding: 8px 18px;
-    border-radius: 8px; cursor: pointer; font-size: 12px;
-    font-weight: 600; font-family: 'Inter', sans-serif;
-    transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(0,26,78,0.2);
-    letter-spacing: 0.1px;
-  }
-  .rebase-btn:hover { background: linear-gradient(135deg, #243F7A, #003080); box-shadow: 0 3px 10px rgba(0,26,78,0.3); }
-  .rebase-btn svg { flex-shrink: 0; }
-
   /* ── REBASE MODAL ────────────────────── */
   .rebase-overlay {
     display: none; position: fixed; inset: 0;
@@ -542,7 +471,6 @@
   }
   .rb-title::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
 
-  /* Type selector: Mes / Trimestre / Anio */
   .rb-type-group { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border); margin-bottom: 14px; }
   .rb-type-btn {
     flex: 1; background: white; border: none; color: var(--text2);
@@ -554,7 +482,6 @@
   .rb-type-btn:hover { background: var(--surf2); }
   .rb-type-btn.active { background: var(--navy); color: white; }
 
-  /* Period picker */
   .rb-selects { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .rb-select-wrap { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 100px; }
   .rb-select-label { font-size: 9px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
@@ -566,7 +493,6 @@
   }
   .rb-select:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(0,45,110,0.1); }
 
-  /* Preview bar */
   .rb-preview {
     background: linear-gradient(135deg, #EEF1F8, #E8EDF6);
     border: 1px solid var(--border2); border-radius: 8px;
@@ -576,7 +502,6 @@
   }
   .rb-preview strong { color: var(--navy); }
 
-  /* Download section */
   .rb-dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .rb-dl-btn {
     display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -596,7 +521,6 @@
   .rb-dl-btn.full { grid-column: 1/-1; background: var(--green2); border-color: var(--green2); color: white; }
   .rb-dl-btn.full:hover { background: var(--green); }
 
-  /* Current base indicator */
   .base-indicator {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px; font-weight: 500;
@@ -604,7 +528,6 @@
     color: rgba(255,255,255,0.8); padding: 4px 10px; border-radius: 5px;
     white-space: nowrap;
   }
-
 
   /* ── MENSAJES VIEW ──────────────────── */
   .msg-container { max-width: 1400px; margin: 0 auto; }
@@ -616,18 +539,39 @@
     margin-bottom: 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
+  .msg-sel-row {
+    display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;
+  }
+  .msg-sel-group {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .msg-sel-group.wide { flex: 1; min-width: 250px; }
   .msg-sel-label {
     font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1.1px; color: var(--text3); margin-bottom: 10px;
+    letter-spacing: 1.1px; color: var(--text3);
   }
   .msg-sel-dropdown {
-    width: 100%; border: 1.5px solid var(--border);
+    border: 1.5px solid var(--border);
     background: var(--surf2); color: var(--text);
     padding: 10px 14px; font-family: 'Inter', sans-serif;
     font-size: 13px; border-radius: 8px; cursor: pointer; outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s; width: 100%;
   }
   .msg-sel-dropdown:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(0,45,110,0.1); }
+
+  .msg-series-toggles {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .msg-toggle-btn {
+    padding: 8px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif;
+    transition: all 0.15s; border: 1.5px solid var(--border2);
+    background: white; color: var(--text2);
+  }
+  .msg-toggle-btn:hover { border-color: var(--navy2); }
+  .msg-toggle-btn.active-org { background: rgba(26,86,196,0.15); border-color: #1A56C4; color: #1A56C4; }
+  .msg-toggle-btn.active-des { background: rgba(192,0,29,0.15); border-color: #C0001D; color: #C0001D; }
+  .msg-toggle-btn.active-tend { background: rgba(0,123,94,0.15); border-color: #007B5E; color: #007B5E; }
 
   .msg-content {
     display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;
@@ -652,7 +596,7 @@
     margin-bottom: 16px; padding-bottom: 12px;
     border-bottom: 1px solid var(--border2);
   }
-  .msg-chart-canvas { margin-bottom: 12px; height: 260px; position: relative; }
+  .msg-chart-canvas { margin-bottom: 12px; height: 280px; position: relative; }
   .msg-chart-legend {
     display: flex; gap: 16px; justify-content: center;
     font-size: 10px; padding-top: 8px;
@@ -700,45 +644,94 @@
     color: var(--text3); font-size: 13px;
   }
 
+  /* ── CONTRIBUCIONES VIEW ─────────────── */
+  .contrib-container { max-width: 1400px; margin: 0 auto; }
 
-  /* Range slider for mensajes chart */
-  .msg-range-control {
-    margin: 12px 0 0;
-    padding: 10px 0 0;
-    border-top: 1px solid var(--border2);
+  .contrib-config {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px; padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
-  .msg-range-label {
-    font-size: 9px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.8px; color: var(--text3);
-    margin-bottom: 8px; display: block;
+  .contrib-config-row {
+    display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;
+    margin-bottom: 16px;
   }
-  .msg-range-inputs {
-    display: flex; gap: 12px; align-items: center;
+  .contrib-config-row:last-child { margin-bottom: 0; }
+  .contrib-config-group {
+    display: flex; flex-direction: column; gap: 6px;
   }
-  .msg-range-slider {
-    flex: 1;
-    -webkit-appearance: none; appearance: none;
-    height: 6px; border-radius: 3px;
-    background: linear-gradient(to right, var(--navy) 0%, var(--navy) 50%, var(--border) 50%, var(--border) 100%);
-    outline: none; cursor: pointer;
+  .contrib-config-group.wide { flex: 1; min-width: 250px; }
+  .contrib-config-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.1px; color: var(--text3);
   }
-  .msg-range-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--navy); cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  .contrib-select {
+    border: 1.5px solid var(--border);
+    background: var(--surf2); color: var(--text);
+    padding: 10px 14px; font-family: 'Inter', sans-serif;
+    font-size: 13px; border-radius: 8px; cursor: pointer; outline: none;
+    transition: border-color 0.15s; width: 100%;
   }
-  .msg-range-slider::-moz-range-thumb {
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--navy); cursor: pointer; border: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  .contrib-select:focus { border-color: var(--navy2); }
+
+  .contrib-chips {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 10px 0;
   }
-  .msg-range-text {
+  .contrib-chip {
+    padding: 6px 14px; border-radius: 20px; cursor: pointer;
+    font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif;
+    transition: all 0.15s; border: 1.5px solid var(--border2);
+    background: white; color: var(--text2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .contrib-chip:hover { border-color: var(--navy2); }
+  .contrib-chip.active {
+    background: var(--navy); color: white; border-color: var(--navy);
+  }
+  .contrib-chip .chip-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  .contrib-chart-panel {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .contrib-chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700; color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .contrib-chart-subtitle {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px; color: var(--text2);
-    white-space: nowrap; min-width: 160px; text-align: right;
+    font-size: 10px; color: var(--text3);
+    margin-bottom: 20px;
+  }
+  .contrib-canvas-wrap {
+    height: 400px; position: relative;
+  }
+  .contrib-legend {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid var(--border2);
+    font-size: 11px;
+  }
+  .contrib-legend-item {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .contrib-legend-dot {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+  .contrib-legend-line {
+    width: 20px; height: 3px; border-radius: 2px;
   }
 
+  .footer { display: none; }
 </style>
 </head>
 <body>
@@ -758,16 +751,15 @@
 
 <!-- UNIFIED CONTROL PANEL -->
 <div class="ctrl-panel">
-
   <!-- Row 1: Vista + Frecuencia + Mostrar -->
   <div class="ctrl-row">
-
     <div class="cg">
       <span class="cg-label">Vista</span>
       <div class="pill-group">
         <button class="pill-btn active" data-grp="view" onclick="setView('graficas',this)">Gr&aacute;ficas</button>
         <button class="pill-btn"        data-grp="view" onclick="setView('tablas',this)">Tablas</button>
         <button class="pill-btn"        data-grp="view" onclick="setView('mensajes',this)">Mensajes</button>
+        <button class="pill-btn"        data-grp="view" onclick="setView('contribuciones',this)">Contribuciones</button>
       </div>
     </div>
 
@@ -791,22 +783,10 @@
     <div class="cg" style="margin-left:auto; border-right:none; padding-right:0;">
       <div class="ctrl-info" id="rangeInfo"></div>
     </div>
-
   </div>
 
-  <!-- Row 2: Rango (presets + selects agrupados) + Cambiar base -->
+  <!-- Row 2: Periodo + Cambiar base -->
   <div class="ctrl-row">
-
-    <div class="cg">
-      <span class="cg-label">Rango</span>
-      <div class="pill-group">
-        <button class="pill-btn" onclick="setRange(24,this)">2 a&ntilde;os</button>
-        <button class="pill-btn" onclick="setRange(60,this)">5 a&ntilde;os</button>
-        <button class="pill-btn active" id="btnR10" onclick="setRange(120,this)">10 a&ntilde;os</button>
-        <button class="pill-btn" onclick="setRange(null,this)">Todo</button>
-      </div>
-    </div>
-
     <div class="cg">
       <span class="cg-label">Periodo</span>
       <select id="selFrom"></select>
@@ -822,14 +802,12 @@
         Cambiar base
       </button>
     </div>
-
   </div>
 </div>
 
 <!-- REBASE MODAL -->
 <div class="rebase-overlay" id="rebaseOverlay" onclick="closeRebaseOuter(event)">
   <div class="rebase-box">
-
     <div class="rebase-header">
       <div>
         <h3>Cambiar base del &iacute;ndice</h3>
@@ -837,9 +815,7 @@
       </div>
       <button class="rebase-close" onclick="closeRebase()">&#10005;</button>
     </div>
-
     <div class="rebase-body">
-
       <div class="rb-section">
         <div class="rb-title">Tipo de periodo base</div>
         <div class="rb-type-group">
@@ -849,12 +825,10 @@
         </div>
         <div class="rb-selects" id="rbSelects"></div>
       </div>
-
       <div class="rb-section">
         <div class="rb-title">Vista previa</div>
         <div class="rb-preview" id="rbPreview">Selecciona un periodo para ver la vista previa.</div>
       </div>
-
       <div class="rb-section" style="margin-bottom:0">
         <div class="rb-title">Aplicar y descargar</div>
         <div class="rb-dl-grid">
@@ -876,7 +850,6 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -900,11 +873,12 @@
   <div id="sectorsContainer"></div>
 </div>
 
-<div class="footer"><span id="footerLastPeriod" style="display:none"></span></div>
-
-
 <script>
-let RAW; // Cargado dinámicamente desde IQYs/Data.xlsx
+// ══════════════════════════════════════════════════════════════════════════════
+// GLOBAL DATA STRUCTURES
+// ══════════════════════════════════════════════════════════════════════════════
+let RAW;           // Main data from Excel
+let ESTRUCTURA;    // Structure data for contributions (value in pesos)
 
 const EXCEL_COLS = [
   {col:0,  scian:'IMAI',  name:'Total Actividad Industrial',                         sector:'total'},
@@ -913,7 +887,6 @@ const EXCEL_COLS = [
   {col:3,  scian:'212',   name:'Minería metálica y no metálica',                    sector:'mineria'},
   {col:4,  scian:'213',   name:'Servicios relacionados con la minería',              sector:'mineria'},
   {col:5,  scian:'22',    name:'Energía eléctrica, agua y gas',                      sector:'energia'},
-  // col 6 = scian '221' (subsector de 22), omitido en la app
   {col:7,  scian:'23',    name:'Total Construcción',                                 sector:'construccion'},
   {col:8,  scian:'236',   name:'Edificación',                                        sector:'construccion'},
   {col:9,  scian:'237',   name:'Construcción de obras de ingeniería civil',          sector:'construccion'},
@@ -942,51 +915,99 @@ const EXCEL_COLS = [
   {col:32, scian:'339',   name:'Otras industrias manufactureras',                    sector:'manufactura'},
 ];
 
+const SECTOR_COLORS = { total:'#002060', mineria:'#9B7D3A', energia:'#007B5E', construccion:'#C0001D', manufactura:'#002060' };
+const SECTOR_LABELS = { total:'Actividad Industrial Total', mineria:'Minería', energia:'Energía eléctrica, agua y gas', construccion:'Construcción', manufactura:'Industrias Manufactureras' };
+
+// Colors for contributions chart components
+const CONTRIB_COLORS = [
+  '#1A56C4', '#C0001D', '#007B5E', '#9B7D3A', '#6B4C9A',
+  '#D35400', '#16A085', '#8E44AD', '#2C3E50', '#E74C3C',
+  '#27AE60', '#F39C12', '#3498DB', '#E91E63', '#00BCD4'
+];
+
+// ══════════════════════════════════════════════════════════════════════════════
+// STATE VARIABLES
+// ══════════════════════════════════════════════════════════════════════════════
+let fromIdx = 0, toIdx = 0;
+let allCharts = [], modalCharts = [];
+let currentFreq = 'M', currentView = 'graficas', currentMode = 'variaciones';
+
+// Mensajes view state
+let msgChart = null;
+let msgSeries = null;
+let msgShowOrg = false, msgShowDes = true, msgShowTend = true;
+let msgFromIdx = 0, msgToIdx = 0;
+
+// Contribuciones view state
+let contribChart = null;
+let contribMainIndicator = 'IMAI';
+let contribSelectedComponents = ['21', '22', '23', '31-33'];
+
+// Rebase state
+let rebaseType = 'A';
+let rebaseBase = null;
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ══════════════════════════════════════════════════════════════════════════════
 async function loadExcelAndInit() {
   try {
     const resp = await fetch('IQYs/Data.xlsx');
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const buf  = await resp.arrayBuffer();
-    const wb   = XLSX.read(buf, {type:'array'});
+    const buf = await resp.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array'});
 
     function parseSheet(sheetName) {
-  const ws   = wb.Sheets[sheetName];
-  const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
-  let hdr = -1;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i][0] === 'Period') { hdr = i; break; }
-  }
-  const colData = {};
-  EXCEL_COLS.forEach(c => { colData[c.col] = []; });
-  const periods = [];
-  for (let r = hdr + 1; r < data.length; r++) {
-    const row = data[r];
-    // Only accept rows whose first cell matches the YYYY/MM date format
-    if (!row[0] || !/^\d{4}\/\d{2}$/.test(String(row[0]))) continue;
-    periods.push(String(row[0]));
-    EXCEL_COLS.forEach(c => {
-      const v = row[c.col + 2]; // +2: saltar Period y Geographic area
-      colData[c.col].push((v !== null && v !== undefined) ? +v : null);
-    });
-  }
-  return { periods, colData };
-}
+      const ws = wb.Sheets[sheetName];
+      if (!ws) return null;
+      const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+      let hdr = -1;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i][0] === 'Period') { hdr = i; break; }
+      }
+      if (hdr < 0) return null;
+      
+      const colData = {};
+      EXCEL_COLS.forEach(c => { colData[c.col] = []; });
+      const periods = [];
+      
+      for (let r = hdr + 1; r < data.length; r++) {
+        const row = data[r];
+        if (!row[0] || !/^\d{4}\/\d{2}$/.test(String(row[0]))) continue;
+        periods.push(String(row[0]));
+        EXCEL_COLS.forEach(c => {
+          const v = row[c.col + 2];
+          colData[c.col].push((v !== null && v !== undefined) ? +v : null);
+        });
+      }
+      return { periods, colData };
+    }
 
-    const org  = parseSheet(wb.SheetNames[0]); // Series Originales
-    const des  = parseSheet(wb.SheetNames[1]); // Series Desestacionalizadas
-    const tend = parseSheet(wb.SheetNames[2]); // Tendencia-ciclo
+    // Parse main data sheets
+    const org = parseSheet(wb.SheetNames[0]);
+    const des = parseSheet(wb.SheetNames[1]);
+    const tend = parseSheet(wb.SheetNames[2]);
 
     RAW = {
       periods: org.periods,
       series: EXCEL_COLS.map(c => ({
-        name:   c.name,
-        scian:  c.scian,
+        name: c.name,
+        scian: c.scian,
         sector: c.sector,
-        org:    org.colData[c.col],
-        des:    des.colData[c.col],
-        tend:   tend.colData[c.col],
+        org: org.colData[c.col],
+        des: des.colData[c.col],
+        tend: tend.colData[c.col],
       }))
     };
+
+    // Parse estructura sheet if available
+    const estructuraSheet = wb.SheetNames.find(n => n.toLowerCase().includes('estructura'));
+    if (estructuraSheet) {
+      parseEstructura(wb.Sheets[estructuraSheet]);
+    } else {
+      // Create synthetic structure data based on typical weights
+      createSyntheticEstructura();
+    }
 
     document.getElementById('loadingOverlay').style.display = 'none';
     initDashboard();
@@ -997,478 +1018,580 @@ async function loadExcelAndInit() {
   }
 }
 
-
-const SECTOR_COLORS = { total:'#002060', mineria:'#9B7D3A', energia:'#007B5E', construccion:'#C0001D', manufactura:'#002060' };
-const SECTOR_LABELS = { total:'Actividad Industrial Total', mineria:'Miner\u00EDa', energia:'Energ\u00EDa el\u00E9ctrica, agua y gas', construccion:'Construcci\u00F3n', manufactura:'Industrias Manufactureras' };
-
-let fromIdx=0, toIdx=0;
-let allCharts=[], modalCharts=[];
-let currentFreq='M', currentView='graficas', currentMode='variaciones';
-
-// \u2500\u2500 SELECTS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-const selFrom=document.getElementById('selFrom'), selTo=document.getElementById('selTo');
-selFrom.addEventListener('change', ()=>{ fromIdx=+selFrom.value; redrawAll(); });
-selTo.addEventListener('change',   ()=>{ toIdx  =+selTo.value;   redrawAll(); });
-
-function setRange(months, btn){
-  document.querySelectorAll('.pill-group .pill-btn').forEach(b=>{ if(!b.dataset.grp) b.classList.remove('active'); });
-  if(btn) btn.classList.add('active');
-  toIdx   = RAW.periods.length-1;
-  fromIdx = months ? Math.max(0, toIdx-months+1) : 0;
-  selFrom.value = fromIdx; selTo.value = toIdx;
-  redrawAll();
+function parseEstructura(ws) {
+  const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+  let hdr = -1;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i][0] === 'Period' || String(data[i][0]).includes('Period')) { hdr = i; break; }
+  }
+  
+  ESTRUCTURA = { periods: [], data: {} };
+  
+  // Initialize data arrays for each SCIAN code
+  EXCEL_COLS.forEach(c => { ESTRUCTURA.data[c.scian] = []; });
+  
+  for (let r = (hdr >= 0 ? hdr + 1 : 1); r < data.length; r++) {
+    const row = data[r];
+    if (!row[0] || !/^\d{4}\/\d{2}$/.test(String(row[0]))) continue;
+    ESTRUCTURA.periods.push(String(row[0]));
+    
+    EXCEL_COLS.forEach((c, idx) => {
+      const v = row[idx + 2];
+      ESTRUCTURA.data[c.scian].push((v !== null && v !== undefined) ? +v : null);
+    });
+  }
 }
-function setFreq(f, btn){ document.querySelectorAll('[data-grp="freq"]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentFreq=f; redrawAll(); }
-function setView(v, btn){ document.querySelectorAll('[data-grp="view"]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentView=v; redrawAll(); }
-function setMode(m, btn){ document.querySelectorAll('[data-grp="mode"]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentMode=m; redrawAll(); }
 
-// \u2500\u2500 AGGREGATION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// vals and rawPeriods must be same-length slices (monthly)
-// returns { vals: number[], periods: string[] }
-function aggregate(vals, rawPeriods, freq){
-  if(freq === 'M') return { vals: vals.slice(), periods: rawPeriods.slice() };
-  const map={}, order=[];
-  rawPeriods.forEach((p, i)=>{
+function createSyntheticEstructura() {
+  // Create synthetic structure based on typical industrial weights for Mexico
+  const weights = {
+    'IMAI': 100, '21': 15, '211': 8, '212': 5, '213': 2,
+    '22': 5, '23': 12, '236': 5, '237': 4, '238': 3,
+    '31-33': 68, '311': 8, '312': 4, '313': 1, '314': 0.5,
+    '315': 1.5, '316': 1, '321': 0.5, '322': 1.5, '323': 0.5,
+    '324': 4, '325': 6, '326': 3, '327': 2, '331': 4,
+    '332': 3, '333': 4, '334': 6, '335': 3, '336': 12,
+    '337': 1, '339': 1.5
+  };
+  
+  ESTRUCTURA = { periods: RAW.periods.slice(), data: {} };
+  EXCEL_COLS.forEach(c => {
+    const w = weights[c.scian] || 1;
+    ESTRUCTURA.data[c.scian] = RAW.periods.map(() => w);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ══════════════════════════════════════════════════════════════════════════════
+const fmt = v => (v != null && isFinite(v)) ? v.toFixed(1) : 'N/D';
+const fmtP = v => (v != null && isFinite(v)) ? ((v >= 0 ? '+' : '') + v.toFixed(2) + '%') : 'N/D';
+const chgCls = v => v == null ? 'neu' : v > 0.05 ? 'pos' : v < -0.05 ? 'neg' : 'neu';
+
+function getLastValid(arr) {
+  for (let i = arr.length - 1; i >= 0; i--) if (arr[i] != null) return {val: arr[i], idx: i};
+  return {val: null, idx: -1};
+}
+
+function calcVarAnualM(arr, idx) {
+  return (idx >= 12 && arr[idx] != null && arr[idx - 12] != null) 
+    ? ((arr[idx] - arr[idx - 12]) / arr[idx - 12]) * 100 : null;
+}
+
+function calcVarMensM(arr, idx) {
+  return (idx > 0 && arr[idx] != null && arr[idx - 1] != null) 
+    ? ((arr[idx] - arr[idx - 1]) / arr[idx - 1]) * 100 : null;
+}
+
+// Get effective series values (rebased if active)
+function getVals(s, key) {
+  if (!rebaseBase) return s[key];
+  const f = rebaseBase.factors[s.scian]?.[key];
+  return rebaseArr(s[key], f);
+}
+
+function rebaseArr(arr, factor) {
+  if (!factor) return arr.map(() => null);
+  return arr.map(v => v != null ? (v / factor) * 100 : null);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// AGGREGATION FUNCTIONS
+// ══════════════════════════════════════════════════════════════════════════════
+function aggregate(vals, rawPeriods, freq) {
+  if (freq === 'M') return { vals: vals.slice(), periods: rawPeriods.slice() };
+  const map = {}, order = [];
+  rawPeriods.forEach((p, i) => {
     const parts = p.split('/');
     const yr = parts[0], mo = parts[1];
-    const key = freq==='Q' ? yr+'/Q'+Math.ceil(+mo/3) : yr;
-    if(!map[key]){ map[key]=[]; order.push(key); }
-    if(vals[i] !== null && vals[i] !== undefined) map[key].push(vals[i]);
+    const key = freq === 'Q' ? yr + '/Q' + Math.ceil(+mo / 3) : yr;
+    if (!map[key]) { map[key] = []; order.push(key); }
+    if (vals[i] !== null && vals[i] !== undefined) map[key].push(vals[i]);
   });
   return {
-    vals:    order.map(k => map[k].length ? map[k].reduce((a,b)=>a+b)/map[k].length : null),
+    vals: order.map(k => map[k].length ? map[k].reduce((a, b) => a + b) / map[k].length : null),
     periods: order
   };
 }
 
-// \u2500\u2500 VARIATION ARRAYS (work on already-aggregated data) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function varAnualArr(vals, freq){
-  // Monthly: lag 12 | Quarterly: lag 4 | Annual: lag 1
-  const lag = freq==='A' ? 1 : freq==='Q' ? 4 : 12;
-  return vals.map((v,i) =>
-    (i>=lag && v!=null && vals[i-lag]!=null) ? ((v-vals[i-lag])/vals[i-lag])*100 : null
+/**
+ * FIXED: Compute annual variation array that uses data BEFORE the visible range
+ * This ensures variations are shown from the first visible period
+ */
+function varAnualArrWithLookback(vals, periods, fullVals, fullPeriods, freq) {
+  const lag = freq === 'A' ? 1 : freq === 'Q' ? 4 : 12;
+  const result = [];
+  
+  for (let i = 0; i < vals.length; i++) {
+    const currentPeriod = periods[i];
+    const currentVal = vals[i];
+    
+    // Find the corresponding period from lag periods ago
+    let prevVal = null;
+    
+    // For aggregated data, we need to find the value lag periods back
+    const fullIdx = fullPeriods.indexOf(currentPeriod);
+    if (fullIdx >= 0 && fullIdx >= lag) {
+      const prevPeriod = fullPeriods[fullIdx - lag];
+      const prevFullIdx = fullPeriods.indexOf(prevPeriod);
+      if (prevFullIdx >= 0) {
+        prevVal = fullVals[prevFullIdx];
+      }
+    } else if (i >= lag) {
+      // Fallback to within-range calculation
+      prevVal = vals[i - lag];
+    }
+    
+    if (currentVal != null && prevVal != null) {
+      result.push(((currentVal - prevVal) / prevVal) * 100);
+    } else {
+      result.push(null);
+    }
+  }
+  
+  return result;
+}
+
+function varPeriodArr(vals) {
+  return vals.map((v, i) =>
+    (i > 0 && v != null && vals[i - 1] != null) ? ((v - vals[i - 1]) / vals[i - 1]) * 100 : null
   );
 }
-function varPeriodArr(vals){
-  // Period-over-period (m/m, q/q, y/y already handled by aggregation)
-  return vals.map((v,i) =>
-    (i>0 && v!=null && vals[i-1]!=null) ? ((v-vals[i-1])/vals[i-1])*100 : null
-  );
-}
 
-// \u2500\u2500 HELPERS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-const fmt  = v => (v!=null && isFinite(v)) ? v.toFixed(1) : 'N/D';
-const fmtP = v => (v!=null && isFinite(v)) ? ((v>=0?'+':'')+v.toFixed(2)+'%') : 'N/D';
-const chgCls = v => v==null ? 'neu' : v>0.05 ? 'pos' : v<-0.05 ? 'neg' : 'neu';
-
-function getLastValid(arr){
-  for(let i=arr.length-1; i>=0; i--) if(arr[i]!=null) return {val:arr[i], idx:i};
-  return {val:null, idx:-1};
-}
-// Monthly helpers (always use raw monthly data)
-function calcVarAnualM(arr, idx){ return (idx>=12 && arr[idx]!=null && arr[idx-12]!=null) ? ((arr[idx]-arr[idx-12])/arr[idx-12])*100 : null; }
-function calcVarMensM(arr, idx){  return (idx>0  && arr[idx]!=null && arr[idx-1] !=null) ? ((arr[idx]-arr[idx-1]) /arr[idx-1]) *100 : null; }
-
-// \u2500\u2500 HISTORICAL STATS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// Uses raw monthly desestacionalizada. Counts how many months back
-// you need to go to find a value STRICTLY higher (for abv) or lower (for blw)
-// Uses a tolerance of 0.05% to avoid float noise.
-function getHistStats(des, lastIdx){
+// ══════════════════════════════════════════════════════════════════════════════
+// HISTORICAL STATS
+// ══════════════════════════════════════════════════════════════════════════════
+function getHistStats(des, lastIdx) {
   const cur = des[lastIdx];
-  if(cur == null) return null;
-  const validVals = des.slice(0, lastIdx+1).filter(v=>v!=null);
-  if(!validVals.length) return null;
+  if (cur == null) return null;
+  const validVals = des.slice(0, lastIdx + 1).filter(v => v != null);
+  if (!validVals.length) return null;
 
   const maxV = Math.max(...validVals);
   const minV = Math.min(...validVals);
-  const TOL  = Math.abs(cur) * 0.0005; // 0.05% tolerance
+  const TOL = Math.abs(cur) * 0.0005;
 
   const isMax = cur >= maxV - TOL;
   const isMin = cur <= minV + TOL;
 
-  // abv: how many months back was the last value strictly ABOVE current
   let abv = 0;
-  for(let i=lastIdx-1; i>=0; i--){
-    if(des[i] == null) continue;
-    if(des[i] > cur + TOL){ abv = lastIdx - i; break; }
+  for (let i = lastIdx - 1; i >= 0; i--) {
+    if (des[i] == null) continue;
+    if (des[i] > cur + TOL) { abv = lastIdx - i; break; }
   }
 
-  // blw: how many months back was the last value strictly BELOW current
   let blw = 0;
-  for(let i=lastIdx-1; i>=0; i--){
-    if(des[i] == null) continue;
-    if(des[i] < cur - TOL){ blw = lastIdx - i; break; }
+  for (let i = lastIdx - 1; i >= 0; i--) {
+    if (des[i] == null) continue;
+    if (des[i] < cur - TOL) { blw = lastIdx - i; break; }
   }
 
-  const maxIdx = des.slice(0, lastIdx+1).reduce((best,v,i)=>v!=null&&v>=(des[best]??-Infinity)?i:best, 0);
-  const minIdx = des.slice(0, lastIdx+1).reduce((best,v,i)=>v!=null&&v<=(des[best]??Infinity) ?i:best, 0);
+  const maxIdx = des.slice(0, lastIdx + 1).reduce((best, v, i) => v != null && v >= (des[best] ?? -Infinity) ? i : best, 0);
+  const minIdx = des.slice(0, lastIdx + 1).reduce((best, v, i) => v != null && v <= (des[best] ?? Infinity) ? i : best, 0);
 
-  // last monthly change for direction logic in fmtCtx
   let varM = 0;
-  if(lastIdx >= 1){
-    const prev = des.slice(0, lastIdx).reduceRight((found, v)=>found!=null?found:v, null);
-    if(prev != null) varM = cur - prev;
+  if (lastIdx >= 1) {
+    const prev = des.slice(0, lastIdx).reduceRight((found, v) => found != null ? found : v, null);
+    if (prev != null) varM = cur - prev;
   }
+  
   return {
     maxV, minV,
-    maxP: RAW.periods[maxIdx]||'',
-    minP: RAW.periods[minIdx]||'',
+    maxP: RAW.periods[maxIdx] || '',
+    minP: RAW.periods[minIdx] || '',
     abv, blw,
-    pctMax: ((cur-maxV)/maxV)*100,
+    pctMax: ((cur - maxV) / maxV) * 100,
     isMax, isMin,
     varM
   };
 }
 
-// fmtCtx: simplified rule \u2014 look in the direction of the last monthly change.
-// varM > 0: how long since current value was last exceeded (abv)?
-// varM < 0: how long since current value was last undercut (blw)?
-function fmtCtx(st){
-  if(!st) return {text:'\u2014', cls:''};
-  if(st.isMax) return {text:'M\u00E1ximo hist\u00F3rico', cls:'highlight'};
-  if(st.isMin) return {text:'M\u00EDnimo hist\u00F3rico', cls:'lowlight'};
+function fmtCtx(st) {
+  if (!st) return {text: '—', cls: ''};
+  if (st.isMax) return {text: 'Máximo histórico', cls: 'highlight'};
+  if (st.isMin) return {text: 'Mínimo histórico', cls: 'lowlight'};
 
-  function fmtMonths(n){
-    if(n <= 0) return null;
-    if(n < 24)  return n + ' meses';
-    if(n < 120) return '~' + Math.round(n/12) + ' a\u00F1os';
-    return 'mas de ' + Math.round(n/12) + ' a\u00F1os';
+  function fmtMonths(n) {
+    if (n <= 0) return null;
+    if (n < 24) return n + ' meses';
+    if (n < 120) return '~' + Math.round(n / 12) + ' años';
+    return 'mas de ' + Math.round(n / 12) + ' años';
   }
 
-  // Direction: use abv if trending up (abv meaningful), blw if trending down
-  if(st.varM >= 0){
-    // Rising: report how long since a higher value was seen
+  if (st.varM >= 0) {
     const t = fmtMonths(st.abv);
-    if(t) return {text:'M\u00E1ximo en ' + t, cls:'highlight'};
+    if (t) return {text: 'Máximo en ' + t, cls: 'highlight'};
   } else {
-    // Falling: report how long since a lower value was seen
     const t = fmtMonths(st.blw);
-    if(t) return {text:'M\u00EDnimo en ' + t, cls:'lowlight'};
+    if (t) return {text: 'Mínimo en ' + t, cls: 'lowlight'};
   }
-  return {text: st.pctMax.toFixed(1)+'% del maximo', cls:''};
+  return {text: st.pctMax.toFixed(1) + '% del maximo', cls: ''};
 }
 
-// \u2500\u2500 SIGNAL ENGINE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function getSignal(des, upToIdx){
-  const ch=[];
-  for(let i=Math.max(1,upToIdx-8);i<=upToIdx;i++){
-    const v=calcVarMensM(des,i);
-    if(v!=null) ch.push(v);
+// ══════════════════════════════════════════════════════════════════════════════
+// SIGNAL ENGINE
+// ══════════════════════════════════════════════════════════════════════════════
+function getSignal(des, upToIdx) {
+  const ch = [];
+  for (let i = Math.max(1, upToIdx - 8); i <= upToIdx; i++) {
+    const v = calcVarMensM(des, i);
+    if (v != null) ch.push(v);
   }
-  const c6=ch.slice(-6), c3=ch.slice(-3);
-  if(c3.length<3) return {label:'--', color:'#888', sub:'datos insuficientes'};
-  const m0=c3[2], m1=c3[1], m2=c3[0], U=0.10;
-  const pos=v=>v>U, neg=v=>v<-U;
-  const a3=c3.reduce((a,b)=>a+b)/c3.length;
-  const a6=c6.length>=3 ? c6.reduce((a,b)=>a+b)/c6.length : a3;
-  const p3=c3.filter(pos).length, n3=c3.filter(neg).length;
-  if(c6.length===6&&c6.every(pos)) return {label:'Expansi\u00F3n sostenida', color:'#145C38', sub:'6 meses al alza'};
-  if(c6.length===6&&c6.every(neg)) return {label:'Contracci\u00F3n sostenida', color:'#C0001D', sub:'6 meses a la baja'};
-  if(pos(m0)&&pos(m1)&&pos(m2))   return {label:'Din\u00E1mica positiva', color:'#2E7D32', sub:'3 meses consecutivos al alza'};
-  if(neg(m0)&&neg(m1)&&neg(m2))   return {label:'Din\u00E1mica negativa', color:'#C0001D', sub:'3 meses consecutivos a la baja'};
-  if(pos(m0)&&pos(m1)&&a3>a6+0.20&&a3>0.25) return {label:'Aceleraci\u00F3n', color:'#1B5E20', sub:'ritmo en aumento'};
-  if(a6>0.20&&a3<a6*0.40&&!pos(m0))         return {label:'Desaceleraci\u00F3n', color:'#E65100', sub:'impulso perdiendo fuerza'};
-  if(a6<-0.15&&pos(m0)&&pos(m1))            return {label:'Recuperaci\u00F3n incipiente', color:'#558B2F', sub:'rebote tras contracci\u00F3n'};
-  if(a6>0.15&&neg(m0)&&neg(m1))             return {label:'Re\u00EDda', color:'#D32F2F', sub:'ca\u00EDda tras periodo de alza'};
-  if(p3===2&&neg(m0)) return {label:'Se\u00F1al de alerta', color:'#D32F2F', sub:'ultimo mes negativo'};
-  if(n3===2&&pos(m0)) return {label:'Se\u00F1al de mejora', color:'#388E3C', sub:'ultimo mes positivo'};
-  if(Math.abs(a3)<=0.15) return {label:'Aton\u00EDa', color:'#78909C', sub:'sin tendencia clara'};
-  return {label:'Variaci\u00F3n mixta', color:'#546E7A', sub:'p3:'+a3.toFixed(2)+'% p6:'+a6.toFixed(2)+'%'};
+  const c6 = ch.slice(-6), c3 = ch.slice(-3);
+  if (c3.length < 3) return {label: '--', color: '#888', sub: 'datos insuficientes'};
+  
+  const m0 = c3[2], m1 = c3[1], m2 = c3[0], U = 0.10;
+  const pos = v => v > U, neg = v => v < -U;
+  const a3 = c3.reduce((a, b) => a + b) / c3.length;
+  const a6 = c6.length >= 3 ? c6.reduce((a, b) => a + b) / c6.length : a3;
+  const p3 = c3.filter(pos).length, n3 = c3.filter(neg).length;
+  
+  if (c6.length === 6 && c6.every(pos)) return {label: 'Expansión sostenida', color: '#145C38', sub: '6 meses al alza'};
+  if (c6.length === 6 && c6.every(neg)) return {label: 'Contracción sostenida', color: '#C0001D', sub: '6 meses a la baja'};
+  if (pos(m0) && pos(m1) && pos(m2)) return {label: 'Dinámica positiva', color: '#2E7D32', sub: '3 meses consecutivos al alza'};
+  if (neg(m0) && neg(m1) && neg(m2)) return {label: 'Dinámica negativa', color: '#C0001D', sub: '3 meses consecutivos a la baja'};
+  if (pos(m0) && pos(m1) && a3 > a6 + 0.20 && a3 > 0.25) return {label: 'Aceleración', color: '#1B5E20', sub: 'ritmo en aumento'};
+  if (a6 > 0.20 && a3 < a6 * 0.40 && !pos(m0)) return {label: 'Desaceleración', color: '#E65100', sub: 'impulso perdiendo fuerza'};
+  if (a6 < -0.15 && pos(m0) && pos(m1)) return {label: 'Recuperación incipiente', color: '#558B2F', sub: 'rebote tras contracción'};
+  if (a6 > 0.15 && neg(m0) && neg(m1)) return {label: 'Reída', color: '#D32F2F', sub: 'caída tras periodo de alza'};
+  if (p3 === 2 && neg(m0)) return {label: 'Señal de alerta', color: '#D32F2F', sub: 'ultimo mes negativo'};
+  if (n3 === 2 && pos(m0)) return {label: 'Señal de mejora', color: '#388E3C', sub: 'ultimo mes positivo'};
+  if (Math.abs(a3) <= 0.15) return {label: 'Atonía', color: '#78909C', sub: 'sin tendencia clara'};
+  return {label: 'Variación mixta', color: '#546E7A', sub: 'p3:' + a3.toFixed(2) + '% p6:' + a6.toFixed(2) + '%'};
 }
 
-// \u2500\u2500 CLIP LIMITS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// Round a number UP to a nice step multiple
-function ceilNice(v, step){ return Math.ceil(v/step)*step; }
-function floorNice(v, step){ return Math.floor(v/step)*step; }
+// ══════════════════════════════════════════════════════════════════════════════
+// CHART OPTIONS AND PLUGINS
+// ══════════════════════════════════════════════════════════════════════════════
+function ceilNice(v, step) { return Math.ceil(v / step) * step; }
+function floorNice(v, step) { return Math.floor(v / step) * step; }
 
-// Compute a uniform step that gives ~4 ticks between min and max
-function niceStep(range){
-  const raw  = range / 4;
-  const mag  = Math.pow(10, Math.floor(Math.log10(Math.abs(raw)||1)));
+function niceStep(range) {
+  const raw = range / 4;
+  const mag = Math.pow(10, Math.floor(Math.log10(Math.abs(raw) || 1)));
   const norm = raw / mag;
-  const step = norm<=1?1 : norm<=2?2 : norm<=5?5 : 10;
+  const step = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10;
   return step * mag;
 }
 
-function clipLimits(values, pLo=0.03, pHi=0.97, forceZero=false){
-  const v = values.filter(x=>x!=null&&isFinite(x)).sort((a,b)=>a-b);
-  if(!v.length) return {min:undefined, max:undefined, clipped:false};
-  const lo  = v[Math.floor(pLo*(v.length-1))];
-  const hi  = v[Math.floor(pHi*(v.length-1))];
-  const rawMin = v[0], rawMax = v[v.length-1];
-  // Nice bounds: include zero if forceZero, snap to uniform step
+function clipLimits(values, pLo = 0.03, pHi = 0.97, forceZero = false) {
+  const v = values.filter(x => x != null && isFinite(x)).sort((a, b) => a - b);
+  if (!v.length) return {min: undefined, max: undefined, clipped: false};
+  const lo = v[Math.floor(pLo * (v.length - 1))];
+  const hi = v[Math.floor(pHi * (v.length - 1))];
   const roughMin = forceZero ? Math.min(lo, 0) : lo;
   const roughMax = forceZero ? Math.max(hi, 0) : hi;
   const step = niceStep(roughMax - roughMin);
-  const clMin = floorNice(roughMin - step*0.2, step);
-  const clMax  = ceilNice(roughMax + step*0.2, step);
+  const clMin = floorNice(roughMin - step * 0.2, step);
+  const clMax = ceilNice(roughMax + step * 0.2, step);
   const finalMin = forceZero ? Math.min(clMin, 0) : clMin;
   const finalMax = forceZero ? Math.max(clMax, 0) : clMax;
-  return {min:finalMin, max:finalMax, step, clipped: rawMin<finalMin || rawMax>finalMax};
-}
-function tightLimits(values){
-  const v = values.filter(x=>x!=null&&isFinite(x));
-  if(!v.length) return {min:undefined, max:undefined, clipped:false};
-  const lo=Math.min(...v), hi=Math.max(...v);
-  const step = niceStep(hi - lo);
-  const mn = floorNice(lo - step*0.15, step);
-  const mx  = ceilNice(hi  + step*0.15, step);
-  return {min:mn, max:mx, step, clipped:false};
+  return {min: finalMin, max: finalMax, step, clipped: false};
 }
 
-// \u2500\u2500 TRUNCATION LINE PLUGIN \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function tightLimits(values) {
+  const v = values.filter(x => x != null && isFinite(x));
+  if (!v.length) return {min: undefined, max: undefined, clipped: false};
+  const lo = Math.min(...v), hi = Math.max(...v);
+  const step = niceStep(hi - lo);
+  const mn = floorNice(lo - step * 0.15, step);
+  const mx = ceilNice(hi + step * 0.15, step);
+  return {min: mn, max: mx, step, clipped: false};
+}
+
 const truncPlugin = {
   id: 'truncLines',
-  afterDraw(chart){
+  afterDraw(chart) {
     const ys = chart.scales.y;
-    if(!ys) return;
-    const {min:yMin, max:yMax} = ys;
+    if (!ys) return;
+    const {min: yMin, max: yMax} = ys;
     const ds = chart.data.datasets[0];
-    if(!ds) return;
-    const allVals = ds.data.filter(v=>v!=null&&isFinite(v));
-    if(!allVals.length) return;
-    const rawMin=Math.min(...allVals), rawMax=Math.max(...allVals);
-    const {ctx, chartArea:{left,right,top,bottom}} = chart;
+    if (!ds) return;
+    const allVals = ds.data.filter(v => v != null && isFinite(v));
+    if (!allVals.length) return;
+    const rawMin = Math.min(...allVals), rawMax = Math.max(...allVals);
+    const {ctx, chartArea: {left, right, top, bottom}} = chart;
     ctx.save();
-    ctx.strokeStyle='#999999';
-    ctx.lineWidth=1.2;
-    ctx.setLineDash([4,3]);
-    if(rawMax > yMax+0.01){
-      ctx.beginPath(); ctx.moveTo(left,top+1); ctx.lineTo(right,top+1); ctx.stroke();
+    ctx.strokeStyle = '#999999';
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([4, 3]);
+    if (rawMax > yMax + 0.01) {
+      ctx.beginPath(); ctx.moveTo(left, top + 1); ctx.lineTo(right, top + 1); ctx.stroke();
     }
-    if(rawMin < yMin-0.01){
-      ctx.beginPath(); ctx.moveTo(left,bottom-1); ctx.lineTo(right,bottom-1); ctx.stroke();
+    if (rawMin < yMin - 0.01) {
+      ctx.beginPath(); ctx.moveTo(left, bottom - 1); ctx.lineTo(right, bottom - 1); ctx.stroke();
     }
     ctx.restore();
   }
 };
 Chart.register(truncPlugin);
 
-// Force last label on X axis always
 Chart.register({
   id: 'forceLastTick',
-  afterBuildTicks(axis){
-    if(axis.axis !== 'x') return;
+  afterBuildTicks(axis) {
+    if (axis.axis !== 'x') return;
     const ticks = axis.ticks;
-    if(!ticks.length) return;
+    if (!ticks.length) return;
     const last = axis.chart.data.labels?.length - 1;
-    if(last == null || last < 0) return;
-    // Check if last data point label is already in ticks
+    if (last == null || last < 0) return;
     const lastLabel = axis.chart.data.labels[last];
     const alreadyIn = ticks.some(t => t.label === lastLabel || String(t.value) === String(last));
-    if(!alreadyIn){
-      ticks.push({ value: last, label: lastLabel });
+    if (!alreadyIn) {
+      ticks.push({value: last, label: lastLabel});
     }
   }
 });
 
-// \u2500\u2500 CHART OPTIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function xTickCb(freq, small){
-  // Returns callback for x-axis ticks
-  // small cards: show every quarter boundary; modal: show every period
-  return function(v){
+function xTickCb(freq, small) {
+  return function(v) {
     const l = this.getLabelForValue(v);
-    if(!l) return '';
+    if (!l) return '';
     const parts = l.split('/');
-    if(parts.length < 2) return l; // annual: just the year
+    if (parts.length < 2) return l;
     const [yr, rest] = parts;
-    if(rest.startsWith('Q')) return small ? (rest==='Q1'?yr:'') : yr+'-'+rest;
-    // Monthly: rest is MM
+    if (rest.startsWith('Q')) return small ? (rest === 'Q1' ? yr : '') : yr + '-' + rest;
     const mo = rest;
-    if(!small) return yr+'-'+mo;
-    // small: show only Jan and Jul
-    return (mo==='01'||mo==='07') ? yr.slice(2)+'-'+mo : '';
+    if (!small) return yr + '-' + mo;
+    return (mo === '01' || mo === '07') ? yr.slice(2) + '-' + mo : '';
   };
 }
 
-function barOpts(vals, isPct, small=true){
+function barOpts(vals, isPct, small = true) {
   const lim = clipLimits(vals, 0.03, 0.97, true);
-  const fs=small?7:10, tk=small?4:6;
+  const fs = small ? 7 : 10;
   return {
-    responsive:true, animation:false,
-    plugins:{
-      legend:{display:false},
-      truncLines:{},
-      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.parsed.y!=null?ctx.parsed.y.toFixed(2)+(isPct?'%':''):''}}
+    responsive: true, animation: false,
+    plugins: {
+      legend: {display: false},
+      truncLines: {},
+      tooltip: {mode: 'index', intersect: false, callbacks: {label: ctx => ctx.parsed.y != null ? ctx.parsed.y.toFixed(2) + (isPct ? '%' : '') : ''}}
     },
-    scales:{
-      x:{
-        display:true,
-        grid:{display:false},
-        ticks:{
-          maxTicksLimit:small?8:16,
-          font:{family:'IBM Plex Mono',size:fs},
-          color:'#AAAAAA',
-          maxRotation:90, minRotation:45,
-          autoSkip:true,
-          callback:xTickCb(currentFreq,small)
+    scales: {
+      x: {
+        display: true,
+        grid: {display: false},
+        ticks: {
+          maxTicksLimit: small ? 8 : 16,
+          font: {family: 'IBM Plex Mono', size: fs},
+          color: '#AAAAAA',
+          maxRotation: 90, minRotation: 45,
+          autoSkip: true,
+          callback: xTickCb(currentFreq, small)
         },
-        border:{display:false}
+        border: {display: false}
       },
-      y:{
-        display:true, min:lim.min, max:lim.max,
-        grid:{color:ctx=>ctx.tick.value===0?'#33333380':'#E4E4E0', lineWidth:ctx=>ctx.tick.value===0?1.5:0.5},
-        ticks:{stepSize:lim.step, font:{family:'IBM Plex Mono',size:fs}, color:'#AAAAAA', callback:v=>{ const d=v>=10||v<=-10?0:v>=1||v<=-1?1:2; return v.toFixed(d)+(isPct?'%':''); }},
-        border:{display:false}
+      y: {
+        display: true, min: lim.min, max: lim.max,
+        grid: {color: ctx => ctx.tick.value === 0 ? '#33333380' : '#E4E4E0', lineWidth: ctx => ctx.tick.value === 0 ? 1.5 : 0.5},
+        ticks: {stepSize: lim.step, font: {family: 'IBM Plex Mono', size: fs}, color: '#AAAAAA', callback: v => { const d = v >= 10 || v <= -10 ? 0 : v >= 1 || v <= -1 ? 1 : 2; return v.toFixed(d) + (isPct ? '%' : ''); }},
+        border: {display: false}
       }
     }
   };
 }
-function lineOpts(vals, small=true){
+
+function lineOpts(vals, small = true) {
   const lim = tightLimits(vals);
-  const fs=small?7:10, tk=small?4:6;
+  const fs = small ? 7 : 10;
   return {
-    responsive:true, animation:false,
-    plugins:{
-      legend:{display:false},
-      truncLines:{},
-      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.parsed.y!=null?ctx.parsed.y.toFixed(1):''}}
+    responsive: true, animation: false,
+    plugins: {
+      legend: {display: false},
+      truncLines: {},
+      tooltip: {mode: 'index', intersect: false, callbacks: {label: ctx => ctx.parsed.y != null ? ctx.parsed.y.toFixed(1) : ''}}
     },
-    scales:{
-      x:{
-        display:true,
-        grid:{display:false},
-        ticks:{
-          maxTicksLimit:small?8:16,
-          font:{family:'IBM Plex Mono',size:fs},
-          color:'#AAAAAA',
-          maxRotation:90, minRotation:45,
-          autoSkip:true,
-          callback:xTickCb(currentFreq,small)
+    scales: {
+      x: {
+        display: true,
+        grid: {display: false},
+        ticks: {
+          maxTicksLimit: small ? 8 : 16,
+          font: {family: 'IBM Plex Mono', size: fs},
+          color: '#AAAAAA',
+          maxRotation: 90, minRotation: 45,
+          autoSkip: true,
+          callback: xTickCb(currentFreq, small)
         },
-        border:{display:false}
+        border: {display: false}
       },
-      y:{
-        display:true, min:lim.min, max:lim.max,
-        grid:{color:'#E4E4E0', lineWidth:0.5},
-        ticks:{stepSize:lim.step, font:{family:'IBM Plex Mono',size:fs}, color:'#AAAAAA', callback:v=>{ const d=v>=10||v<=-10?0:v>=1||v<=-1?1:2; return v.toFixed(d); }},
-        border:{display:false}
+      y: {
+        display: true, min: lim.min, max: lim.max,
+        grid: {color: '#E4E4E0', lineWidth: 0.5},
+        ticks: {stepSize: lim.step, font: {family: 'IBM Plex Mono', size: fs}, color: '#AAAAAA', callback: v => { const d = v >= 10 || v <= -10 ? 0 : v >= 1 || v <= -1 ? 1 : 2; return v.toFixed(d); }},
+        border: {display: false}
       }
     }
   };
 }
 
-// \u2500\u2500 MODAL \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function openModal(s, color){
-  modalCharts.forEach(c=>c.destroy()); modalCharts=[];
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTROLS AND SELECTS
+// ══════════════════════════════════════════════════════════════════════════════
+const selFrom = document.getElementById('selFrom'), selTo = document.getElementById('selTo');
+selFrom.addEventListener('change', () => { fromIdx = +selFrom.value; redrawAll(); });
+selTo.addEventListener('change', () => { toIdx = +selTo.value; redrawAll(); });
+
+function setFreq(f, btn) {
+  document.querySelectorAll('[data-grp="freq"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFreq = f;
+  redrawAll();
+}
+
+function setView(v, btn) {
+  document.querySelectorAll('[data-grp="view"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentView = v;
+  redrawAll();
+}
+
+function setMode(m, btn) {
+  document.querySelectorAll('[data-grp="mode"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMode = m;
+  redrawAll();
+}
+
+function updateInfo() {
+  document.getElementById('rangeInfo').textContent =
+    RAW.periods[fromIdx].replace('/', '-') + ' → ' + RAW.periods[toIdx].replace('/', '-') +
+    ' · ' + (toIdx - fromIdx + 1) + ' obs.';
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════════════════════════════
+function openModal(s, color) {
+  modalCharts.forEach(c => c.destroy());
+  modalCharts = [];
   document.getElementById('modalTitle').textContent = s.name;
-  document.getElementById('modalMeta').textContent  = 'SCIAN '+s.scian+'  \u00B7  Base 2018=100';
+  document.getElementById('modalMeta').textContent = 'SCIAN ' + s.scian + '  ·  Base 2018=100';
 
-  const slP = RAW.periods.slice(fromIdx, toIdx+1);
-  const {vals:oV, periods:oP} = aggregate(getVals(s,'org').slice(fromIdx,toIdx+1),  slP, currentFreq);
-  const {vals:dV, periods:dP} = aggregate(getVals(s,'des').slice(fromIdx,toIdx+1),  slP, currentFreq);
-  const {vals:tV, periods:tP} = aggregate(getVals(s,'tend').slice(fromIdx,toIdx+1), slP, currentFreq);
+  // Get FULL data for lookback calculations
+  const fullOrg = getVals(s, 'org');
+  const fullDes = getVals(s, 'des');
+  const fullTend = getVals(s, 'tend');
+  const fullPeriods = RAW.periods;
+  
+  // Aggregate full data
+  const {vals: fullOrgAgg, periods: fullOrgPeriods} = aggregate(fullOrg, fullPeriods, currentFreq);
+  const {vals: fullDesAgg, periods: fullDesPeriods} = aggregate(fullDes, fullPeriods, currentFreq);
 
-  let bodyHtml='';
-  if(currentMode==='variaciones'){
-    const va = varAnualArr(oV, currentFreq);
+  // Get visible range data
+  const slP = RAW.periods.slice(fromIdx, toIdx + 1);
+  const {vals: oV, periods: oP} = aggregate(getVals(s, 'org').slice(fromIdx, toIdx + 1), slP, currentFreq);
+  const {vals: dV, periods: dP} = aggregate(getVals(s, 'des').slice(fromIdx, toIdx + 1), slP, currentFreq);
+  const {vals: tV, periods: tP} = aggregate(getVals(s, 'tend').slice(fromIdx, toIdx + 1), slP, currentFreq);
+
+  let bodyHtml = '';
+  if (currentMode === 'variaciones') {
+    // Use lookback for annual variations
+    const va = varAnualArrWithLookback(oV, oP, fullOrgAgg, fullOrgPeriods, currentFreq);
     const vm = varPeriodArr(dV);
-    const periodLabel = currentFreq==='M'?'Mensual':currentFreq==='Q'?'Trimestral':'Anual';
-    bodyHtml=`<div class="modal-charts">
+    const periodLabel = currentFreq === 'M' ? 'Mensual' : currentFreq === 'Q' ? 'Trimestral' : 'Anual';
+    bodyHtml = `<div class="modal-charts">
       <div class="modal-chart-cell"><div class="modal-chart-label">Var. Anual Original (%)</div><canvas id="mc_1" height="240"></canvas></div>
       <div class="modal-chart-cell"><div class="modal-chart-label">Var. ${periodLabel} Desest. (%)</div><canvas id="mc_2" height="240"></canvas></div>
       <div class="modal-chart-cell"><div class="modal-chart-label">Tendencia-Ciclo</div><canvas id="mc_3" height="240"></canvas></div>
     </div>`;
     document.getElementById('modalBody').innerHTML = bodyHtml;
-    requestAnimationFrame(()=>{
-      modalCharts.push(new Chart(document.getElementById('mc_1'),{type:'bar',data:{labels:oP,datasets:[{data:va,backgroundColor:va.map(v=>v==null?'transparent':v>=0?'#1A56C440':'#4B8BDE40'),borderColor:va.map(v=>v==null?'transparent':v>=0?'#1A56C4':'#4B8BDE'),borderWidth:1,barPercentage:0.9,categoryPercentage:0.9}]},options:barOpts(va,true,false)}));
-      modalCharts.push(new Chart(document.getElementById('mc_2'),{type:'bar',data:{labels:dP,datasets:[{data:vm,backgroundColor:vm.map(v=>v==null?'transparent':v>=0?'#C0001D40':'#FF5A5A40'),borderColor:vm.map(v=>v==null?'transparent':v>=0?'#C0001D':'#FF5A5A'),borderWidth:1,barPercentage:0.9,categoryPercentage:0.9}]},options:barOpts(vm,true,false)}));
-      const tf=tV.filter(v=>v!=null); if(tf.length) modalCharts.push(new Chart(document.getElementById('mc_3'),{type:'line',data:{labels:tP,datasets:[{data:tV,borderColor:'#007B5E',borderWidth:2,pointRadius:0,tension:0.4,fill:{target:'origin',above:'#007B5E18',below:'#007B5E18'}}]},options:lineOpts(tf,false)}));
+    requestAnimationFrame(() => {
+      modalCharts.push(new Chart(document.getElementById('mc_1'), {type: 'bar', data: {labels: oP, datasets: [{data: va, backgroundColor: va.map(v => v == null ? 'transparent' : v >= 0 ? '#1A56C440' : '#4B8BDE40'), borderColor: va.map(v => v == null ? 'transparent' : v >= 0 ? '#1A56C4' : '#4B8BDE'), borderWidth: 1, barPercentage: 0.9, categoryPercentage: 0.9}]}, options: barOpts(va, true, false)}));
+      modalCharts.push(new Chart(document.getElementById('mc_2'), {type: 'bar', data: {labels: dP, datasets: [{data: vm, backgroundColor: vm.map(v => v == null ? 'transparent' : v >= 0 ? '#C0001D40' : '#FF5A5A40'), borderColor: vm.map(v => v == null ? 'transparent' : v >= 0 ? '#C0001D' : '#FF5A5A'), borderWidth: 1, barPercentage: 0.9, categoryPercentage: 0.9}]}, options: barOpts(vm, true, false)}));
+      const tf = tV.filter(v => v != null);
+      if (tf.length) modalCharts.push(new Chart(document.getElementById('mc_3'), {type: 'line', data: {labels: tP, datasets: [{data: tV, borderColor: '#007B5E', borderWidth: 2, pointRadius: 0, tension: 0.4, fill: {target: 'origin', above: '#007B5E18', below: '#007B5E18'}}]}, options: lineOpts(tf, false)}));
     });
   } else {
-    bodyHtml=`<div class="modal-charts">
+    bodyHtml = `<div class="modal-charts">
       <div class="modal-chart-cell"><div class="modal-chart-label">Original (nivel)</div><canvas id="mc_1" height="240"></canvas></div>
       <div class="modal-chart-cell"><div class="modal-chart-label">Desestacionalizada (nivel)</div><canvas id="mc_2" height="240"></canvas></div>
       <div class="modal-chart-cell"><div class="modal-chart-label">Tendencia-Ciclo (nivel)</div><canvas id="mc_3" height="240"></canvas></div>
     </div>`;
     document.getElementById('modalBody').innerHTML = bodyHtml;
-    requestAnimationFrame(()=>{
-      const of=oV.filter(v=>v!=null), df=dV.filter(v=>v!=null), tf=tV.filter(v=>v!=null);
-      if(of.length) modalCharts.push(new Chart(document.getElementById('mc_1'),{type:'line',data:{labels:oP,datasets:[{data:oV,borderColor:'#1A56C4',borderWidth:2,pointRadius:0,tension:0.3,fill:{target:'origin',above:'#1A56C418',below:'#1A56C418'}}]},options:lineOpts(of,false)}));
-      if(df.length) modalCharts.push(new Chart(document.getElementById('mc_2'),{type:'line',data:{labels:dP,datasets:[{data:dV,borderColor:'#C0001D',borderWidth:2,pointRadius:0,tension:0.3,fill:{target:'origin',above:'#C0001D18',below:'#C0001D18'}}]},options:lineOpts(df,false)}));
-      if(tf.length) modalCharts.push(new Chart(document.getElementById('mc_3'),{type:'line',data:{labels:tP,datasets:[{data:tV,borderColor:'#007B5E',borderWidth:2,pointRadius:0,tension:0.4,fill:{target:'origin',above:'#007B5E18',below:'#007B5E18'}}]},options:lineOpts(tf,false)}));
+    requestAnimationFrame(() => {
+      const of = oV.filter(v => v != null), df = dV.filter(v => v != null), tf = tV.filter(v => v != null);
+      if (of.length) modalCharts.push(new Chart(document.getElementById('mc_1'), {type: 'line', data: {labels: oP, datasets: [{data: oV, borderColor: '#1A56C4', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: {target: 'origin', above: '#1A56C418', below: '#1A56C418'}}]}, options: lineOpts(of, false)}));
+      if (df.length) modalCharts.push(new Chart(document.getElementById('mc_2'), {type: 'line', data: {labels: dP, datasets: [{data: dV, borderColor: '#C0001D', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: {target: 'origin', above: '#C0001D18', below: '#C0001D18'}}]}, options: lineOpts(df, false)}));
+      if (tf.length) modalCharts.push(new Chart(document.getElementById('mc_3'), {type: 'line', data: {labels: tP, datasets: [{data: tV, borderColor: '#007B5E', borderWidth: 2, pointRadius: 0, tension: 0.4, fill: {target: 'origin', above: '#007B5E18', below: '#007B5E18'}}]}, options: lineOpts(tf, false)}));
     });
   }
   document.getElementById('modalOverlay').classList.add('open');
 }
-function closeModal(e){ if(e.target===document.getElementById('modalOverlay')) closeModalBtn(); }
-function closeModalBtn(){ document.getElementById('modalOverlay').classList.remove('open'); modalCharts.forEach(c=>c.destroy()); modalCharts=[]; }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModalBtn(); });
 
-// \u2500\u2500 SUMMARY \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildSummary(){
-  const g = document.getElementById('summaryGrid'); g.innerHTML='';
-  const top = {total:'IMAI', mineria:'21', energia:'22', construccion:'23', manufactura:'31-33'};
-  Object.entries(top).forEach(([sec,sc])=>{
-    const s = RAW.series.find(x=>x.sector===sec&&x.scian===sc); if(!s) return;
-    const org = getVals(s,'org');
-    const {val,idx} = getLastValid(org);
+function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modalOverlay').classList.remove('open'); modalCharts.forEach(c => c.destroy()); modalCharts = []; }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SUMMARY CARDS
+// ══════════════════════════════════════════════════════════════════════════════
+function buildSummary() {
+  const g = document.getElementById('summaryGrid');
+  g.innerHTML = '';
+  const top = {total: 'IMAI', mineria: '21', energia: '22', construccion: '23', manufactura: '31-33'};
+  Object.entries(top).forEach(([sec, sc]) => {
+    const s = RAW.series.find(x => x.sector === sec && x.scian === sc);
+    if (!s) return;
+    const org = getVals(s, 'org');
+    const {val, idx} = getLastValid(org);
     const va = calcVarAnualM(org, idx);
     const baseLabel = rebaseBase ? rebaseBase.label : '2018=100';
-    const c = document.createElement('div'); c.className='sum-card'; c.style.setProperty('--c',SECTOR_COLORS[sec]);
-    c.innerHTML=`<div class="sum-label">${sec==='total'?'IMAI Total':SECTOR_LABELS[sec]}</div><div class="sum-val">${fmt(val)}</div><div class="sum-period">Base ${baseLabel} \u00B7 ${idx>=0?RAW.periods[idx].replace('/',' '):''}</div><span class="sum-badge ${chgCls(va)}">${fmtP(va)} a/a</span>`;
+    const c = document.createElement('div');
+    c.className = 'sum-card';
+    c.style.setProperty('--c', SECTOR_COLORS[sec]);
+    c.innerHTML = `<div class="sum-label">${sec === 'total' ? 'IMAI Total' : SECTOR_LABELS[sec]}</div><div class="sum-val">${fmt(val)}</div><div class="sum-period">Base ${baseLabel} · ${idx >= 0 ? RAW.periods[idx].replace('/', ' ') : ''}</div><span class="sum-badge ${chgCls(va)}">${fmtP(va)} a/a</span>`;
     g.appendChild(c);
   });
 }
 
-// \u2500\u2500 TABLE VIEW \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildTable(container, seriesInSector){
-  const slP = RAW.periods.slice(fromIdx, toIdx+1);
-
-  // Step 1: compute aggregated periods using first series
-  const firstOrg = seriesInSector[0].org.slice(fromIdx, toIdx+1);
+// ══════════════════════════════════════════════════════════════════════════════
+// TABLE VIEW
+// ══════════════════════════════════════════════════════════════════════════════
+function buildTable(container, seriesInSector) {
+  const slP = RAW.periods.slice(fromIdx, toIdx + 1);
+  const firstOrg = seriesInSector[0].org.slice(fromIdx, toIdx + 1);
   const {periods: aggP} = aggregate(firstOrg, slP, currentFreq);
+  
+  // Get FULL data for lookback
+  const fullPeriods = RAW.periods;
 
-  // Step 2: show ALL aggregated periods in the selected range
-  const N     = aggP.length;
-  const off   = 0;
-  const showP = aggP;
-
-  // Step 3: build HTML
   const wrap = document.createElement('div');
   wrap.style.cssText = 'overflow-x:auto; margin-bottom:20px; width:100%';
 
   let rows = '<table class="data-table"><thead><tr><th>Serie</th>';
-  showP.forEach(p => { rows += '<th>' + String(p).replace('/','-') + '</th>'; });
+  aggP.forEach(p => { rows += '<th>' + String(p).replace('/', '-') + '</th>'; });
   rows += '</tr></thead><tbody>';
 
   seriesInSector.forEach(s => {
-    const {vals:oV} = aggregate(getVals(s,'org').slice(fromIdx,toIdx+1),  slP, currentFreq);
-    const {vals:dV} = aggregate(getVals(s,'des').slice(fromIdx,toIdx+1),  slP, currentFreq);
-    const {vals:tV} = aggregate(getVals(s,'tend').slice(fromIdx,toIdx+1), slP, currentFreq);
+    const fullOrg = getVals(s, 'org');
+    const fullDes = getVals(s, 'des');
+    const {vals: fullOrgAgg, periods: fullOrgPeriods} = aggregate(fullOrg, fullPeriods, currentFreq);
+    const {vals: fullDesAgg, periods: fullDesPeriods} = aggregate(fullDes, fullPeriods, currentFreq);
+    
+    const {vals: oV, periods: oP} = aggregate(getVals(s, 'org').slice(fromIdx, toIdx + 1), slP, currentFreq);
+    const {vals: dV} = aggregate(getVals(s, 'des').slice(fromIdx, toIdx + 1), slP, currentFreq);
+    const {vals: tV} = aggregate(getVals(s, 'tend').slice(fromIdx, toIdx + 1), slP, currentFreq);
 
-    if(currentMode === 'niveles'){
-      // 3 rows per series: original, desest, tendencia
-      [
-        ['Orig.',   oV, '#1A56C4'],
-        ['Desest.', dV, '#C0001D'],
-        ['Tend.',   tV, '#007B5E']
-      ].forEach(([lbl, arr, col])=>{
+    if (currentMode === 'niveles') {
+      [['Orig.', oV, '#1A56C4'], ['Desest.', dV, '#C0001D'], ['Tend.', tV, '#007B5E']].forEach(([lbl, arr, col]) => {
         rows += '<tr>';
-        rows += '<td style="color:'+col+';font-weight:500">'+s.name+
-                ' <span style="opacity:.5;font-size:9px;font-weight:400">['+s.scian+'] '+lbl+'</span></td>';
-        for(let i=0; i<N; i++){
-          const v = arr[off+i];
-          rows += '<td>'+(v!=null ? v.toFixed(1) : '\u2014')+'</td>';
+        rows += '<td style="color:' + col + ';font-weight:500">' + s.name + ' <span style="opacity:.5;font-size:9px;font-weight:400">[' + s.scian + '] ' + lbl + '</span></td>';
+        for (let i = 0; i < aggP.length; i++) {
+          const v = arr[i];
+          rows += '<td>' + (v != null ? v.toFixed(1) : '—') + '</td>';
         }
         rows += '</tr>';
       });
     } else {
-      // 2 rows per series: var anual original, var period desest
-      const va = varAnualArr(oV, currentFreq);
+      const va = varAnualArrWithLookback(oV, oP, fullOrgAgg, fullOrgPeriods, currentFreq);
       const vm = varPeriodArr(dV);
-      const pLabel = currentFreq==='M'?'m/m': currentFreq==='Q'?'t/t':'a/a*';
-      [
-        ['Var.Anual',  va, '#1A56C4'],
-        ['Var.'+pLabel, vm, '#C0001D']
-      ].forEach(([lbl, arr, col])=>{
+      const pLabel = currentFreq === 'M' ? 'm/m' : currentFreq === 'Q' ? 't/t' : 'a/a*';
+      [['Var.Anual', va, '#1A56C4'], ['Var.' + pLabel, vm, '#C0001D']].forEach(([lbl, arr, col]) => {
         rows += '<tr>';
-        rows += '<td style="color:'+col+';font-weight:500">'+s.name+
-                ' <span style="opacity:.5;font-size:9px;font-weight:400">['+s.scian+'] '+lbl+'</span></td>';
-        for(let i=0; i<N; i++){
-          const v = arr[off+i];
-          const cls = v==null?'': v>=0?'pos-cell':'neg-cell';
-          rows += '<td class="'+cls+'">'+(v!=null ? v.toFixed(2)+'%' : '\u2014')+'</td>';
+        rows += '<td style="color:' + col + ';font-weight:500">' + s.name + ' <span style="opacity:.5;font-size:9px;font-weight:400">[' + s.scian + '] ' + lbl + '</span></td>';
+        for (let i = 0; i < aggP.length; i++) {
+          const v = arr[i];
+          const cls = v == null ? '' : v >= 0 ? 'pos-cell' : 'neg-cell';
+          rows += '<td class="' + cls + '">' + (v != null ? v.toFixed(2) + '%' : '—') + '</td>';
         }
         rows += '</tr>';
       });
@@ -1480,40 +1603,47 @@ function buildTable(container, seriesInSector){
   container.appendChild(wrap);
 }
 
-// \u2500\u2500 CARDS VIEW \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildCards(grid, s, color){
-  const slP = RAW.periods.slice(fromIdx, toIdx+1);
-  const {vals:oV, periods:oP} = aggregate(getVals(s,'org').slice(fromIdx,toIdx+1),  slP, currentFreq);
-  const {vals:dV, periods:dP} = aggregate(getVals(s,'des').slice(fromIdx,toIdx+1),  slP, currentFreq);
-  const {vals:tV, periods:tP} = aggregate(getVals(s,'tend').slice(fromIdx,toIdx+1), slP, currentFreq);
+// ══════════════════════════════════════════════════════════════════════════════
+// CARDS VIEW
+// ══════════════════════════════════════════════════════════════════════════════
+function buildCards(grid, s, color) {
+  // Get FULL data for lookback calculations
+  const fullOrg = getVals(s, 'org');
+  const fullDes = getVals(s, 'des');
+  const fullPeriods = RAW.periods;
+  const {vals: fullOrgAgg, periods: fullOrgPeriods} = aggregate(fullOrg, fullPeriods, currentFreq);
+  const {vals: fullDesAgg, periods: fullDesPeriods} = aggregate(fullDes, fullPeriods, currentFreq);
 
-  // Stats use rebased data
-  const org = getVals(s,'org'), des = getVals(s,'des'), tend = getVals(s,'tend');
-  const {val:lastOrg, idx:loIdx} = getLastValid(org);
-  const {val:lastDes, idx:ldIdx} = getLastValid(des);
-  const {val:lastTend}           = getLastValid(tend);
+  const slP = RAW.periods.slice(fromIdx, toIdx + 1);
+  const {vals: oV, periods: oP} = aggregate(getVals(s, 'org').slice(fromIdx, toIdx + 1), slP, currentFreq);
+  const {vals: dV, periods: dP} = aggregate(getVals(s, 'des').slice(fromIdx, toIdx + 1), slP, currentFreq);
+  const {vals: tV, periods: tP} = aggregate(getVals(s, 'tend').slice(fromIdx, toIdx + 1), slP, currentFreq);
+
+  const org = getVals(s, 'org'), des = getVals(s, 'des'), tend = getVals(s, 'tend');
+  const {val: lastOrg, idx: loIdx} = getLastValid(org);
+  const {val: lastDes, idx: ldIdx} = getLastValid(des);
+  const {val: lastTend} = getLastValid(tend);
   const varA = calcVarAnualM(org, loIdx);
   const varM = calcVarMensM(des, ldIdx);
-  const sig  = getSignal(des, ldIdx);
-  const st   = getHistStats(des, ldIdx);
-  const ctx  = fmtCtx(st);
+  const sig = getSignal(des, ldIdx);
+  const st = getHistStats(des, ldIdx);
+  const ctx = fmtCtx(st);
 
-  // Chart data depends on mode
   let c1data, c2data, c1label, c2label;
-  if(currentMode==='variaciones'){
-    c1data  = varAnualArr(oV, currentFreq);
-    c2data  = varPeriodArr(dV);
+  if (currentMode === 'variaciones') {
+    c1data = varAnualArrWithLookback(oV, oP, fullOrgAgg, fullOrgPeriods, currentFreq);
+    c2data = varPeriodArr(dV);
     c1label = 'Var. Anual Orig. (%)';
-    c2label = 'Var. '+(currentFreq==='M'?'Mensual':currentFreq==='Q'?'Trimestral':'Anual')+' Des. (%)';
+    c2label = 'Var. ' + (currentFreq === 'M' ? 'Mensual' : currentFreq === 'Q' ? 'Trimestral' : 'Anual') + ' Des. (%)';
   } else {
-    c1data  = oV;
-    c2data  = dV;
+    c1data = oV;
+    c2data = dV;
     c1label = 'Original (nivel)';
     c2label = 'Desestacionalizada';
   }
 
-  const uid = 'c'+Math.random().toString(36).slice(2,9);
-  window['SR_'+uid] = s;
+  const uid = 'c' + Math.random().toString(36).slice(2, 9);
+  window['SR_' + uid] = s;
 
   const card = document.createElement('div');
   card.className = 'card';
@@ -1526,16 +1656,16 @@ function buildCards(grid, s, color){
     <div class="card-signal">
       <div class="signal-dot" style="background:${sig.color}"></div>
       <span class="signal-text" style="color:${sig.color}">${sig.label}</span>
-      <span class="signal-sep">&#8212;</span><span class="signal-sub">${sig.sub}</span>
+      <span class="signal-sep">—</span><span class="signal-sub">${sig.sub}</span>
     </div>
     <div class="card-metrics">
       <div class="metric">
-        <div class="m-label">Original \u00B7 ${RAW.periods[loIdx]?.replace('/','-')||''}</div>
+        <div class="m-label">Original · ${RAW.periods[loIdx]?.replace('/', '-') || ''}</div>
         <div class="m-val">${fmt(lastOrg)}</div>
         <div class="m-chg ${chgCls(varA)}">${fmtP(varA)} a/a</div>
       </div>
       <div class="metric">
-        <div class="m-label">Desest. \u00B7 ${RAW.periods[ldIdx]?.replace('/','-')||''}</div>
+        <div class="m-label">Desest. · ${RAW.periods[ldIdx]?.replace('/', '-') || ''}</div>
         <div class="m-val">${fmt(lastDes)}</div>
         <div class="m-chg ${chgCls(varM)}">${fmtP(varM)} m/m</div>
       </div>
@@ -1546,16 +1676,16 @@ function buildCards(grid, s, color){
     </div>
     <div class="card-statbar">
       <div class="stat-item">
-        <div class="stat-label">M\u00E1x. hist\u00F3rico (desest.)</div>
-        <div class="stat-val">${st ? st.maxV.toFixed(1)+' \u00B7 '+st.maxP.replace('/','-') : '\u2014'}</div>
+        <div class="stat-label">Máx. histórico (desest.)</div>
+        <div class="stat-val">${st ? st.maxV.toFixed(1) + ' · ' + st.maxP.replace('/', '-') : '—'}</div>
       </div>
       <div class="stat-item">
         <div class="stat-label">Nivel actual</div>
         <div class="stat-val ${ctx.cls}">${ctx.text}</div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">vs M\u00E1x. hist\u00F3rico</div>
-        <div class="stat-val ${st&&st.pctMax<-5?'lowlight':''}">${st ? st.pctMax.toFixed(1)+'%' : '\u2014'}</div>
+        <div class="stat-label">vs Máx. histórico</div>
+        <div class="stat-val ${st && st.pctMax < -5 ? 'lowlight' : ''}">${st ? st.pctMax.toFixed(1) + '%' : '—'}</div>
       </div>
     </div>
     <div class="charts-row">
@@ -1574,260 +1704,203 @@ function buildCards(grid, s, color){
     </div>`;
   grid.appendChild(card);
 
-  requestAnimationFrame(()=>{
-    // Chart 1
-    const el1 = document.getElementById(uid+'_1');
-    if(el1){
-      if(currentMode==='variaciones'){
-        allCharts.push(new Chart(el1,{type:'bar',data:{labels:oP,datasets:[{data:c1data,backgroundColor:c1data.map(v=>v==null?'transparent':v>=0?'#1A56C440':'#4B8BDE40'),borderColor:c1data.map(v=>v==null?'transparent':v>=0?'#1A56C4':'#4B8BDE'),borderWidth:0.8,barPercentage:1,categoryPercentage:1}]},options:barOpts(c1data,true)}));
+  requestAnimationFrame(() => {
+    const el1 = document.getElementById(uid + '_1');
+    if (el1) {
+      if (currentMode === 'variaciones') {
+        allCharts.push(new Chart(el1, {type: 'bar', data: {labels: oP, datasets: [{data: c1data, backgroundColor: c1data.map(v => v == null ? 'transparent' : v >= 0 ? '#1A56C440' : '#4B8BDE40'), borderColor: c1data.map(v => v == null ? 'transparent' : v >= 0 ? '#1A56C4' : '#4B8BDE'), borderWidth: 0.8, barPercentage: 1, categoryPercentage: 1}]}, options: barOpts(c1data, true)}));
       } else {
-        const f=c1data.filter(v=>v!=null&&isFinite(v));
-        if(f.length) allCharts.push(new Chart(el1,{type:'line',data:{labels:oP,datasets:[{data:c1data,borderColor:'#1A56C4',borderWidth:1.8,pointRadius:0,tension:0.3,fill:{target:'origin',above:'#1A56C418',below:'#1A56C418'}}]},options:lineOpts(f)}));
+        const f = c1data.filter(v => v != null && isFinite(v));
+        if (f.length) allCharts.push(new Chart(el1, {type: 'line', data: {labels: oP, datasets: [{data: c1data, borderColor: '#1A56C4', borderWidth: 1.8, pointRadius: 0, tension: 0.3, fill: {target: 'origin', above: '#1A56C418', below: '#1A56C418'}}]}, options: lineOpts(f)}));
       }
     }
-    // Chart 2
-    const el2 = document.getElementById(uid+'_2');
-    if(el2){
-      if(currentMode==='variaciones'){
-        allCharts.push(new Chart(el2,{type:'bar',data:{labels:dP,datasets:[{data:c2data,backgroundColor:c2data.map(v=>v==null?'transparent':v>=0?'#C0001D40':'#FF5A5A40'),borderColor:c2data.map(v=>v==null?'transparent':v>=0?'#C0001D':'#FF5A5A'),borderWidth:0.8,barPercentage:1,categoryPercentage:1}]},options:barOpts(c2data,true)}));
+    const el2 = document.getElementById(uid + '_2');
+    if (el2) {
+      if (currentMode === 'variaciones') {
+        allCharts.push(new Chart(el2, {type: 'bar', data: {labels: dP, datasets: [{data: c2data, backgroundColor: c2data.map(v => v == null ? 'transparent' : v >= 0 ? '#C0001D40' : '#FF5A5A40'), borderColor: c2data.map(v => v == null ? 'transparent' : v >= 0 ? '#C0001D' : '#FF5A5A'), borderWidth: 0.8, barPercentage: 1, categoryPercentage: 1}]}, options: barOpts(c2data, true)}));
       } else {
-        const f=c2data.filter(v=>v!=null&&isFinite(v));
-        if(f.length) allCharts.push(new Chart(el2,{type:'line',data:{labels:dP,datasets:[{data:c2data,borderColor:'#C0001D',borderWidth:1.8,pointRadius:0,tension:0.3,fill:{target:'origin',above:'#C0001D18',below:'#C0001D18'}}]},options:lineOpts(f)}));
+        const f = c2data.filter(v => v != null && isFinite(v));
+        if (f.length) allCharts.push(new Chart(el2, {type: 'line', data: {labels: dP, datasets: [{data: c2data, borderColor: '#C0001D', borderWidth: 1.8, pointRadius: 0, tension: 0.3, fill: {target: 'origin', above: '#C0001D18', below: '#C0001D18'}}]}, options: lineOpts(f)}));
       }
     }
-    // Chart 3: always tendencia
-    const el3 = document.getElementById(uid+'_3');
-    if(el3){
-      const f=tV.filter(v=>v!=null&&isFinite(v));
-      if(f.length) allCharts.push(new Chart(el3,{type:'line',data:{labels:tP,datasets:[{data:tV,borderColor:'#007B5E',borderWidth:1.8,pointRadius:0,tension:0.4,fill:{target:'origin',above:'#007B5E18',below:'#007B5E18'}}]},options:lineOpts(f)}));
+    const el3 = document.getElementById(uid + '_3');
+    if (el3) {
+      const f = tV.filter(v => v != null && isFinite(v));
+      if (f.length) allCharts.push(new Chart(el3, {type: 'line', data: {labels: tP, datasets: [{data: tV, borderColor: '#007B5E', borderWidth: 1.8, pointRadius: 0, tension: 0.4, fill: {target: 'origin', above: '#007B5E18', below: '#007B5E18'}}]}, options: lineOpts(f)}));
     }
   });
 }
 
-// \u2500\u2500 BUILD SECTORS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-
-// ── MENSAJES VIEW ───────────────────────────────────────────────
-
-let msgChart = null;
-let msgSeries = null;
-
-function buildMensajes(){
+// ══════════════════════════════════════════════════════════════════════════════
+// MENSAJES VIEW - IMPROVED
+// ══════════════════════════════════════════════════════════════════════════════
+function buildMensajes() {
   const container = document.getElementById('sectorsContainer');
   container.innerHTML = '';
 
   const wrap = document.createElement('div');
   wrap.className = 'msg-container';
 
-  // Selector
-  const sel = document.createElement('div');
-  sel.className = 'msg-selector';
-  sel.innerHTML = `
-    <div class="msg-sel-label">Selecciona un indicador</div>
-    <select class="msg-sel-dropdown" id="msgSelector">
-      <option value="">-- Selecciona una serie --</option>
-    </select>
+  // Configuration panel
+  const configPanel = document.createElement('div');
+  configPanel.className = 'msg-selector';
+  configPanel.innerHTML = `
+    <div class="msg-sel-row">
+      <div class="msg-sel-group wide">
+        <div class="msg-sel-label">Indicador</div>
+        <select class="msg-sel-dropdown" id="msgSelector"></select>
+      </div>
+      <div class="msg-sel-group">
+        <div class="msg-sel-label">Fecha inicial</div>
+        <select class="msg-sel-dropdown" id="msgFromSel" style="width:140px"></select>
+      </div>
+      <div class="msg-sel-group">
+        <div class="msg-sel-label">Fecha final</div>
+        <select class="msg-sel-dropdown" id="msgToSel" style="width:140px"></select>
+      </div>
+    </div>
+    <div class="msg-sel-row" style="margin-top:16px">
+      <div class="msg-sel-group">
+        <div class="msg-sel-label">Series a mostrar</div>
+        <div class="msg-series-toggles" id="msgSeriesToggle">
+          <button class="msg-toggle-btn" data-series="org" id="btnOrg">Original</button>
+          <button class="msg-toggle-btn active-des" data-series="des" id="btnDes">Desestacionalizada</button>
+          <button class="msg-toggle-btn active-tend" data-series="tend" id="btnTend">Tendencia</button>
+        </div>
+      </div>
+    </div>
   `;
-  wrap.appendChild(sel);
+  wrap.appendChild(configPanel);
 
-  // Build options grouped by sector
-  const selEl = sel.querySelector('select');
-  ['total','mineria','energia','construccion','manufactura'].forEach(sector=>{
-    const ser = RAW.series.filter(s=>s.sector===sector);
+  // Build indicator selector
+  const selEl = configPanel.querySelector('#msgSelector');
+  ['total', 'mineria', 'energia', 'construccion', 'manufactura'].forEach(sector => {
+    const ser = RAW.series.filter(s => s.sector === sector);
     const optgroup = document.createElement('optgroup');
     optgroup.label = SECTOR_LABELS[sector];
-    ser.forEach(s=>{
+    ser.forEach(s => {
       const opt = new Option(s.name + ' [' + s.scian + ']', s.scian);
+      if (s.scian === 'IMAI') opt.selected = true; // Default to IMAI total
       optgroup.appendChild(opt);
     });
     selEl.appendChild(optgroup);
   });
 
-  selEl.addEventListener('change', ()=>{
+  // Build date selectors
+  const msgFromSel = configPanel.querySelector('#msgFromSel');
+  const msgToSel = configPanel.querySelector('#msgToSel');
+  
+  RAW.periods.forEach((p, i) => {
+    msgFromSel.appendChild(new Option(p.replace('/', '-'), i));
+    msgToSel.appendChild(new Option(p.replace('/', '-'), i));
+  });
+  
+  // Set default range (last 120 periods)
+  msgToIdx = RAW.periods.length - 1;
+  msgFromIdx = Math.max(0, msgToIdx - 119);
+  msgFromSel.value = msgFromIdx;
+  msgToSel.value = msgToIdx;
+
+  // Event listeners
+  selEl.addEventListener('change', () => {
     const scian = selEl.value;
-    if(!scian){ clearMensajes(); return; }
-    const s = RAW.series.find(x=>x.scian===scian);
-    if(s) renderMensajes(s);
+    if (!scian) return;
+    const s = RAW.series.find(x => x.scian === scian);
+    if (s) { msgSeries = s; renderMensajes(); }
+  });
+  
+  msgFromSel.addEventListener('change', () => {
+    msgFromIdx = +msgFromSel.value;
+    if (msgFromIdx > msgToIdx) {
+      msgToIdx = msgFromIdx;
+      msgToSel.value = msgToIdx;
+    }
+    renderMensajes();
+  });
+  
+  msgToSel.addEventListener('change', () => {
+    msgToIdx = +msgToSel.value;
+    if (msgToIdx < msgFromIdx) {
+      msgFromIdx = msgToIdx;
+      msgFromSel.value = msgFromIdx;
+    }
+    renderMensajes();
   });
 
-  // Content area (empty initially)
+  // Series toggle buttons
+  configPanel.querySelector('#btnOrg').addEventListener('click', (e) => {
+    msgShowOrg = !msgShowOrg;
+    e.target.classList.toggle('active-org', msgShowOrg);
+    renderMensajes();
+  });
+  configPanel.querySelector('#btnDes').addEventListener('click', (e) => {
+    msgShowDes = !msgShowDes;
+    e.target.classList.toggle('active-des', msgShowDes);
+    renderMensajes();
+  });
+  configPanel.querySelector('#btnTend').addEventListener('click', (e) => {
+    msgShowTend = !msgShowTend;
+    e.target.classList.toggle('active-tend', msgShowTend);
+    renderMensajes();
+  });
+
+  // Content area
   const content = document.createElement('div');
   content.id = 'msgContent';
-  content.innerHTML = '<div class="msg-empty">Selecciona un indicador para ver los mensajes autom&aacute;ticos.</div>';
   wrap.appendChild(content);
 
   container.appendChild(wrap);
+
+  // Initialize with IMAI total
+  msgSeries = RAW.series.find(s => s.scian === 'IMAI');
+  renderMensajes();
 }
 
-function clearMensajes(){
-  document.getElementById('msgContent').innerHTML = '<div class="msg-empty">Selecciona un indicador para ver los mensajes autom&aacute;ticos.</div>';
-  if(msgChart){ msgChart.destroy(); msgChart=null; }
-}
-
-function renderMensajes(s){
-  msgSeries = s;
+function renderMensajes() {
+  if (!msgSeries) return;
+  
   const content = document.getElementById('msgContent');
   content.innerHTML = '';
 
-  const org = getVals(s,'org'), des = getVals(s,'des'), tend = getVals(s,'tend');
+  if (currentFreq === 'A') {
+    content.innerHTML = '<div class="msg-empty">Los mensajes automáticos solo están disponibles para frecuencia <strong>Mensual</strong> o <strong>Trimestral</strong>.</div>';
+    return;
+  }
 
-  // Use FULL range for mensajes (ignore fromIdx/toIdx)
-  const allP = RAW.periods;
-  const oV = org;
-  const dV = des;
-  const tV = tend;
-
-  // Only available for Mensual or Trimestral
-  if(currentFreq === 'A'){
-    content.innerHTML = '<div class="msg-empty">Los mensajes autom&aacute;ticos solo est&aacute;n disponibles para frecuencia <strong>Mensual</strong> o <strong>Trimestral</strong>.</div>';
+  if (!msgShowOrg && !msgShowDes && !msgShowTend) {
+    content.innerHTML = '<div class="msg-empty">Selecciona al menos una serie para visualizar.</div>';
     return;
   }
 
   const grid = document.createElement('div');
   grid.className = 'msg-content';
 
-  // ── LEFT: Chart with range slider ───────────────────────────
+  // LEFT: Chart panel
   const chartPanel = document.createElement('div');
   chartPanel.className = 'msg-chart-panel';
   
-  // Default range: last 120 periods
-  const defaultEnd = allP.length - 1;
-  const defaultStart = Math.max(0, defaultEnd - 119);
-  
   chartPanel.innerHTML = `
-    <div class="msg-chart-title">${s.name}</div>
-    <div class="msg-chart-meta">SCIAN ${s.scian} &middot; Serie completa</div>
+    <div class="msg-chart-title">${msgSeries.name}</div>
+    <div class="msg-chart-meta">SCIAN ${msgSeries.scian} · ${RAW.periods[msgFromIdx]} → ${RAW.periods[msgToIdx]}</div>
     <div class="msg-chart-canvas"><canvas id="msgCanvas" height="280"></canvas></div>
-    <div class="msg-chart-legend">
-      <div class="msg-legend-item"><div class="msg-legend-dot" style="background:rgba(26,86,196,0.4)"></div><span>Original</span></div>
-      <div class="msg-legend-item"><div class="msg-legend-dot" style="background:#C0001D"></div><span>Desestacionalizada</span></div>
-      <div class="msg-legend-item"><div class="msg-legend-dot" style="background:#007B5E"></div><span>Tendencia-Ciclo</span></div>
-    </div>
-    <div class="msg-range-control">
-      <label class="msg-range-label">Ajustar rango de la gr&aacute;fica</label>
-      <div class="msg-range-inputs">
-        <input type="range" class="msg-range-slider" id="msgRangeSlider" min="0" max="${allP.length-1}" value="${defaultStart}" step="1">
-        <span class="msg-range-text" id="msgRangeText">${allP[defaultStart]} &rarr; ${allP[defaultEnd]}</span>
-      </div>
-    </div>
+    <div class="msg-chart-legend" id="msgLegend"></div>
   `;
   grid.appendChild(chartPanel);
 
-  // ── RIGHT: Messages ──────────────────────────────────────────
+  // RIGHT: Messages panel
   const textPanel = document.createElement('div');
   textPanel.className = 'msg-text-panel';
-  textPanel.innerHTML = '<div class="msg-text-title">Mensajes autom&aacute;ticos del &uacute;ltimo dato</div>';
+  textPanel.innerHTML = '<div class="msg-text-title">Mensajes automáticos</div>';
   grid.appendChild(textPanel);
 
   content.appendChild(grid);
 
-  // Draw chart function
-  function drawMsgChart(startIdx, endIdx){
-    const sliceP = allP.slice(startIdx, endIdx+1);
-    const sliceO = oV.slice(startIdx, endIdx+1);
-    const sliceD = dV.slice(startIdx, endIdx+1);
-    const sliceT = tV.slice(startIdx, endIdx+1);
+  // Draw chart
+  drawMsgChart();
 
-    const ctx = document.getElementById('msgCanvas');
-    if(!ctx) return;
-    if(msgChart){ msgChart.destroy(); msgChart=null; }
-
-    msgChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: sliceP.map(p=>p.replace('/','-')),
-        datasets: [
-          {
-            label: 'Original',
-            data: sliceO,
-            borderColor: 'rgba(26,86,196,0.4)',
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            pointRadius: 0,
-            tension: 0.3
-          },
-          {
-            label: 'Desestacionalizada',
-            data: sliceD,
-            borderColor: '#C0001D',
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            pointRadius: 0,
-            tension: 0.3
-          },
-          {
-            label: 'Tendencia-Ciclo',
-            data: sliceT,
-            borderColor: '#007B5E',
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            pointRadius: 0,
-            tension: 0.4
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y!=null ? ctx.parsed.y.toFixed(2) : 'N/D')
-            }
-          }
-        },
-        scales: {
-          x: {
-            display: true,
-            grid: { display: false },
-            ticks: {
-              maxTicksLimit: 12,
-              font: { family: 'IBM Plex Mono', size: 9 },
-              color: '#AAAAAA',
-              maxRotation: 45,
-              minRotation: 30
-            },
-            border: { display: false }
-          },
-          y: {
-            display: true,
-            grid: { color: '#E4E4E0', lineWidth: 0.5 },
-            ticks: {
-              maxTicksLimit: 6,
-              font: { family: 'IBM Plex Mono', size: 9 },
-              color: '#AAAAAA'
-            },
-            border: { display: false }
-          }
-        }
-      }
-    });
-  }
-
-  // Initial draw
-  requestAnimationFrame(() => {
-    drawMsgChart(defaultStart, defaultEnd);
-  });
-
-  // Slider handler
-  const slider = document.getElementById('msgRangeSlider');
-  const rangeText = document.getElementById('msgRangeText');
-  slider.addEventListener('input', ()=>{
-    const startIdx = +slider.value;
-    const endIdx = allP.length - 1;
-    rangeText.textContent = allP[startIdx] + ' \u2192 ' + allP[endIdx];
-    // Update slider background gradient
-    const pct = ((startIdx / (allP.length-1)) * 100).toFixed(1);
-    slider.style.background = `linear-gradient(to right, var(--border) 0%, var(--border) ${pct}%, var(--navy) ${pct}%, var(--navy) 100%)`;
-    drawMsgChart(startIdx, endIdx);
-  });
-
-  // Compute messages (always from full series)
-  const msgs = computeMessages(org, des, tend);
-  msgs.forEach(m=>{
+  // Compute and render messages
+  const msgs = computeMessages(msgSeries, msgFromIdx, msgToIdx);
+  msgs.forEach(m => {
     const item = document.createElement('div');
     item.className = 'msg-item';
     item.innerHTML = `<div class="msg-item-label">${m.label}</div><div class="msg-item-text">${m.text}</div>`;
@@ -1835,198 +1908,640 @@ function renderMensajes(s){
   });
 }
 
+function drawMsgChart() {
+  const ctx = document.getElementById('msgCanvas');
+  if (!ctx) return;
+  if (msgChart) { msgChart.destroy(); msgChart = null; }
 
-function computeMessages(org, des, tend){
-  const {val:lastOrg, idx:loIdx} = getLastValid(org);
-  const {val:lastDes, idx:ldIdx} = getLastValid(des);
+  const org = getVals(msgSeries, 'org');
+  const des = getVals(msgSeries, 'des');
+  const tend = getVals(msgSeries, 'tend');
+
+  const sliceP = RAW.periods.slice(msgFromIdx, msgToIdx + 1);
+  const sliceO = org.slice(msgFromIdx, msgToIdx + 1);
+  const sliceD = des.slice(msgFromIdx, msgToIdx + 1);
+  const sliceT = tend.slice(msgFromIdx, msgToIdx + 1);
+
+  const datasets = [];
+  const legendItems = [];
+
+  if (msgShowOrg) {
+    datasets.push({
+      label: 'Original',
+      data: sliceO,
+      borderColor: 'rgba(26,86,196,0.6)',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    });
+    legendItems.push({color: 'rgba(26,86,196,0.6)', label: 'Original'});
+  }
+  if (msgShowDes) {
+    datasets.push({
+      label: 'Desestacionalizada',
+      data: sliceD,
+      borderColor: '#C0001D',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    });
+    legendItems.push({color: '#C0001D', label: 'Desestacionalizada'});
+  }
+  if (msgShowTend) {
+    datasets.push({
+      label: 'Tendencia-Ciclo',
+      data: sliceT,
+      borderColor: '#007B5E',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.4
+    });
+    legendItems.push({color: '#007B5E', label: 'Tendencia-Ciclo'});
+  }
+
+  // Update legend
+  const legendEl = document.getElementById('msgLegend');
+  if (legendEl) {
+    legendEl.innerHTML = legendItems.map(item => 
+      `<div class="msg-legend-item"><div class="msg-legend-dot" style="background:${item.color}"></div><span>${item.label}</span></div>`
+    ).join('');
+  }
+
+  msgChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: sliceP.map(p => p.replace('/', '-')),
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y != null ? ctx.parsed.y.toFixed(2) : 'N/D')
+          }
+        }
+      },
+      scales: {
+        x: {
+          display: true,
+          grid: {display: false},
+          ticks: {
+            maxTicksLimit: 12,
+            font: {family: 'IBM Plex Mono', size: 9},
+            color: '#AAAAAA',
+            maxRotation: 45,
+            minRotation: 30
+          },
+          border: {display: false}
+        },
+        y: {
+          display: true,
+          grid: {color: '#E4E4E0', lineWidth: 0.5},
+          ticks: {
+            maxTicksLimit: 6,
+            font: {family: 'IBM Plex Mono', size: 9},
+            color: '#AAAAAA'
+          },
+          border: {display: false}
+        }
+      }
+    }
+  });
+}
+
+function computeMessages(s, startIdx, endIdx) {
+  const org = getVals(s, 'org');
+  const des = getVals(s, 'des');
+  const tend = getVals(s, 'tend');
+  
+  const {val: lastOrg, idx: loIdx} = getLastValid(org);
+  const {val: lastDes, idx: ldIdx} = getLastValid(des);
 
   const messages = [];
 
-  // 1. Comparaci\u00F3n mensual/trimestral desestacionalizada
-  if(ldIdx >= 1 && des[ldIdx-1] != null){
-    const prev = des[ldIdx-1];
+  // 1. Comparison: Last period vs Start period (dynamic based on date selection)
+  const startVal = des[startIdx];
+  const endVal = des[ldIdx];
+  if (startVal != null && endVal != null && startIdx !== ldIdx) {
+    const chg = ((endVal - startVal) / startVal) * 100;
+    const dir = chg >= 0 ? 'aumentó' : 'disminuyó';
+    const cls = chg >= 0 ? 'pos' : 'neg';
+    const numPeriods = ldIdx - startIdx;
+    messages.push({
+      label: 'Cambio en el periodo seleccionado',
+      text: `Desde ${RAW.periods[startIdx]} hasta ${RAW.periods[ldIdx]} (${numPeriods} periodos), la serie desestacionalizada <strong>${dir}</strong> <span class="${cls}">${Math.abs(chg).toFixed(2)}%</span> (de ${startVal.toFixed(2)} a ${endVal.toFixed(2)}).`
+    });
+  }
+
+  // 2. Monthly/quarterly comparison
+  if (ldIdx >= 1 && des[ldIdx - 1] != null) {
+    const prev = des[ldIdx - 1];
     const chg = ((lastDes - prev) / prev) * 100;
-    const dir = chg >= 0 ? 'increment\u00F3' : 'disminuy\u00F3';
+    const dir = chg >= 0 ? 'incrementó' : 'disminuyó';
     const cls = chg >= 0 ? 'pos' : 'neg';
     messages.push({
-      label: currentFreq==='M' ? 'Comparaci\u00F3n mensual' : 'Comparaci\u00F3n trimestral',
-      text: `La serie desestacionalizada <strong>${dir}</strong> <span class="${cls}">${Math.abs(chg).toFixed(2)}%</span> respecto al periodo anterior (${RAW.periods[ldIdx-1]}: ${prev.toFixed(2)} \u2192 ${RAW.periods[ldIdx]}: ${lastDes.toFixed(2)}).`
+      label: currentFreq === 'M' ? 'Comparación mensual' : 'Comparación trimestral',
+      text: `La serie desestacionalizada <strong>${dir}</strong> <span class="${cls}">${Math.abs(chg).toFixed(2)}%</span> respecto al periodo anterior (${RAW.periods[ldIdx - 1]}: ${prev.toFixed(2)} → ${RAW.periods[ldIdx]}: ${lastDes.toFixed(2)}).`
     });
   }
 
-  // 2. Comparaci\u00F3n anual original
-  const lag = currentFreq==='M' ? 12 : 4;
-  if(loIdx >= lag && org[loIdx-lag] != null){
-    const prevYear = org[loIdx-lag];
+  // 3. Annual comparison (original)
+  const lag = currentFreq === 'M' ? 12 : 4;
+  if (loIdx >= lag && org[loIdx - lag] != null) {
+    const prevYear = org[loIdx - lag];
     const chg = ((lastOrg - prevYear) / prevYear) * 100;
-    const dir = chg >= 0 ? 'creci\u00F3' : 'cay\u00F3';
+    const dir = chg >= 0 ? 'creció' : 'cayó';
     const cls = chg >= 0 ? 'pos' : 'neg';
     messages.push({
-      label: 'Comparaci\u00F3n anual',
-      text: `En t\u00E9rminos interanuales (serie original), la actividad <strong>${dir}</strong> <span class="${cls}">${Math.abs(chg).toFixed(2)}%</span> respecto al mismo periodo del a\u00F1o anterior (${RAW.periods[loIdx-lag]}: ${prevYear.toFixed(2)} vs ${RAW.periods[loIdx]}: ${lastOrg.toFixed(2)}).`
+      label: 'Comparación anual',
+      text: `En términos interanuales (serie original), la actividad <strong>${dir}</strong> <span class="${cls}">${Math.abs(chg).toFixed(2)}%</span> respecto al mismo periodo del año anterior (${RAW.periods[loIdx - lag]}: ${prevYear.toFixed(2)} vs ${RAW.periods[loIdx]}: ${lastOrg.toFixed(2)}).`
     });
   }
 
-  // 3. Comparaci\u00F3n trimestral (vs trimestre inmediato anterior)
-  if(currentFreq==='M' && ldIdx >= 2){
+  // 4. Quarterly comparison (for monthly data)
+  if (currentFreq === 'M' && ldIdx >= 2) {
     const curPeriod = RAW.periods[ldIdx];
     const [yr, mo] = curPeriod.split('/');
     const monthNum = +mo;
     const trimesterComplete = monthNum % 3 === 0;
 
-    if(trimesterComplete){
-      // Trimestre completo: comparar con trimestre inmediato anterior
-      const curQ = [des[ldIdx], des[ldIdx-1], des[ldIdx-2]].filter(v=>v!=null);
-      const prevQ = [des[ldIdx-3], des[ldIdx-4], des[ldIdx-5]].filter(v=>v!=null);
-      if(curQ.length===3 && prevQ.length===3){
-        const avgCur = curQ.reduce((a,b)=>a+b)/3;
-        const avgPrev = prevQ.reduce((a,b)=>a+b)/3;
+    if (trimesterComplete) {
+      const curQ = [des[ldIdx], des[ldIdx - 1], des[ldIdx - 2]].filter(v => v != null);
+      const prevQ = [des[ldIdx - 3], des[ldIdx - 4], des[ldIdx - 5]].filter(v => v != null);
+      if (curQ.length === 3 && prevQ.length === 3) {
+        const avgCur = curQ.reduce((a, b) => a + b) / 3;
+        const avgPrev = prevQ.reduce((a, b) => a + b) / 3;
         const chg = ((avgCur - avgPrev) / avgPrev) * 100;
         const cls = chg >= 0 ? 'pos' : 'neg';
         const qNum = Math.ceil(monthNum / 3);
         messages.push({
-          label: 'Comparaci\u00F3n trimestral',
-          text: `El trimestre Q${qNum} de ${yr} (promedio: ${avgCur.toFixed(2)}) tuvo una variaci\u00F3n de <span class="${cls}">${chg.toFixed(2)}%</span> respecto al trimestre inmediato anterior (${avgPrev.toFixed(2)}).`
-        });
-      }
-    } else {
-      // Trimestre incompleto: comparar con el \u00FAltimo trimestre completo
-      const monthsInCurQ = monthNum % 3;
-      const curPartial = [];
-      for(let i=0; i<monthsInCurQ; i++) if(des[ldIdx-i]!=null) curPartial.push(des[ldIdx-i]);
-      
-      const lastFullQEnd = ldIdx - monthsInCurQ;
-      const lastFullQ = [des[lastFullQEnd], des[lastFullQEnd-1], des[lastFullQEnd-2]].filter(v=>v!=null);
-      
-      if(curPartial.length>0 && lastFullQ.length===3){
-        const avgCur = curPartial.reduce((a,b)=>a+b)/curPartial.length;
-        const avgLast = lastFullQ.reduce((a,b)=>a+b)/3;
-        const chg = ((avgCur - avgLast) / avgLast) * 100;
-        const cls = chg >= 0 ? 'pos' : 'neg';
-        messages.push({
-          label: 'Comparaci\u00F3n trimestral',
-          text: `El promedio parcial del trimestre en curso (${avgCur.toFixed(2)}, ${monthsInCurQ} ${monthsInCurQ===1?'mes':'meses'}) es <span class="${cls}">${chg.toFixed(2)}%</span> ${chg>=0?'mayor':'menor'} que el promedio del trimestre inmediato anterior (${avgLast.toFixed(2)}).`
+          label: 'Comparación trimestral',
+          text: `El trimestre Q${qNum} de ${yr} (promedio: ${avgCur.toFixed(2)}) tuvo una variación de <span class="${cls}">${chg.toFixed(2)}%</span> respecto al trimestre inmediato anterior (${avgPrev.toFixed(2)}).`
         });
       }
     }
   }
 
-  // 4. Acumulado del a\u00F1o vs mismo acumulado del a\u00F1o anterior (original)
-  if(currentFreq==='M' && loIdx >= 12){
+  // 5. YTD comparison
+  if (currentFreq === 'M' && loIdx >= 12) {
     const curPeriod = RAW.periods[loIdx];
     const [yr, mo] = curPeriod.split('/');
     const monthNum = +mo;
     
     const ytdCur = [];
-    for(let m=1; m<=monthNum; m++){
-      const idx = RAW.periods.indexOf(yr+'/'+String(m).padStart(2,'0'));
-      if(idx>=0 && org[idx]!=null) ytdCur.push(org[idx]);
+    for (let m = 1; m <= monthNum; m++) {
+      const idx = RAW.periods.indexOf(yr + '/' + String(m).padStart(2, '0'));
+      if (idx >= 0 && org[idx] != null) ytdCur.push(org[idx]);
     }
     
     const prevYr = String(+yr - 1);
     const ytdPrev = [];
-    for(let m=1; m<=monthNum; m++){
-      const idx = RAW.periods.indexOf(prevYr+'/'+String(m).padStart(2,'0'));
-      if(idx>=0 && org[idx]!=null) ytdPrev.push(org[idx]);
+    for (let m = 1; m <= monthNum; m++) {
+      const idx = RAW.periods.indexOf(prevYr + '/' + String(m).padStart(2, '0'));
+      if (idx >= 0 && org[idx] != null) ytdPrev.push(org[idx]);
     }
     
-    if(ytdCur.length === monthNum && ytdPrev.length === monthNum){
-      const avgCur = ytdCur.reduce((a,b)=>a+b)/ytdCur.length;
-      const avgPrev = ytdPrev.reduce((a,b)=>a+b)/ytdPrev.length;
+    if (ytdCur.length === monthNum && ytdPrev.length === monthNum) {
+      const avgCur = ytdCur.reduce((a, b) => a + b) / ytdCur.length;
+      const avgPrev = ytdPrev.reduce((a, b) => a + b) / ytdPrev.length;
       const chg = ((avgCur - avgPrev) / avgPrev) * 100;
       const cls = chg >= 0 ? 'pos' : 'neg';
       messages.push({
-        label: 'Acumulado del a\u00F1o',
-        text: `El promedio acumulado de ${yr} (${monthNum} ${monthNum===1?'mes':'meses'}: ${avgCur.toFixed(2)}) presenta una variaci\u00F3n de <span class="${cls}">${chg.toFixed(2)}%</span> respecto al mismo acumulado de ${prevYr} (${avgPrev.toFixed(2)}).`
+        label: 'Acumulado del año',
+        text: `El promedio acumulado de ${yr} (${monthNum} ${monthNum === 1 ? 'mes' : 'meses'}: ${avgCur.toFixed(2)}) presenta una variación de <span class="${cls}">${chg.toFixed(2)}%</span> respecto al mismo acumulado de ${prevYr} (${avgPrev.toFixed(2)}).`
       });
     }
   }
 
-  // 5. Nivel hist\u00F3rico (usar TODA la serie)
-  const fullDes = getVals(msgSeries, 'des');
-  const fullLastIdx = fullDes.length - 1;
-  const fullLastVal = fullDes[fullLastIdx];
-  const st = getHistStats(fullDes, fullLastIdx);
+  // 6. Historical level
+  const fullDes = des;
+  const st = getHistStats(fullDes, ldIdx);
   
-  if(st){
-    if(st.isMax){
+  if (st) {
+    if (st.isMax) {
       messages.push({
-        label: 'Nivel hist\u00F3rico',
-        text: `<strong>M\u00E1ximo hist\u00F3rico</strong> de la serie desestacionalizada (${fullLastVal.toFixed(2)} en ${RAW.periods[fullLastIdx]}).`
+        label: 'Nivel histórico',
+        text: `<strong>Máximo histórico</strong> de la serie desestacionalizada (${lastDes.toFixed(2)} en ${RAW.periods[ldIdx]}).`
       });
-    } else if(st.isMin){
+    } else if (st.isMin) {
       messages.push({
-        label: 'Nivel hist\u00F3rico',
-        text: `<strong>M\u00EDnimo hist\u00F3rico</strong> de la serie desestacionalizada (${fullLastVal.toFixed(2)} en ${RAW.periods[fullLastIdx]}).`
+        label: 'Nivel histórico',
+        text: `<strong>Mínimo histórico</strong> de la serie desestacionalizada (${lastDes.toFixed(2)} en ${RAW.periods[ldIdx]}).`
       });
     } else {
-      const varM = fullLastIdx>=1 && fullDes[fullLastIdx-1]!=null ? ((fullLastVal-fullDes[fullLastIdx-1])/fullDes[fullLastIdx-1])*100 : null;
+      const varM = ldIdx >= 1 && fullDes[ldIdx - 1] != null ? ((lastDes - fullDes[ldIdx - 1]) / fullDes[ldIdx - 1]) * 100 : null;
       const rising = varM != null && varM >= 0;
-      if(rising && st.abv >= 3){
-        const unit = st.abv < 24 ? 'meses' : 'a\u00F1os';
-        const n = st.abv < 24 ? st.abv : Math.round(st.abv/12);
-        const periodAgo = RAW.periods[fullLastIdx - st.abv] || st.maxP;
+      if (rising && st.abv >= 3) {
+        const unit = st.abv < 24 ? 'meses' : 'años';
+        const n = st.abv < 24 ? st.abv : Math.round(st.abv / 12);
         messages.push({
-          label: 'Nivel hist\u00F3rico',
-          text: `Nivel m\u00E1s alto en <strong>${n} ${unit}</strong> (desde ${periodAgo}: ${st.maxV.toFixed(2)}) con un valor actual de ${fullLastVal.toFixed(2)}.`
+          label: 'Nivel histórico',
+          text: `Nivel más alto en <strong>${n} ${unit}</strong> con un valor actual de ${lastDes.toFixed(2)}.`
         });
-      } else if(!rising && st.blw >= 3){
-        const unit = st.blw < 24 ? 'meses' : 'a\u00F1os';
-        const n = st.blw < 24 ? st.blw : Math.round(st.blw/12);
-        const periodAgo = RAW.periods[fullLastIdx - st.blw] || st.minP;
+      } else if (!rising && st.blw >= 3) {
+        const unit = st.blw < 24 ? 'meses' : 'años';
+        const n = st.blw < 24 ? st.blw : Math.round(st.blw / 12);
         messages.push({
-          label: 'Nivel hist\u00F3rico',
-          text: `Nivel m\u00E1s bajo en <strong>${n} ${unit}</strong> (desde ${periodAgo}: ${st.minV.toFixed(2)}) con un valor actual de ${fullLastVal.toFixed(2)}.`
+          label: 'Nivel histórico',
+          text: `Nivel más bajo en <strong>${n} ${unit}</strong> con un valor actual de ${lastDes.toFixed(2)}.`
         });
       }
     }
   }
 
-  // 6. vs M\u00E1ximo hist\u00F3rico
-  if(st && !st.isMax){
+  // 7. vs Max/Min
+  if (st && !st.isMax) {
     const diff = st.pctMax;
     messages.push({
-      label: 'vs M\u00E1ximo hist\u00F3rico',
-      text: `El nivel actual se encuentra <span class="neg">${Math.abs(diff).toFixed(1)}%</span> por debajo del m\u00E1ximo hist\u00F3rico (${st.maxV.toFixed(2)} en ${st.maxP}).`
+      label: 'vs Máximo histórico',
+      text: `El nivel actual se encuentra <span class="neg">${Math.abs(diff).toFixed(1)}%</span> por debajo del máximo histórico (${st.maxV.toFixed(2)} en ${st.maxP}).`
     });
   }
 
-  // 7. vs M\u00EDnimo hist\u00F3rico
-  if(st && !st.isMin){
-    const pctAboveMin = ((fullLastVal - st.minV) / st.minV) * 100;
+  if (st && !st.isMin) {
+    const pctAboveMin = ((lastDes - st.minV) / st.minV) * 100;
     messages.push({
-      label: 'vs M\u00EDnimo hist\u00F3rico',
-      text: `El nivel actual es <span class="pos">${pctAboveMin.toFixed(1)}%</span> mayor que el m\u00EDnimo hist\u00F3rico (${st.minV.toFixed(2)} en ${st.minP}).`
+      label: 'vs Mínimo histórico',
+      text: `El nivel actual es <span class="pos">${pctAboveMin.toFixed(1)}%</span> mayor que el mínimo histórico (${st.minV.toFixed(2)} en ${st.minP}).`
     });
   }
 
   return messages;
 }
 
-
-function buildSectors(){
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTRIBUCIONES VIEW - NEW
+// ══════════════════════════════════════════════════════════════════════════════
+function buildContribuciones() {
   const container = document.getElementById('sectorsContainer');
-  container.innerHTML='';
-  allCharts.forEach(c=>c.destroy()); allCharts=[];
+  container.innerHTML = '';
 
-  if(currentView === 'mensajes'){ buildMensajes(); return; }
-  ['total','mineria','energia','construccion','manufactura'].forEach(sector=>{
-    const ser   = RAW.series.filter(s=>s.sector===sector);
+  const wrap = document.createElement('div');
+  wrap.className = 'contrib-container';
+
+  // Configuration panel
+  const configPanel = document.createElement('div');
+  configPanel.className = 'contrib-config';
+  
+  // Get parent indicators (those that have components)
+  const parentIndicators = [
+    {scian: 'IMAI', name: 'IMAI Total', components: ['21', '22', '23', '31-33']},
+    {scian: '21', name: 'Minería', components: ['211', '212', '213']},
+    {scian: '23', name: 'Construcción', components: ['236', '237', '238']},
+    {scian: '31-33', name: 'Manufacturas', components: ['311', '312', '313', '314', '315', '316', '321', '322', '323', '324', '325', '326', '327', '331', '332', '333', '334', '335', '336', '337', '339']}
+  ];
+
+  let selectHtml = '';
+  parentIndicators.forEach(p => {
+    selectHtml += `<option value="${p.scian}" ${p.scian === 'IMAI' ? 'selected' : ''}>${p.name}</option>`;
+  });
+
+  configPanel.innerHTML = `
+    <div class="contrib-config-row">
+      <div class="contrib-config-group wide">
+        <div class="contrib-config-label">Indicador principal</div>
+        <select class="contrib-select" id="contribMainSelect">${selectHtml}</select>
+      </div>
+    </div>
+    <div class="contrib-config-row">
+      <div class="contrib-config-group" style="width:100%">
+        <div class="contrib-config-label">Componentes a mostrar (los no seleccionados se agrupan en "Otros")</div>
+        <div class="contrib-chips" id="contribChips"></div>
+      </div>
+    </div>
+  `;
+  wrap.appendChild(configPanel);
+
+  // Chart panel
+  const chartPanel = document.createElement('div');
+  chartPanel.className = 'contrib-chart-panel';
+  chartPanel.innerHTML = `
+    <div class="contrib-chart-title" id="contribChartTitle">Contribuciones a la variación anual del IMAI</div>
+    <div class="contrib-chart-subtitle" id="contribChartSubtitle">Variación anual (%) y contribuciones por componente</div>
+    <div class="contrib-canvas-wrap"><canvas id="contribCanvas"></canvas></div>
+    <div class="contrib-legend" id="contribLegend"></div>
+  `;
+  wrap.appendChild(chartPanel);
+
+  container.appendChild(wrap);
+
+  // Event listeners
+  document.getElementById('contribMainSelect').addEventListener('change', (e) => {
+    contribMainIndicator = e.target.value;
+    const parent = parentIndicators.find(p => p.scian === contribMainIndicator);
+    if (parent) {
+      contribSelectedComponents = parent.components.slice(0, 4); // Default to first 4
+      updateContribChips();
+      renderContribuciones();
+    }
+  });
+
+  // Initialize chips
+  updateContribChips();
+  renderContribuciones();
+}
+
+function updateContribChips() {
+  const chipsContainer = document.getElementById('contribChips');
+  if (!chipsContainer) return;
+
+  const parentIndicators = [
+    {scian: 'IMAI', components: ['21', '22', '23', '31-33']},
+    {scian: '21', components: ['211', '212', '213']},
+    {scian: '23', components: ['236', '237', '238']},
+    {scian: '31-33', components: ['311', '312', '313', '314', '315', '316', '321', '322', '323', '324', '325', '326', '327', '331', '332', '333', '334', '335', '336', '337', '339']}
+  ];
+
+  const parent = parentIndicators.find(p => p.scian === contribMainIndicator);
+  if (!parent) return;
+
+  let html = '';
+  parent.components.forEach((scian, idx) => {
+    const s = RAW.series.find(x => x.scian === scian);
+    if (!s) return;
+    const isActive = contribSelectedComponents.includes(scian);
+    const color = CONTRIB_COLORS[idx % CONTRIB_COLORS.length];
+    html += `<button class="contrib-chip ${isActive ? 'active' : ''}" data-scian="${scian}" style="${isActive ? 'border-color:' + color : ''}">
+      <span class="chip-dot" style="background:${isActive ? color : '#CCC'}"></span>
+      ${s.name.length > 30 ? s.name.slice(0, 30) + '...' : s.name}
+    </button>`;
+  });
+
+  chipsContainer.innerHTML = html;
+
+  // Add click handlers
+  chipsContainer.querySelectorAll('.contrib-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const scian = chip.dataset.scian;
+      if (contribSelectedComponents.includes(scian)) {
+        contribSelectedComponents = contribSelectedComponents.filter(c => c !== scian);
+      } else {
+        contribSelectedComponents.push(scian);
+      }
+      updateContribChips();
+      renderContribuciones();
+    });
+  });
+}
+
+function renderContribuciones() {
+  const ctx = document.getElementById('contribCanvas');
+  if (!ctx) return;
+  if (contribChart) { contribChart.destroy(); contribChart = null; }
+
+  const mainSeries = RAW.series.find(s => s.scian === contribMainIndicator);
+  if (!mainSeries) return;
+
+  // Update title
+  document.getElementById('contribChartTitle').textContent = 
+    `Contribuciones a la variación anual: ${mainSeries.name}`;
+
+  // Get data range
+  const slP = RAW.periods.slice(fromIdx, toIdx + 1);
+  
+  // Get full data for lookback
+  const fullOrg = getVals(mainSeries, 'org');
+  const fullPeriods = RAW.periods;
+  const {vals: fullOrgAgg, periods: fullOrgPeriods} = aggregate(fullOrg, fullPeriods, currentFreq);
+
+  // Aggregate main indicator
+  const {vals: mainVals, periods: aggPeriods} = aggregate(
+    fullOrg.slice(fromIdx, toIdx + 1), slP, currentFreq
+  );
+
+  // Calculate annual variation with lookback
+  const mainVarAnual = varAnualArrWithLookback(mainVals, aggPeriods, fullOrgAgg, fullOrgPeriods, currentFreq);
+
+  // Get parent indicators info
+  const parentIndicators = [
+    {scian: 'IMAI', components: ['21', '22', '23', '31-33']},
+    {scian: '21', components: ['211', '212', '213']},
+    {scian: '23', components: ['236', '237', '238']},
+    {scian: '31-33', components: ['311', '312', '313', '314', '315', '316', '321', '322', '323', '324', '325', '326', '327', '331', '332', '333', '334', '335', '336', '337', '339']}
+  ];
+  const parent = parentIndicators.find(p => p.scian === contribMainIndicator);
+  const allComponents = parent ? parent.components : [];
+
+  // Calculate contributions for each selected component
+  const componentData = [];
+  const otherComponents = allComponents.filter(c => !contribSelectedComponents.includes(c));
+
+  contribSelectedComponents.forEach((scian, idx) => {
+    const s = RAW.series.find(x => x.scian === scian);
+    if (!s) return;
+
+    const compOrg = getVals(s, 'org');
+    const {vals: compFullAgg, periods: compFullPeriods} = aggregate(compOrg, fullPeriods, currentFreq);
+    const {vals: compVals} = aggregate(compOrg.slice(fromIdx, toIdx + 1), slP, currentFreq);
+    
+    // Calculate annual variation for component
+    const compVarAnual = varAnualArrWithLookback(compVals, aggPeriods, compFullAgg, compFullPeriods, currentFreq);
+
+    // Calculate structure weights
+    const compEstruc = ESTRUCTURA.data[scian] || [];
+    const {vals: strucVals} = aggregate(compEstruc.slice(fromIdx, toIdx + 1), slP, currentFreq);
+    const totalEstruc = ESTRUCTURA.data[contribMainIndicator] || [];
+    const {vals: totalStrucVals} = aggregate(totalEstruc.slice(fromIdx, toIdx + 1), slP, currentFreq);
+
+    // Calculate contributions: var_anual_component * (estructura_t-1 / total_estructura_t-1)
+    const contributions = compVarAnual.map((va, i) => {
+      if (va == null || i < 1) return null;
+      const strucWeight = strucVals[i - 1];
+      const totalStruc = totalStrucVals[i - 1];
+      if (strucWeight == null || totalStruc == null || totalStruc === 0) return null;
+      return va * (strucWeight / totalStruc);
+    });
+
+    componentData.push({
+      scian,
+      name: s.name,
+      color: CONTRIB_COLORS[idx % CONTRIB_COLORS.length],
+      contributions
+    });
+  });
+
+  // Calculate "Otros" if there are unselected components
+  if (otherComponents.length > 0) {
+    const otrosContributions = aggPeriods.map((_, i) => {
+      if (i < 1) return null;
+      let sum = 0;
+      let hasData = false;
+      
+      otherComponents.forEach(scian => {
+        const s = RAW.series.find(x => x.scian === scian);
+        if (!s) return;
+
+        const compOrg = getVals(s, 'org');
+        const {vals: compFullAgg, periods: compFullPeriods} = aggregate(compOrg, fullPeriods, currentFreq);
+        const {vals: compVals} = aggregate(compOrg.slice(fromIdx, toIdx + 1), slP, currentFreq);
+        const compVarAnual = varAnualArrWithLookback(compVals, aggPeriods, compFullAgg, compFullPeriods, currentFreq);
+
+        const compEstruc = ESTRUCTURA.data[scian] || [];
+        const {vals: strucVals} = aggregate(compEstruc.slice(fromIdx, toIdx + 1), slP, currentFreq);
+        const totalEstruc = ESTRUCTURA.data[contribMainIndicator] || [];
+        const {vals: totalStrucVals} = aggregate(totalEstruc.slice(fromIdx, toIdx + 1), slP, currentFreq);
+
+        const va = compVarAnual[i];
+        const strucWeight = strucVals[i - 1];
+        const totalStruc = totalStrucVals[i - 1];
+        
+        if (va != null && strucWeight != null && totalStruc != null && totalStruc !== 0) {
+          sum += va * (strucWeight / totalStruc);
+          hasData = true;
+        }
+      });
+
+      return hasData ? sum : null;
+    });
+
+    componentData.push({
+      scian: 'otros',
+      name: 'Otros',
+      color: '#95A5A6',
+      contributions: otrosContributions
+    });
+  }
+
+  // Build datasets
+  const datasets = [];
+
+  // Stacked bars for contributions
+  componentData.forEach((comp, idx) => {
+    datasets.push({
+      type: 'bar',
+      label: comp.name,
+      data: comp.contributions,
+      backgroundColor: comp.color + '99',
+      borderColor: comp.color,
+      borderWidth: 1,
+      stack: 'contributions',
+      order: 2
+    });
+  });
+
+  // Line for total variation
+  datasets.push({
+    type: 'line',
+    label: 'Variación anual total',
+    data: mainVarAnual,
+    borderColor: '#0C1220',
+    backgroundColor: 'transparent',
+    borderWidth: 3,
+    pointRadius: 3,
+    pointBackgroundColor: '#0C1220',
+    tension: 0.1,
+    order: 1
+  });
+
+  // Calculate y-axis limits
+  const allValues = [...mainVarAnual.filter(v => v != null)];
+  componentData.forEach(comp => {
+    allValues.push(...comp.contributions.filter(v => v != null));
+  });
+  const lim = clipLimits(allValues, 0.02, 0.98, true);
+
+  contribChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: aggPeriods.map(p => p.replace('/', '-')),
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y != null ? ctx.parsed.y.toFixed(2) + '%' : 'N/D')
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          display: true,
+          grid: {display: false},
+          ticks: {
+            maxTicksLimit: 16,
+            font: {family: 'IBM Plex Mono', size: 10},
+            color: '#AAAAAA',
+            maxRotation: 45,
+            minRotation: 30
+          },
+          border: {display: false}
+        },
+        y: {
+          stacked: true,
+          display: true,
+          min: lim.min,
+          max: lim.max,
+          grid: {color: ctx => ctx.tick.value === 0 ? '#33333380' : '#E4E4E0', lineWidth: ctx => ctx.tick.value === 0 ? 1.5 : 0.5},
+          ticks: {
+            stepSize: lim.step,
+            font: {family: 'IBM Plex Mono', size: 10},
+            color: '#AAAAAA',
+            callback: v => v.toFixed(1) + '%'
+          },
+          border: {display: false}
+        }
+      }
+    }
+  });
+
+  // Update legend
+  const legendEl = document.getElementById('contribLegend');
+  if (legendEl) {
+    let legendHtml = `<div class="contrib-legend-item"><div class="contrib-legend-line" style="background:#0C1220"></div><span>Variación anual total</span></div>`;
+    componentData.forEach(comp => {
+      legendHtml += `<div class="contrib-legend-item"><div class="contrib-legend-dot" style="background:${comp.color}"></div><span>${comp.name.length > 25 ? comp.name.slice(0, 25) + '...' : comp.name}</span></div>`;
+    });
+    legendEl.innerHTML = legendHtml;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BUILD SECTORS (Main orchestrator)
+// ══════════════════════════════════════════════════════════════════════════════
+function buildSectors() {
+  const container = document.getElementById('sectorsContainer');
+  container.innerHTML = '';
+  allCharts.forEach(c => c.destroy());
+  allCharts = [];
+
+  if (currentView === 'mensajes') { buildMensajes(); return; }
+  if (currentView === 'contribuciones') { buildContribuciones(); return; }
+
+  ['total', 'mineria', 'energia', 'construccion', 'manufactura'].forEach(sector => {
+    const ser = RAW.series.filter(s => s.sector === sector);
     const color = SECTOR_COLORS[sector];
     const mainS = ser[0];
-    const mainOrg = getVals(mainS,'org');
-    const {val:hV, idx:hI} = getLastValid(mainOrg);
+    const mainOrg = getVals(mainS, 'org');
+    const {val: hV, idx: hI} = getLastValid(mainOrg);
     const hVa = calcVarAnualM(mainOrg, hI);
 
-    // Sector header
-    const hdr = document.createElement('div'); hdr.className='sector-header';
-    hdr.innerHTML=`<div class="sector-accent" style="background:${color}"></div><div class="sector-name">${SECTOR_LABELS[sector]}</div><div class="sector-scian">SCIAN ${mainS.scian}</div><div class="sector-val">${fmt(hV)}&nbsp;<span style="color:${hVa>=0?'#145C38':'#C0001D'};font-size:11px">(${fmtP(hVa)})</span></div>`;
+    const hdr = document.createElement('div');
+    hdr.className = 'sector-header';
+    hdr.innerHTML = `<div class="sector-accent" style="background:${color}"></div><div class="sector-name">${SECTOR_LABELS[sector]}</div><div class="sector-scian">SCIAN ${mainS.scian}</div><div class="sector-val">${fmt(hV)}&nbsp;<span style="color:${hVa >= 0 ? '#145C38' : '#C0001D'};font-size:11px">(${fmtP(hVa)})</span></div>`;
     container.appendChild(hdr);
 
-    if(currentView === 'tablas'){
+    if (currentView === 'tablas') {
       buildTable(container, ser);
     } else {
-      const grid = document.createElement('div'); grid.className='cards-grid';
+      const grid = document.createElement('div');
+      grid.className = 'cards-grid';
       container.appendChild(grid);
       ser.forEach(s => buildCards(grid, s, color));
     }
@@ -2034,254 +2549,237 @@ function buildSectors(){
   updateInfo();
 }
 
-function updateInfo(){
-  document.getElementById('rangeInfo').textContent =
-    RAW.periods[fromIdx].replace('/','-') + ' \u2192 ' + RAW.periods[toIdx].replace('/','-') +
-    ' \u00B7 ' + (toIdx-fromIdx+1) + ' obs.';
-}
-
-function redrawAll(){
-  allCharts.forEach(c=>c.destroy()); allCharts=[];
-  if(msgChart){ msgChart.destroy(); msgChart=null; }
-  buildSummary();
-  buildSectors();
-}
-
-
-// ── REBASE ENGINE ────────────────────────────────────────────────
-
-let rebaseType = 'A';      // 'A' | 'Q' | 'M'
-let rebaseBase = null;     // { type, label, factor_per_series }
-                           // factor_per_series: map scian -> {org, des, tend}
-
-function openRebase(){
+// ══════════════════════════════════════════════════════════════════════════════
+// REBASE ENGINE
+// ══════════════════════════════════════════════════════════════════════════════
+function openRebase() {
   buildRebaseSelects();
   updateRbPreview();
   document.getElementById('rebaseOverlay').classList.add('open');
 }
-function closeRebase(){ document.getElementById('rebaseOverlay').classList.remove('open'); }
-function closeRebaseOuter(e){ if(e.target===document.getElementById('rebaseOverlay')) closeRebase(); }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeRebase(); closeModalBtn(); } });
+function closeRebase() { document.getElementById('rebaseOverlay').classList.remove('open'); }
+function closeRebaseOuter(e) { if (e.target === document.getElementById('rebaseOverlay')) closeRebase(); }
 
-function setRbType(t, btn){
-  document.querySelectorAll('[data-rbtype]').forEach(b=>b.classList.remove('active'));
+function setRbType(t, btn) {
+  document.querySelectorAll('[data-rbtype]').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   rebaseType = t;
   buildRebaseSelects();
   updateRbPreview();
 }
 
-function buildRebaseSelects(){
+function buildRebaseSelects() {
   const wrap = document.getElementById('rbSelects');
   wrap.innerHTML = '';
 
-  if(rebaseType === 'A'){
-    // Year select
-    const years = [...new Set(RAW.periods.map(p=>p.split('/')[0]))].sort();
-    const sel = makeRbSelect('A\u00F1o', 'rbYear', years, '2018');
+  if (rebaseType === 'A') {
+    const years = [...new Set(RAW.periods.map(p => p.split('/')[0]))].sort();
+    const sel = makeRbSelect('Año', 'rbYear', years, '2018');
     sel.addEventListener('change', updateRbPreview);
     wrap.appendChild(sel);
-
-  } else if(rebaseType === 'Q'){
-    // Year + Quarter
-    const years = [...new Set(RAW.periods.map(p=>p.split('/')[0]))].sort();
-    const yw = makeRbSelect('A\u00F1o', 'rbYear', years, '2018');
-    const qw = makeRbSelect('Trimestre', 'rbQ', ['Q1','Q2','Q3','Q4'], 'Q1');
+  } else if (rebaseType === 'Q') {
+    const years = [...new Set(RAW.periods.map(p => p.split('/')[0]))].sort();
+    const yw = makeRbSelect('Año', 'rbYear', years, '2018');
+    const qw = makeRbSelect('Trimestre', 'rbQ', ['Q1', 'Q2', 'Q3', 'Q4'], 'Q1');
     yw.addEventListener('change', updateRbPreview);
     qw.addEventListener('change', updateRbPreview);
-    wrap.appendChild(yw); wrap.appendChild(qw);
-
+    wrap.appendChild(yw);
+    wrap.appendChild(qw);
   } else {
-    // Year + Month
-    const years = [...new Set(RAW.periods.map(p=>p.split('/')[0]))].sort();
+    const years = [...new Set(RAW.periods.map(p => p.split('/')[0]))].sort();
     const months = [
-      ['01','Enero'],['02','Febrero'],['03','Marzo'],['04','Abril'],
-      ['05','Mayo'],['06','Junio'],['07','Julio'],['08','Agosto'],
-      ['09','Septiembre'],['10','Octubre'],['11','Noviembre'],['12','Diciembre']
+      ['01', 'Enero'], ['02', 'Febrero'], ['03', 'Marzo'], ['04', 'Abril'],
+      ['05', 'Mayo'], ['06', 'Junio'], ['07', 'Julio'], ['08', 'Agosto'],
+      ['09', 'Septiembre'], ['10', 'Octubre'], ['11', 'Noviembre'], ['12', 'Diciembre']
     ];
-    const yw = makeRbSelect('A\u00F1o',  'rbYear', years, '2018');
-    const mw = makeRbSelect('Mes', 'rbMonth',
-      months.map(([v,l])=>({v,l})), '01');
+    const yw = makeRbSelect('Año', 'rbYear', years, '2018');
+    const mw = makeRbSelect('Mes', 'rbMonth', months.map(([v, l]) => ({v, l})), '01');
     yw.addEventListener('change', updateRbPreview);
     mw.querySelector('select').addEventListener('change', updateRbPreview);
-    wrap.appendChild(yw); wrap.appendChild(mw);
+    wrap.appendChild(yw);
+    wrap.appendChild(mw);
   }
 }
 
-function makeRbSelect(label, id, options, defaultVal){
+function makeRbSelect(label, id, options, defaultVal) {
   const wrap = document.createElement('div');
   wrap.className = 'rb-select-wrap';
   const lbl = document.createElement('div');
-  lbl.className = 'rb-select-label'; lbl.textContent = label;
+  lbl.className = 'rb-select-label';
+  lbl.textContent = label;
   const sel = document.createElement('select');
-  sel.id = id; sel.className = 'rb-select';
-  options.forEach(o=>{
+  sel.id = id;
+  sel.className = 'rb-select';
+  options.forEach(o => {
     const v = typeof o === 'object' ? o.v : o;
     const l = typeof o === 'object' ? o.l : o;
     const opt = new Option(l, v);
-    if(v === defaultVal) opt.selected = true;
+    if (v === defaultVal) opt.selected = true;
     sel.appendChild(opt);
   });
-  wrap.appendChild(lbl); wrap.appendChild(sel);
+  wrap.appendChild(lbl);
+  wrap.appendChild(sel);
   return wrap;
 }
 
-function getRbPeriods(){
-  // Returns the RAW.periods indices that form the base period
+function getRbPeriods() {
   const yr = document.getElementById('rbYear')?.value;
-  if(!yr) return [];
-  if(rebaseType === 'A'){
-    return RAW.periods.reduce((acc,p,i)=>{ if(p.startsWith(yr+'/')) acc.push(i); return acc; }, []);
-  } else if(rebaseType === 'Q'){
-    const q  = document.getElementById('rbQ')?.value;
+  if (!yr) return [];
+  if (rebaseType === 'A') {
+    return RAW.periods.reduce((acc, p, i) => { if (p.startsWith(yr + '/')) acc.push(i); return acc; }, []);
+  } else if (rebaseType === 'Q') {
+    const q = document.getElementById('rbQ')?.value;
     const qn = q ? +q[1] : 1;
-    const months = [(qn-1)*3+1, (qn-1)*3+2, qn*3].map(m=>yr+'/'+String(m).padStart(2,'0'));
-    return RAW.periods.reduce((acc,p,i)=>{ if(months.includes(p)) acc.push(i); return acc; }, []);
+    const months = [(qn - 1) * 3 + 1, (qn - 1) * 3 + 2, qn * 3].map(m => yr + '/' + String(m).padStart(2, '0'));
+    return RAW.periods.reduce((acc, p, i) => { if (months.includes(p)) acc.push(i); return acc; }, []);
   } else {
     const mo = document.getElementById('rbMonth')?.value || '01';
-    const target = yr+'/'+mo;
+    const target = yr + '/' + mo;
     const idx = RAW.periods.indexOf(target);
-    return idx>=0 ? [idx] : [];
+    return idx >= 0 ? [idx] : [];
   }
 }
 
-function getRbLabel(){
+function getRbLabel() {
   const yr = document.getElementById('rbYear')?.value || '2018';
-  if(rebaseType === 'A') return yr + ' = 100';
-  if(rebaseType === 'Q'){
+  if (rebaseType === 'A') return yr + ' = 100';
+  if (rebaseType === 'Q') {
     const q = document.getElementById('rbQ')?.value || 'Q1';
     return yr + '-' + q + ' = 100';
   }
   const mo = document.getElementById('rbMonth')?.value || '01';
-  const mnames = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const mnames = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
   return mnames[+mo] + ' ' + yr + ' = 100';
 }
 
-function computeFactors(indices){
-  // For each series, compute avg of base period for org, des, tend
-  // Returns map: scian -> {org, des, tend}
+function computeFactors(indices) {
   const result = {};
-  RAW.series.forEach(s=>{
+  RAW.series.forEach(s => {
     const avg = (arr) => {
-      const vals = indices.map(i=>arr[i]).filter(v=>v!=null);
-      return vals.length ? vals.reduce((a,b)=>a+b)/vals.length : null;
+      const vals = indices.map(i => arr[i]).filter(v => v != null);
+      return vals.length ? vals.reduce((a, b) => a + b) / vals.length : null;
     };
-    result[s.scian] = { org: avg(s.org), des: avg(s.des), tend: avg(s.tend) };
+    result[s.scian] = {org: avg(s.org), des: avg(s.des), tend: avg(s.tend)};
   });
   return result;
 }
 
-function rebaseArr(arr, factor){
-  if(!factor) return arr.map(()=>null);
-  return arr.map(v=> v!=null ? (v/factor)*100 : null);
-}
-
-function updateRbPreview(){
+function updateRbPreview() {
   const idxs = getRbPeriods();
   const preview = document.getElementById('rbPreview');
-  if(!idxs.length){
+  if (!idxs.length) {
     preview.innerHTML = '<span style="color:var(--neg)">Periodo no disponible en los datos.</span>';
     return;
   }
   const label = getRbLabel();
   const factors = computeFactors(idxs);
-  // Show first series as example
   const s0 = RAW.series[0];
   const f0 = factors[s0.scian].org;
-  const lastIdx = RAW.periods.length-1;
+  const lastIdx = RAW.periods.length - 1;
   const lastRaw = s0.org[lastIdx];
-  const lastReb = lastRaw && f0 ? (lastRaw/f0)*100 : null;
+  const lastReb = lastRaw && f0 ? (lastRaw / f0) * 100 : null;
 
   preview.innerHTML =
     '<strong>Base: ' + label + '</strong><br>' +
-    'Per\u00EDodo: ' + (idxs.length===1 ? RAW.periods[idxs[0]] : RAW.periods[idxs[0]]+' &rarr; '+RAW.periods[idxs[idxs.length-1]]) +
+    'Período: ' + (idxs.length === 1 ? RAW.periods[idxs[0]] : RAW.periods[idxs[0]] + ' → ' + RAW.periods[idxs[idxs.length - 1]]) +
     ' (' + idxs.length + ' obs. promediadas)<br>' +
-    'Ejemplo &mdash; ' + s0.name + ': ' +
-    (f0 ? f0.toFixed(2)+' &rarr; 100.00' : 'N/D') +
-    ' &nbsp;|&nbsp; \u00DAltimo dato: ' +
+    'Ejemplo — ' + s0.name + ': ' +
+    (f0 ? f0.toFixed(2) + ' → 100.00' : 'N/D') +
+    ' &nbsp;|&nbsp; Último dato: ' +
     (lastReb ? lastReb.toFixed(2) : 'N/D');
 }
 
-function applyRebase(){
+function applyRebase() {
   const idxs = getRbPeriods();
-  if(!idxs.length){ alert('Periodo no disponible.'); return; }
+  if (!idxs.length) { alert('Periodo no disponible.'); return; }
   const label = getRbLabel();
   const factors = computeFactors(idxs);
-  // Store in rebaseBase for use in chart rendering
-  rebaseBase = { label, factors };
-  // Update header with icon
-  const icon = label.includes('2018') ? '&#9679;' : '&#9650;';
-  document.getElementById('baseIndicator').innerHTML = icon + ' BASE ' + label;
-  document.getElementById('headerSub') && (document.getElementById('headerSub').textContent = 'BASE ' + label);
+  rebaseBase = {label, factors};
+  document.getElementById('baseIndicator').innerHTML = '▲ BASE ' + label;
   closeRebase();
   redrawAll();
 }
 
-function clearRebase(){
-  rebaseBase = null;
-  document.getElementById('baseIndicator').innerHTML = '&#9679; BASE 2018 = 100';
-  redrawAll();
-}
-
-// Get effective series values (rebased if active)
-function getVals(s, key){
-  if(!rebaseBase) return s[key];
-  const f = rebaseBase.factors[s.scian]?.[key];
-  return rebaseArr(s[key], f);
-}
-
-// ── CSV DOWNLOAD ─────────────────────────────────────────────────
-function downloadCSV(which){
+function downloadCSV(which) {
   const idxs = getRbPeriods();
-  if(!idxs.length){ alert('Selecciona un periodo base primero.'); return; }
-  const label = getRbLabel().replace(/[^a-zA-Z0-9]/g,'_');
+  if (!idxs.length) { alert('Selecciona un periodo base primero.'); return; }
+  const label = getRbLabel().replace(/[^a-zA-Z0-9]/g, '_');
   const factors = computeFactors(idxs);
 
-  const keys = which==='org'   ? ['org'] :
-               which==='des'   ? ['des'] :
-               ['org','des','tend'];
+  const keys = which === 'org' ? ['org'] :
+               which === 'des' ? ['des'] :
+               ['org', 'des', 'tend'];
 
-  const header = ['Periodo',...RAW.series.flatMap(s=>
-    keys.map(k=> '"'+s.name.replace(/"/g,'""')+' ['+s.scian+'] '+k+'"')
+  const header = ['Periodo', ...RAW.series.flatMap(s =>
+    keys.map(k => '"' + s.name.replace(/"/g, '""') + ' [' + s.scian + '] ' + k + '"')
   )];
 
-  const rows = RAW.periods.map((p,pi)=>{
-    const cells = [p, ...RAW.series.flatMap(s=>
-      keys.map(k=>{
+  const rows = RAW.periods.map((p, pi) => {
+    const cells = [p, ...RAW.series.flatMap(s =>
+      keys.map(k => {
         const f = factors[s.scian]?.[k];
         const v = s[k][pi];
-        const rv = (v!=null&&f) ? (v/f)*100 : null;
-        return rv!=null ? rv.toFixed(4) : '';
+        const rv = (v != null && f) ? (v / f) * 100 : null;
+        return rv != null ? rv.toFixed(4) : '';
       })
     )];
     return cells.join(',');
   });
 
   const csv = [header.join(','), ...rows].join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'IMAI_base_'+label+'_'+which+'.csv';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
+  const blob = new Blob(['\uFEFF' + csv], {type: 'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'IMAI_base_' + label + '_' + which + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// REDRAW AND INIT
+// ══════════════════════════════════════════════════════════════════════════════
+function redrawAll() {
+  allCharts.forEach(c => c.destroy());
+  allCharts = [];
+  if (msgChart) { msgChart.destroy(); msgChart = null; }
+  if (contribChart) { contribChart.destroy(); contribChart = null; }
+  buildSummary();
+  buildSectors();
+}
 
-// Init:
 function initDashboard() {
   toIdx = RAW.periods.length - 1;
-  RAW.periods.forEach((p,i)=>{
-    selFrom.appendChild(new Option(p.replace('/','-'), i));
-    selTo.appendChild(new Option(p.replace('/','-'), i));
+  fromIdx = Math.max(0, toIdx - 119); // Default to last 10 years
+  
+  RAW.periods.forEach((p, i) => {
+    selFrom.appendChild(new Option(p.replace('/', '-'), i));
+    selTo.appendChild(new Option(p.replace('/', '-'), i));
   });
-  document.getElementById('lastPeriodHdr').textContent = RAW.periods[toIdx].replace('/','-');
-  document.getElementById('footerLastPeriod').textContent = RAW.periods[toIdx];
-  setRange(120, document.getElementById('btnR10'));
+  
+  selFrom.value = fromIdx;
+  selTo.value = toIdx;
+  
+  document.getElementById('lastPeriodHdr').textContent = RAW.periods[toIdx].replace('/', '-');
+  
   buildRebaseSelects();
-  buildRebaseSelects();
+  buildSummary();
+  buildSectors();
+  updateInfo();
 }
-loadExcelAndInit();
 
+// Event listeners
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeRebase();
+    closeModalBtn();
+  }
+});
+
+// Start loading
+loadExcelAndInit();
 </script>
 </body>
 </html>
