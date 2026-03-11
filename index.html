@@ -829,21 +829,17 @@ function getSignal(des,upToIdx){
   if(neg(m0)&&neg(m1)&&neg(m2))
     return{label:'Dinamica negativa',color:'#C0001D',sub:consecNeg+' meses consecutivos a la baja'};
   
-  // Other signals
-  if(pos(m0)&&pos(m1)&&a3>a6+0.20&&a3>0.25)
-    return{label:'Aceleracion',color:'#1B5E20',sub:'ritmo en aumento'};
-  if(a6>0.20&&a3<a6*0.40&&!pos(m0))
-    return{label:'Desaceleracion',color:'#E65100',sub:'impulso perdiendo fuerza'};
-  if(a6<-0.15&&pos(m0)&&pos(m1))
-    return{label:'Recuperacion incipiente',color:'#558B2F',sub:'rebote tras contraccion'};
-  if(a6>0.15&&neg(m0)&&neg(m1))
+  // Reversal signals
+  if(a6<0&&pos(m0)&&pos(m1))
+    return{label:'Recuperacion',color:'#558B2F',sub:'rebote tras contraccion'};
+  if(a6>0&&neg(m0)&&neg(m1))
     return{label:'Caida',color:'#D32F2F',sub:'caida tras periodo de alza'};
-  
+
   const p3=last3.filter(v=>pos(v.val)).length;
   const n3=last3.filter(v=>neg(v.val)).length;
-  
-  if(p3===2&&neg(m0))return{label:'Senal de alerta',color:'#D32F2F',sub:'ultimo mes negativo'};
-  if(n3===2&&pos(m0))return{label:'Senal de mejora',color:'#388E3C',sub:'ultimo mes positivo'};
+
+  if(p3===2&&neg(m0))return{label:'Quiebre a la baja',color:'#D32F2F',sub:'ultimo mes negativo'};
+  if(n3===2&&pos(m0))return{label:'Mejora incipiente',color:'#388E3C',sub:'ultimo mes positivo'};
   if(Math.abs(a3)<=0.15)return{label:'Atonia',color:'#78909C',sub:'sin tendencia clara'};
   
   // Mixed - FIXED: Show last 3 exact variations
