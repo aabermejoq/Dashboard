@@ -31,23 +31,23 @@
   .base-indicator{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);padding:4px 10px;border-radius:5px;white-space:nowrap}
 
   .ctrl-panel{background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.06)}
-  .ctrl-row{display:flex;align-items:center;gap:0;padding:0 40px;border-bottom:1px solid var(--border2);min-height:58px;flex-wrap:wrap}
+  .ctrl-row{display:flex;align-items:center;gap:0;padding:0 40px;border-bottom:1px solid var(--border2);min-height:62px;flex-wrap:wrap}
   .ctrl-row:last-child{border-bottom:none}
-  .cg{display:flex;align-items:center;gap:10px;padding:12px 28px 12px 0;margin-right:28px;border-right:1px solid var(--border2);flex-shrink:0}
+  .cg{display:flex;align-items:center;gap:10px;padding:14px 28px 14px 0;margin-right:28px;border-right:1px solid var(--border2);flex-shrink:0}
   .cg:last-child{border-right:none;margin-right:0}
-  .cg-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;margin-right:6px}
+  .cg-label{font-size:11px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;margin-right:8px}
 
-  .pill-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--surf2);box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)}
-  .pill-btn{background:transparent;border:none;color:var(--text3);padding:10px 18px;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.18s ease;border-right:1px solid var(--border);white-space:nowrap}
+  .pill-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);background:var(--surf2);box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)}
+  .pill-btn{background:transparent;border:none;color:var(--text2);padding:9px 20px;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.18s ease;border-right:1px solid var(--border);white-space:nowrap;letter-spacing:0.1px}
   .pill-btn:last-child{border-right:none}
-  .pill-btn:hover{background:rgba(0,26,78,0.06);color:var(--navy)}
-  .pill-btn.active{background:var(--navy);color:white;font-weight:600;box-shadow:0 2px 8px rgba(0,26,78,0.25)}
+  .pill-btn:hover{background:rgba(0,26,78,0.08);color:var(--navy);font-weight:600}
+  .pill-btn.active{background:var(--navy);color:white;font-weight:700;box-shadow:0 2px 8px rgba(0,26,78,0.3);letter-spacing:0.2px}
 
   .ctrl-row select{border:1px solid var(--border);background:var(--surf2);color:var(--text);padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;border-radius:6px;cursor:pointer;outline:none}
   .ctrl-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap;background:var(--surf2);padding:6px 12px;border-radius:6px;border:1px solid var(--border2)}
   .ctrl-arrow{color:var(--text4);font-size:14px;margin:0 6px}
 
-  .action-btn{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.18s ease;white-space:nowrap;box-shadow:0 2px 8px rgba(0,26,78,0.2)}
+  .action-btn{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:11px 22px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;transition:all 0.18s ease;white-space:nowrap;box-shadow:0 2px 8px rgba(0,26,78,0.2)}
   .action-btn:hover{background:linear-gradient(135deg,var(--navy2),#003590);box-shadow:0 4px 12px rgba(0,26,78,0.3);transform:translateY(-1px)}
 
   .main{padding:28px 40px 56px;max-width:1900px;margin:0 auto}
@@ -283,6 +283,13 @@
       <span class="ctrl-arrow">→</span>
       <select id="selTo"></select>
     </div>
+    <div class="cg" id="graficasScaleCg" style="display:none">
+      <span class="cg-label">Escala</span>
+      <div class="pill-group">
+        <button class="pill-btn active" id="gScaleAuto" onclick="setGraficasScale('auto',this)">Acotada</button>
+        <button class="pill-btn" id="gScaleFull" onclick="setGraficasScale('full',this)">Completa</button>
+      </div>
+    </div>
     <div class="cg" style="margin-left:auto;border-right:none;padding-right:0">
       <button class="action-btn" onclick="openRebase()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
@@ -344,8 +351,9 @@
 // ══════════════════════════════════════════════════════════════════════════════
 // GLOBAL DATA
 // ══════════════════════════════════════════════════════════════════════════════
-let RAW;        // {periods:[], series:{SCIAN:{name,scian,sector,org,des,tend}}}
-let ESTRUCTURA; // {periods:[], data:{SCIAN:[]}}
+let RAW;           // {periods:[], series:{SCIAN:{name,scian,sector,org,des,tend}}}
+let ESTRUCTURA;    // {periods:[], data:{SCIAN:[]}}  — original structure
+let ESTRUCTURA_D;  // {periods:[], data:{SCIAN:[]}}  — desestacionalizada structure
 
 // Series definitions - hasDesOrig indicates if DES/TEND exist
 const SERIES_DEFS = [
@@ -394,12 +402,15 @@ const CONTRIB_COLORS = ['#1A56C4','#C0001D','#007B5E','#9B7D3A','#6B4C9A','#D354
 let fromIdx=0,toIdx=0;
 let allCharts=[],modalCharts=[];
 let currentFreq='M',currentView='graficas',currentMode='variaciones';
+let graficasScaleMode='auto';
 let msgChart=null,msgSeriesScian='IMAI',msgShowOrg=false,msgShowDes=true,msgShowTend=true,msgFromIdx=0,msgToIdx=0;
 let contribChart=null,contribMainIndicator='IMAI',contribSelectedComponents=['21','22','23','31-33'],contribScaleMode='auto',lastContribData=null;
+let contribSerieType='org'; // 'org' | 'des'
+let contribVarType='A';     // 'A' | 'Q' | 'M'
 let rebaseType='A',rebaseBase=null;
 
 // ══════════════════════════════════════════════════════════════════════════════
-// DATA LOADING - FIXED: Parse by SCIAN identifier, not position
+// DATA LOADING — uses row 5 numeric SCIAN identifiers (not header text)
 // ══════════════════════════════════════════════════════════════════════════════
 async function loadExcelAndInit(){
   try{
@@ -408,45 +419,37 @@ async function loadExcelAndInit(){
     const buf=await resp.arrayBuffer();
     const wb=XLSX.read(buf,{type:'array'});
 
-    // Extract SCIAN from header text
-    function extractScian(h){
-      if(!h||typeof h!=='string')return null;
-      if(h.includes('Total de la actividad industrial'))return'IMAI';
-      if(h.includes('Total minería'))return'21';
-      if(h.includes('Total generación')||h.includes('Total subsector 22'))return'22';
-      if(h.includes('Total construcción'))return'23';
-      if(h.includes('Total industrias manufactureras'))return'31-33';
-      const m=h.match(/(\d{3})\s+[A-Z]/);
-      return m?m[1]:null;
+    // Map numeric row-5 id → canonical SCIAN string
+    function mapId(id){
+      if(id===1||id==='1')return'IMAI';
+      if(id===31||id==='31')return'31-33';
+      if(id==null)return null;
+      const s=String(id).trim();
+      return s||null;
     }
 
-    // Parse sheet by SCIAN - returns {periods, colByScian}
+    // Parse a data sheet using row 5 identifiers; data starts row 7 (index 6)
     function parseSheetByScian(sheetName){
       const ws=wb.Sheets[sheetName];
       if(!ws)return null;
       const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});
-      
-      let hdrRow=-1;
-      for(let i=0;i<Math.min(10,data.length);i++){
-        if(data[i][0]==='Period'||data[i][0]==='PERIODO'){hdrRow=i;break;}
-      }
-      if(hdrRow<0)return null;
+      if(data.length<7)return null;
 
-      // Map SCIAN -> column index
+      const idRow=data[4]; // Row 5 (0-indexed = 4)
       const scianToCol={};
-      for(let c=2;c<data[hdrRow].length;c++){
-        const scian=extractScian(String(data[hdrRow][c]||''));
+      for(let c=2;c<idRow.length;c++){
+        const scian=mapId(idRow[c]);
         if(scian)scianToCol[scian]=c;
       }
 
       const periods=[],colByScian={};
       Object.keys(scianToCol).forEach(s=>{colByScian[s]=[];});
 
-      for(let r=hdrRow+1;r<data.length;r++){
+      for(let r=6;r<data.length;r++){ // Data starts row 7 (index 6)
         const row=data[r];
         const pRaw=row[0];
         if(!pRaw)continue;
-        
+
         let period=null;
         if(typeof pRaw==='string'&&/^\d{4}\/\d{2}$/.test(pRaw)){
           period=pRaw;
@@ -467,8 +470,9 @@ async function loadExcelAndInit(){
     const org=parseSheetByScian('ORG');
     const des=parseSheetByScian('DES');
     const tend=parseSheetByScian('TEND');
+    if(!org)throw new Error('No se pudo leer la hoja ORG');
 
-    // Build RAW - match series by SCIAN, not position
+    // Build RAW — match by SCIAN; gracefully handle missing series in des/tend
     RAW={periods:org.periods,series:{}};
     SERIES_DEFS.forEach(def=>{
       const scian=def.scian;
@@ -477,8 +481,8 @@ async function loadExcelAndInit(){
         scian:scian,
         sector:def.sector,
         org:org.colByScian[scian]||org.periods.map(()=>null),
-        des:des.colByScian[scian]||null,  // null if not available
-        tend:tend.colByScian[scian]||null
+        des:(des&&des.colByScian[scian]&&des.colByScian[scian].some(v=>v!=null))?des.colByScian[scian]:null,
+        tend:(tend&&tend.colByScian[scian]&&tend.colByScian[scian].some(v=>v!=null))?tend.colByScian[scian]:null
       };
     });
 
@@ -491,33 +495,32 @@ async function loadExcelAndInit(){
   }
 }
 
-// Parse estructura sheet - standardize dates to YYYY/MM
-function parseEstructura(wb){
-  const ws=wb.Sheets['Estructura'];
-  if(!ws){createSyntheticEstructura();return;}
+// Parse a structure sheet using row 5 identifiers
+function parseEstructuraSheet(wb,sheetName){
+  const ws=wb.Sheets[sheetName];
+  if(!ws)return null;
   const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+  if(data.length<7)return null;
 
-  function extractScian(h){
-    if(!h||typeof h!=='string')return null;
-    if(h.includes('Total de la actividad industrial'))return'IMAI';
-    if(h.includes('Total minería'))return'21';
-    if(h.includes('Total generación')||h.includes('Total subsector 22'))return'22';
-    if(h.includes('Total construcción'))return'23';
-    if(h.includes('Total industrias manufactureras'))return'31-33';
-    const m=h.match(/(\d{3})\s+[A-Z]/);
-    return m?m[1]:null;
+  function mapId(id){
+    if(id===1||id==='1')return'IMAI';
+    if(id===31||id==='31')return'31-33';
+    if(id==null)return null;
+    const s=String(id).trim();
+    return s||null;
   }
 
+  const idRow=data[4]; // Row 5
   const scianToCol={};
-  for(let c=2;c<data[0].length;c++){
-    const scian=extractScian(String(data[0][c]||''));
+  for(let c=2;c<idRow.length;c++){
+    const scian=mapId(idRow[c]);
     if(scian)scianToCol[scian]=c;
   }
 
-  ESTRUCTURA={periods:[],data:{}};
-  Object.keys(scianToCol).forEach(s=>{ESTRUCTURA.data[s]=[];});
+  const result={periods:[],data:{}};
+  Object.keys(scianToCol).forEach(s=>{result.data[s]=[];});
 
-  for(let r=1;r<data.length;r++){
+  for(let r=6;r<data.length;r++){ // Data from row 7
     const row=data[r];
     const pRaw=row[0];
     if(!pRaw)continue;
@@ -530,14 +533,11 @@ function parseEstructura(wb){
       period=pRaw.getFullYear()+'/'+String(pRaw.getMonth()+1).padStart(2,'0');
     }else if(typeof pRaw==='string'){
       if(/^\d{4}\/\d{2}$/.test(pRaw))period=pRaw;
-      else if(/^\d{4}-\d{2}/.test(pRaw)){
-        const parts=pRaw.split('-');
-        period=parts[0]+'/'+parts[1];
-      }
+      else if(/^\d{4}-\d{2}/.test(pRaw)){const parts=pRaw.split('-');period=parts[0]+'/'+parts[1];}
     }
     if(!period)continue;
 
-    ESTRUCTURA.periods.push(period);
+    result.periods.push(period);
     Object.entries(scianToCol).forEach(([scian,col])=>{
       const v=row[col];
       let numVal=null;
@@ -545,16 +545,41 @@ function parseEstructura(wb){
         const parsed=typeof v==='number'?v:parseFloat(String(v).replace(/,/g,''));
         if(!isNaN(parsed))numVal=parsed;
       }
-      ESTRUCTURA.data[scian].push(numVal);
+      result.data[scian].push(numVal);
     });
   }
-  console.log('Estructura:',ESTRUCTURA.periods.length,'periods');
+  console.log(sheetName+':',result.periods.length,'periods,',Object.keys(result.data).length,'series');
+  return result;
+}
+
+function parseEstructura(wb){
+  // Primary: Estructura_O (original), fallback: Estructura (legacy)
+  let res=parseEstructuraSheet(wb,'Estructura_O')||parseEstructuraSheet(wb,'Estructura');
+  if(res){
+    ESTRUCTURA=res;
+  }else{
+    createSyntheticEstructura();
+  }
+
+  // Desestacionalizada structure
+  let resD=parseEstructuraSheet(wb,'Estructura_D');
+  if(resD){
+    ESTRUCTURA_D=resD;
+  }else{
+    // Fallback: use original structure for D
+    ESTRUCTURA_D=ESTRUCTURA;
+  }
 }
 
 function createSyntheticEstructura(){
   const weights={'IMAI':100,'21':15,'211':8,'212':5,'213':2,'22':5,'221':5,'23':12,'236':5,'237':4,'238':3,'31-33':68,'311':8,'312':4,'313':1,'314':0.5,'315':1.5,'316':1,'321':0.5,'322':1.5,'323':0.5,'324':4,'325':6,'326':3,'327':2,'331':4,'332':3,'333':4,'334':6,'335':3,'336':12,'337':1,'339':1.5};
   ESTRUCTURA={periods:RAW.periods.slice(),data:{}};
   Object.keys(weights).forEach(scian=>{ESTRUCTURA.data[scian]=RAW.periods.map(()=>weights[scian]);});
+  // Also set D structure (without 221)
+  const weightsD=Object.assign({},weights);
+  delete weightsD['221'];
+  ESTRUCTURA_D={periods:RAW.periods.slice(),data:{}};
+  Object.keys(weightsD).forEach(scian=>{ESTRUCTURA_D.data[scian]=RAW.periods.map(()=>weightsD[scian]);});
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -848,13 +873,13 @@ function xTickCb(freq,small){
 }
 
 function barOpts(vals,isPct,small=true){
-  const lim=clipLimits(vals,0.03,0.97,true);
+  const lim=(graficasScaleMode==='full')?fullLimits(vals,true):clipLimits(vals,0.03,0.97,true);
   const fs=small?7:10;
   return{responsive:true,animation:false,plugins:{legend:{display:false},truncLines:{},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.parsed.y!=null?ctx.parsed.y.toFixed(2)+(isPct?'%':''):''}}},scales:{x:{display:true,grid:{display:false},ticks:{maxTicksLimit:small?8:16,font:{family:'IBM Plex Mono',size:fs},color:'#AAAAAA',maxRotation:90,minRotation:45,autoSkip:true,callback:xTickCb(currentFreq,small)},border:{display:false}},y:{display:true,min:lim.min,max:lim.max,grid:{color:ctx=>ctx.tick.value===0?'#33333380':'#E4E4E0',lineWidth:ctx=>ctx.tick.value===0?1.5:0.5},ticks:{stepSize:lim.step,font:{family:'IBM Plex Mono',size:fs},color:'#AAAAAA',callback:v=>{const d=v>=10||v<=-10?0:v>=1||v<=-1?1:2;return v.toFixed(d)+(isPct?'%':'');}},border:{display:false}}}};
 }
 
 function lineOpts(vals,small=true){
-  const lim=tightLimits(vals);
+  const lim=(graficasScaleMode==='full')?fullLimits(vals,false):tightLimits(vals);
   const fs=small?7:10;
   return{responsive:true,animation:false,plugins:{legend:{display:false},truncLines:{},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.parsed.y!=null?ctx.parsed.y.toFixed(1):''}}},scales:{x:{display:true,grid:{display:false},ticks:{maxTicksLimit:small?8:16,font:{family:'IBM Plex Mono',size:fs},color:'#AAAAAA',maxRotation:90,minRotation:45,autoSkip:true,callback:xTickCb(currentFreq,small)},border:{display:false}},y:{display:true,min:lim.min,max:lim.max,grid:{color:'#E4E4E0',lineWidth:0.5},ticks:{stepSize:lim.step,font:{family:'IBM Plex Mono',size:fs},color:'#AAAAAA',callback:v=>{const d=v>=10||v<=-10?0:v>=1||v<=-1?1:2;return v.toFixed(d);}},border:{display:false}}}};
 }
@@ -867,8 +892,9 @@ selFrom.addEventListener('change',()=>{fromIdx=+selFrom.value;redrawAll();});
 selTo.addEventListener('change',()=>{toIdx=+selTo.value;redrawAll();});
 
 function setFreq(f,btn){document.querySelectorAll('[data-grp="freq"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFreq=f;redrawAll();}
-function setView(v,btn){document.querySelectorAll('[data-grp="view"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=v;redrawAll();}
+function setView(v,btn){document.querySelectorAll('[data-grp="view"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=v;const scaleCg=document.getElementById('graficasScaleCg');if(scaleCg)scaleCg.style.display=(v==='graficas')?'flex':'none';redrawAll();}
 function setMode(m,btn){document.querySelectorAll('[data-grp="mode"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentMode=m;redrawAll();}
+function setGraficasScale(mode,btn){graficasScaleMode=mode;document.querySelectorAll('#gScaleAuto,#gScaleFull').forEach(b=>b.classList.remove('active'));btn.classList.add('active');redrawAll();}
 function updateInfo(){document.getElementById('rangeInfo').textContent=RAW.periods[fromIdx].replace('/','-')+' → '+RAW.periods[toIdx].replace('/','-')+' | '+(toIdx-fromIdx+1)+' obs.';}
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1224,18 +1250,19 @@ function computeMessages(s,startIdx,endIdx){
 // CONTRIBUCIONES VIEW - FIXED: peso en t-k (k=12 anual, k=1 mensual, k=4 trimestral)
 // ══════════════════════════════════════════════════════════════════════════════
 
-// Get structure value for SCIAN at period
-function getEstructuraValue(scian,period){
-  if(!ESTRUCTURA||!ESTRUCTURA.data[scian])return null;
-  const idx=ESTRUCTURA.periods.indexOf(period);
+// Get structure value for SCIAN at period (accepts optional estructura obj)
+function getEstructuraValue(scian,period,estObj){
+  const est=estObj||ESTRUCTURA;
+  if(!est||!est.data[scian])return null;
+  const idx=est.periods.indexOf(period);
   if(idx<0)return null;
-  return ESTRUCTURA.data[scian][idx];
+  return est.data[scian][idx];
 }
 
 // Get structure weight at period: componente / total
-function getStructureWeight(compScian,parentScian,period){
-  const compVal=getEstructuraValue(compScian,period);
-  const parentVal=getEstructuraValue(parentScian,period);
+function getStructureWeight(compScian,parentScian,period,estObj){
+  const compVal=getEstructuraValue(compScian,period,estObj);
+  const parentVal=getEstructuraValue(parentScian,period,estObj);
   if(compVal==null||parentVal==null||parentVal===0)return null;
   return compVal/parentVal;
 }
@@ -1258,7 +1285,41 @@ function buildContribuciones(){
 
   const configPanel=document.createElement('div');
   configPanel.className='contrib-config';
-  configPanel.innerHTML=`<div class="contrib-config-row"><div class="contrib-config-group wide"><div class="contrib-config-label">Indicador principal</div><select class="contrib-select" id="contribMainSelect">${selectHtml}</select></div></div><div class="contrib-config-row"><div class="contrib-config-group" style="width:100%"><div class="contrib-config-label">Componentes a mostrar (los no seleccionados se agrupan en "Otros")</div><div class="contrib-chips" id="contribChips"></div></div></div><div class="contrib-config-row"><div class="contrib-controls"><div class="contrib-config-label" style="margin-right:12px">Escala del eje Y:</div><div class="contrib-scale-toggle"><button class="scale-btn active" data-scale="auto" id="scaleAuto">Automatica</button><button class="scale-btn" data-scale="full" id="scaleFull">Completa</button></div><button class="contrib-download-btn" id="contribDownloadBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar Excel</button></div></div>`;
+  configPanel.innerHTML=`
+    <div class="contrib-config-row">
+      <div class="contrib-config-group wide"><div class="contrib-config-label">Indicador principal</div><select class="contrib-select" id="contribMainSelect">${selectHtml}</select></div>
+    </div>
+    <div class="contrib-config-row">
+      <div class="contrib-config-group"><div class="contrib-config-label">Tipo de serie</div>
+        <div class="pill-group" style="margin-top:4px">
+          <button class="pill-btn ${contribSerieType==='org'?'active':''}" id="cSerieOrg" onclick="setContribSerieType('org',this)">Original</button>
+          <button class="pill-btn ${contribSerieType==='des'?'active':''}" id="cSerieDes" onclick="setContribSerieType('des',this)">Desestacionalizada</button>
+        </div>
+      </div>
+      <div class="contrib-config-group"><div class="contrib-config-label">Tipo de variacion</div>
+        <div class="pill-group" style="margin-top:4px">
+          <button class="pill-btn ${contribVarType==='M'?'active':''}" id="cVarM" onclick="setContribVarType('M',this)">Mensual</button>
+          <button class="pill-btn ${contribVarType==='Q'?'active':''}" id="cVarQ" onclick="setContribVarType('Q',this)">Trimestral</button>
+          <button class="pill-btn ${contribVarType==='A'?'active':''}" id="cVarA" onclick="setContribVarType('A',this)">Anual</button>
+        </div>
+      </div>
+    </div>
+    <div class="contrib-config-row">
+      <div class="contrib-config-group" style="width:100%"><div class="contrib-config-label">Componentes (los no seleccionados se agrupan en "Otros")</div><div class="contrib-chips" id="contribChips"></div></div>
+    </div>
+    <div class="contrib-config-row">
+      <div class="contrib-controls">
+        <div class="contrib-config-label" style="margin-right:12px">Escala:</div>
+        <div class="contrib-scale-toggle">
+          <button class="scale-btn active" data-scale="auto" id="scaleAuto">Acotada</button>
+          <button class="scale-btn" data-scale="full" id="scaleFull">Completa</button>
+        </div>
+        <button class="contrib-download-btn" id="contribDownloadBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar Excel
+        </button>
+      </div>
+    </div>`;
   wrap.appendChild(configPanel);
 
   const chartPanel=document.createElement('div');
@@ -1277,6 +1338,20 @@ function buildContribuciones(){
   document.getElementById('contribDownloadBtn').addEventListener('click',downloadContribExcel);
 
   updateContribChips();
+  renderContribuciones();
+}
+
+function setContribSerieType(type,btn){
+  contribSerieType=type;
+  document.querySelectorAll('#cSerieOrg,#cSerieDes').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContribuciones();
+}
+
+function setContribVarType(type,btn){
+  contribVarType=type;
+  document.querySelectorAll('#cVarM,#cVarQ,#cVarA').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   renderContribuciones();
 }
 
@@ -1309,9 +1384,9 @@ function updateContribChips(){
 
 /**
  * Render contributions chart
- * FIXED: Formula = var_anual_t × (estructura_comp_t-k / estructura_parent_t-k)
- * donde k = 12 para mensual, 4 para trimestral, 1 para anual
- * El peso DEBE estar en el mismo periodo base que la variación
+ * Uses contribSerieType ('org'|'des') and contribVarType ('A'|'Q'|'M')
+ * Full precision in calculations — no rounding until display
+ * FORMULA: contrib_t = var_comp_t × (estructura_comp_{t-k} / estructura_parent_{t-k})
  */
 function renderContribuciones(){
   const ctx=document.getElementById('contribCanvas');
@@ -1321,55 +1396,61 @@ function renderContribuciones(){
   const mainSeries=getSeries(contribMainIndicator);
   if(!mainSeries)return;
 
-  document.getElementById('contribChartTitle').textContent=`Contribuciones a la variacion anual: ${mainSeries.name}`;
+  // If desestacionalizada requested but not available for this indicator, fallback to org
+  const serieKey=(contribSerieType==='des'&&mainSeries.des)?'des':'org';
+  const estObj=serieKey==='des'?ESTRUCTURA_D:ESTRUCTURA;
+
+  // Lag based on variation type
+  const lag=contribVarType==='A'?12:contribVarType==='Q'?4:1;
+
+  const varTypeLabel=contribVarType==='A'?'anual':contribVarType==='Q'?'trimestral':'mensual';
+  const serieLabel=serieKey==='des'?'desestacionalizada':'original';
+  document.getElementById('contribChartTitle').textContent=`Contribuciones a la variacion ${varTypeLabel} (${serieLabel}): ${mainSeries.name}`;
+  document.getElementById('contribChartSubtitle').textContent=`Variacion ${varTypeLabel} (%) y contribuciones por componente (pp) — serie ${serieLabel}`;
 
   const parentIndicators=[{scian:'IMAI',components:['21','22','23','31-33']},{scian:'21',components:['211','212','213']},{scian:'23',components:['236','237','238']},{scian:'31-33',components:['311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339']}];
   const parent=parentIndicators.find(p=>p.scian===contribMainIndicator);
   const allComponents=parent?parent.components:[];
 
-  // Determine lag based on frequency
-  const lag=currentFreq==='A'?1:currentFreq==='Q'?4:12;
-  
   const visiblePeriods=[];
   const mainVarAnual=[];
   const componentContribs={};
   allComponents.forEach(scian=>{componentContribs[scian]=[];});
 
-  const mainOrg=getVals(mainSeries,'org');
+  const mainArr=getVals(mainSeries,serieKey)||getVals(mainSeries,'org');
 
-  // Iterate through visible range (need lag periods lookback)
   for(let rawIdx=Math.max(fromIdx,lag);rawIdx<=toIdx;rawIdx++){
     const period=RAW.periods[rawIdx];
-    const periodLag=RAW.periods[rawIdx-lag];  // Period t-k for structure weight
-    
+    const periodLag=RAW.periods[rawIdx-lag];
+
     visiblePeriods.push(period);
-    
-    // Main indicator annual variation
-    const mainCurrent=mainOrg[rawIdx];
-    const mainPrevYear=mainOrg[rawIdx-lag];
-    const mainVA=(mainCurrent!=null&&mainPrevYear!=null&&mainPrevYear!==0)?((mainCurrent-mainPrevYear)/mainPrevYear)*100:null;
+
+    // Main indicator variation (full precision)
+    const mainCur=mainArr[rawIdx];
+    const mainPrev=mainArr[rawIdx-lag];
+    const mainVA=(mainCur!=null&&mainPrev!=null&&mainPrev!==0)?((mainCur-mainPrev)/mainPrev)*100:null;
     mainVarAnual.push(mainVA);
-    
-    // Calculate contribution for each component
-    // CORRECT FORMULA: contrib = var_anual_comp × peso_t-k
+
     allComponents.forEach(scian=>{
       const compSeries=getSeries(scian);
       if(!compSeries){componentContribs[scian].push(null);return;}
-      
-      const compOrg=getVals(compSeries,'org');
-      const compCurrent=compOrg[rawIdx];
-      const compPrevYear=compOrg[rawIdx-lag];
-      
-      // Annual variation of component (as decimal for calculation)
-      const compVA=(compCurrent!=null&&compPrevYear!=null&&compPrevYear!==0)?(compCurrent-compPrevYear)/compPrevYear:null;
-      
-      // FIXED: Get structure weight from t-k (same base period as variation)
-      const peso=getStructureWeight(scian,contribMainIndicator,periodLag);
-      
+
+      // Use desest if available and requested, otherwise org
+      const compKey=(serieKey==='des'&&compSeries.des)?'des':'org';
+      const compArr=getVals(compSeries,compKey)||getVals(compSeries,'org');
+      if(!compArr){componentContribs[scian].push(null);return;}
+
+      const compCur=compArr[rawIdx];
+      const compPrev=compArr[rawIdx-lag];
+
+      // Full-precision variation (decimal, not %)
+      const compVA=(compCur!=null&&compPrev!=null&&compPrev!==0)?(compCur-compPrev)/compPrev:null;
+
+      // Weight from t-k using appropriate structure
+      const peso=getStructureWeight(scian,contribMainIndicator,periodLag,estObj);
+
       if(compVA!=null&&peso!=null){
-        // Contribution = var_anual × peso × 100 (to get percentage points)
-        const contrib=compVA*peso*100;
-        componentContribs[scian].push(contrib);
+        componentContribs[scian].push(compVA*peso*100); // Full precision, convert to pp
       }else{
         componentContribs[scian].push(null);
       }
@@ -1379,39 +1460,31 @@ function renderContribuciones(){
   // Prepare chart data
   const otherComponents=allComponents.filter(c=>!contribSelectedComponents.includes(c));
   const componentData=[];
+  lastContribData={periods:visiblePeriods,mainIndicator:mainSeries.name,serieType:serieKey,varType:contribVarType,mainVarAnual,components:[]};
 
-  lastContribData={periods:visiblePeriods,mainIndicator:mainSeries.name,mainVarAnual:mainVarAnual,components:[]};
-
-  // Selected components
   contribSelectedComponents.forEach((scian,idx)=>{
     const s=getSeries(scian);
     if(!s)return;
     componentData.push({scian,name:s.name,color:CONTRIB_COLORS[idx%CONTRIB_COLORS.length],contributions:componentContribs[scian]});
-    lastContribData.components.push({name:s.name,scian:scian,contributions:componentContribs[scian]});
+    lastContribData.components.push({name:s.name,scian,contributions:componentContribs[scian]});
   });
 
-  // "Otros" - sum of non-selected components
   if(otherComponents.length>0){
     const otrosContributions=visiblePeriods.map((_,i)=>{
-      let sum=0;
-      let hasData=false;
-      otherComponents.forEach(scian=>{
-        const contrib=componentContribs[scian][i];
-        if(contrib!=null){sum+=contrib;hasData=true;}
-      });
+      let sum=0,hasData=false;
+      otherComponents.forEach(scian=>{const c=componentContribs[scian][i];if(c!=null){sum+=c;hasData=true;}});
       return hasData?sum:null;
     });
     componentData.push({scian:'otros',name:'Otros',color:'#95A5A6',contributions:otrosContributions});
     lastContribData.components.push({name:'Otros',scian:'otros',contributions:otrosContributions});
   }
 
-  // Verify: sum of contributions should equal main var anual
+  // Verification
   const verifyEl=document.getElementById('contribVerify');
   if(verifyEl&&visiblePeriods.length>0){
     const lastIdx=visiblePeriods.length-1;
     const lastMainVA=mainVarAnual[lastIdx];
-    let sumContribs=0;
-    let hasAllData=true;
+    let sumContribs=0,hasAllData=true;
     allComponents.forEach(scian=>{
       const c=componentContribs[scian][lastIdx];
       if(c!=null)sumContribs+=c;
@@ -1421,29 +1494,28 @@ function renderContribuciones(){
       const diff=Math.abs(lastMainVA-sumContribs);
       const isOk=diff<0.5;
       verifyEl.className='contrib-verify '+(isOk?'ok':'warn');
-      verifyEl.innerHTML=`Verificacion (${visiblePeriods[lastIdx]}): Var. Anual = ${lastMainVA.toFixed(2)}% | Suma contribuciones = ${sumContribs.toFixed(2)}% | Dif = ${diff.toFixed(2)} pp`;
+      verifyEl.innerHTML=`Verificacion (${visiblePeriods[lastIdx]}): Var. = ${lastMainVA.toFixed(4)}% | Suma contrib. = ${sumContribs.toFixed(4)}% | Dif = ${diff.toFixed(4)} pp`;
     }else{
       verifyEl.className='contrib-verify';
       verifyEl.innerHTML='Verificacion: datos insuficientes para el ultimo periodo';
     }
   }
 
-  // Build datasets
   const datasets=[];
   componentData.forEach(comp=>{
     datasets.push({type:'bar',label:comp.name,data:comp.contributions,backgroundColor:comp.color+'99',borderColor:comp.color,borderWidth:1,stack:'contributions',order:2});
   });
-  datasets.push({type:'line',label:'Variacion anual total',data:mainVarAnual,borderColor:'#0C1220',backgroundColor:'transparent',borderWidth:3,pointRadius:3,pointBackgroundColor:'#0C1220',tension:0.1,order:1});
+  datasets.push({type:'line',label:'Variacion '+varTypeLabel+' total',data:mainVarAnual,borderColor:'#0C1220',backgroundColor:'transparent',borderWidth:3,pointRadius:3,pointBackgroundColor:'#0C1220',tension:0.1,order:1});
 
   const allValues=[...mainVarAnual.filter(v=>v!=null)];
   componentData.forEach(comp=>{allValues.push(...comp.contributions.filter(v=>v!=null));});
   const lim=contribScaleMode==='auto'?clipLimits(allValues,0.02,0.98,true):fullLimits(allValues,true);
 
-  contribChart=new Chart(ctx,{type:'bar',data:{labels:visiblePeriods.map(p=>p.replace('/','-')),datasets:datasets},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y!=null?ctx.parsed.y.toFixed(2)+' pp':'N/D')}}},scales:{x:{stacked:true,display:true,grid:{display:false},ticks:{maxTicksLimit:16,font:{family:'IBM Plex Mono',size:10},color:'#AAAAAA',maxRotation:45,minRotation:30},border:{display:false}},y:{stacked:true,display:true,min:lim.min,max:lim.max,grid:{color:ctx=>ctx.tick.value===0?'#33333380':'#E4E4E0',lineWidth:ctx=>ctx.tick.value===0?1.5:0.5},ticks:{stepSize:lim.step,font:{family:'IBM Plex Mono',size:10},color:'#AAAAAA',callback:v=>v.toFixed(1)+'%'},border:{display:false}}}}});
+  contribChart=new Chart(ctx,{type:'bar',data:{labels:visiblePeriods.map(p=>p.replace('/','-')),datasets},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y!=null?c.parsed.y.toFixed(2)+' pp':'N/D')}}},scales:{x:{stacked:true,display:true,grid:{display:false},ticks:{maxTicksLimit:16,font:{family:'IBM Plex Mono',size:10},color:'#AAAAAA',maxRotation:45,minRotation:30},border:{display:false}},y:{stacked:true,display:true,min:lim.min,max:lim.max,grid:{color:c=>c.tick.value===0?'#33333380':'#E4E4E0',lineWidth:c=>c.tick.value===0?1.5:0.5},ticks:{stepSize:lim.step,font:{family:'IBM Plex Mono',size:10},color:'#AAAAAA',callback:v=>v.toFixed(1)+'%'},border:{display:false}}}}});
 
   const legendEl=document.getElementById('contribLegend');
   if(legendEl){
-    let legendHtml=`<div class="contrib-legend-item"><div class="contrib-legend-line" style="background:#0C1220"></div><span>Variacion anual total</span></div>`;
+    let legendHtml=`<div class="contrib-legend-item"><div class="contrib-legend-line" style="background:#0C1220"></div><span>Variacion ${varTypeLabel} total</span></div>`;
     componentData.forEach(comp=>{legendHtml+=`<div class="contrib-legend-item"><div class="contrib-legend-dot" style="background:${comp.color}"></div><span>${comp.name.length>25?comp.name.slice(0,25)+'...':comp.name}</span></div>`;});
     legendEl.innerHTML=legendHtml;
   }
@@ -1656,6 +1728,9 @@ function initDashboard(){
   document.getElementById('lastPeriodHdr').textContent=RAW.periods[toIdx].replace('/','-');
   const seriesCount=Object.keys(RAW.series).length;
   document.querySelector('.header-sub').textContent=`INEGI · BIE · ${seriesCount} SERIES · SCIAN 2018`;
+  // Show scale toggle by default (initial view is graficas)
+  const scaleCg=document.getElementById('graficasScaleCg');
+  if(scaleCg)scaleCg.style.display='flex';
   buildRebaseSelects();
   buildSummary();
   buildSectors();
