@@ -412,58 +412,87 @@ let rebaseType='A',rebaseBase=null;
 // ══════════════════════════════════════════════════════════════════════════════
 // DATA LOADING — uses row 5 numeric SCIAN identifiers (not header text)
 // ══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Single canonical date parser — handles ALL formats SheetJS may produce:
+ *   - string  "1993/01"  (ORG/DES/TEND cells stored as text)
+ *   - string  "1993-01..." (alternative text format)
+ *   - Date    JS Date object (when workbook read with cellDates:true)
+ *   - number  Excel serial  (fallback, via XLSX.SSF.parse_date_code)
+ * Always returns "YYYY/MM" or null.
+ */
+function parsePeriod(pRaw){
+  if(pRaw==null||pRaw==='')return null;
+  if(typeof pRaw==='string'){
+    // "YYYY/MM" or "YYYY/MM/DD..."
+    if(/^\d{4}\/\d{2}/.test(pRaw))return pRaw.slice(0,7);
+    // "YYYY-MM" or "YYYY-MM-DD..."
+    if(/^\d{4}-\d{2}/.test(pRaw))return pRaw.slice(0,4)+'/'+pRaw.slice(5,7);
+    return null;
+  }
+  if(pRaw instanceof Date){
+    // Use UTC methods to avoid timezone day-shift at midnight
+    return pRaw.getUTCFullYear()+'/'+String(pRaw.getUTCMonth()+1).padStart(2,'0');
+  }
+  if(typeof pRaw==='number'){
+    // Excel date serial — use XLSX.SSF if available, otherwise manual calculation
+    try{
+      const dt=XLSX.SSF.parse_date_code(pRaw);
+      if(dt&&dt.y)return dt.y+'/'+String(dt.m).padStart(2,'0');
+    }catch(e){}
+    // Manual fallback: Excel epoch = 1899-12-30
+    const d=new Date(Math.round((pRaw-25569)*86400*1000));
+    return d.getUTCFullYear()+'/'+String(d.getUTCMonth()+1).padStart(2,'0');
+  }
+  return null;
+}
+
+/** Map row-5 numeric ID → canonical SCIAN string */
+function mapScianId(id){
+  if(id===1||id==='1')return'IMAI';
+  if(id===31||id==='31')return'31-33';
+  if(id==null)return null;
+  const s=String(id).trim();
+  return s||null;
+}
+
 async function loadExcelAndInit(){
   try{
     const resp=await fetch('IQYs/Data.xlsx');
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const buf=await resp.arrayBuffer();
-    const wb=XLSX.read(buf,{type:'array'});
+    // cellDates:true → date cells become JS Date objects (parsePeriod handles them robustly)
+    const wb=XLSX.read(buf,{type:'array',cellDates:true});
 
-    // Map numeric row-5 id → canonical SCIAN string
-    function mapId(id){
-      if(id===1||id==='1')return'IMAI';
-      if(id===31||id==='31')return'31-33';
-      if(id==null)return null;
-      const s=String(id).trim();
-      return s||null;
-    }
-
-    // Parse a data sheet using row 5 identifiers; data starts row 7 (index 6)
+    // Parse a data sheet (ORG/DES/TEND) using row 5 identifiers; data from row 7
     function parseSheetByScian(sheetName){
       const ws=wb.Sheets[sheetName];
       if(!ws)return null;
-      const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});
+      // raw:true so Date objects and numbers come through unformatted
+      const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
       if(data.length<7)return null;
 
-      const idRow=data[4]; // Row 5 (0-indexed = 4)
+      const idRow=data[4]; // Row 5 (0-indexed)
       const scianToCol={};
       for(let c=2;c<idRow.length;c++){
-        const scian=mapId(idRow[c]);
+        const scian=mapScianId(idRow[c]);
         if(scian)scianToCol[scian]=c;
       }
 
       const periods=[],colByScian={};
       Object.keys(scianToCol).forEach(s=>{colByScian[s]=[];});
 
-      for(let r=6;r<data.length;r++){ // Data starts row 7 (index 6)
+      for(let r=6;r<data.length;r++){
         const row=data[r];
-        const pRaw=row[0];
-        if(!pRaw)continue;
-
-        let period=null;
-        if(typeof pRaw==='string'&&/^\d{4}\/\d{2}$/.test(pRaw)){
-          period=pRaw;
-        }else if(typeof pRaw==='number'){
-          const dt=XLSX.SSF.parse_date_code(pRaw);
-          period=dt.y+'/'+String(dt.m).padStart(2,'0');
-        }else continue;
-
+        const period=parsePeriod(row[0]);
+        if(!period)continue;
         periods.push(period);
         Object.entries(scianToCol).forEach(([scian,col])=>{
           const v=row[col];
-          colByScian[scian].push((v!==null&&v!==undefined&&v!=='')?+v:null);
+          colByScian[scian].push((v!=null&&v!==''&&typeof v!=='boolean')?+v:null);
         });
       }
+      console.log(sheetName+': '+periods.length+' periods, first='+periods[0]+', last='+periods[periods.length-1]);
       return{periods,colByScian};
     }
 
@@ -472,14 +501,11 @@ async function loadExcelAndInit(){
     const tend=parseSheetByScian('TEND');
     if(!org)throw new Error('No se pudo leer la hoja ORG');
 
-    // Build RAW — match by SCIAN; gracefully handle missing series in des/tend
     RAW={periods:org.periods,series:{}};
     SERIES_DEFS.forEach(def=>{
       const scian=def.scian;
       RAW.series[scian]={
-        name:def.name,
-        scian:scian,
-        sector:def.sector,
+        name:def.name,scian,sector:def.sector,
         org:org.colByScian[scian]||org.periods.map(()=>null),
         des:(des&&des.colByScian[scian]&&des.colByScian[scian].some(v=>v!=null))?des.colByScian[scian]:null,
         tend:(tend&&tend.colByScian[scian]&&tend.colByScian[scian].some(v=>v!=null))?tend.colByScian[scian]:null
@@ -487,68 +513,63 @@ async function loadExcelAndInit(){
     });
 
     parseEstructura(wb);
+
+    // ── Verification: confirm ESTRUCTURA periods align with RAW ──────────────
+    const estPeriods=ESTRUCTURA?.periods||[];
+    const rawPeriods=RAW.periods;
+    if(estPeriods.length>0){
+      const sampleRaw=rawPeriods[rawPeriods.length-1];
+      const sampleEst=estPeriods[estPeriods.length-1];
+      const alignOk=sampleRaw===sampleEst;
+      console.log(`Period alignment check: RAW[-1]="${sampleRaw}" | ESTRUCTURA[-1]="${sampleEst}" | match=${alignOk}`);
+      if(!alignOk)console.warn('⚠ Period mismatch — structure lookups will fail!');
+    }else{
+      console.warn('⚠ ESTRUCTURA empty — using synthetic weights');
+    }
+
     document.getElementById('loadingOverlay').style.display='none';
     initDashboard();
   }catch(e){
-    document.getElementById('loadingOverlay').innerHTML='<div style="color:#AE001C;font-size:14px">Error: '+e.message+'</div>';
+    document.getElementById('loadingOverlay').innerHTML='<div style="color:#AE001C;font-size:14px">Error cargando datos: '+e.message+'</div>';
     console.error(e);
   }
 }
 
-// Parse a structure sheet using row 5 identifiers
+// Parse a structure sheet using row 5 identifiers — same parsePeriod as data sheets
 function parseEstructuraSheet(wb,sheetName){
   const ws=wb.Sheets[sheetName];
   if(!ws)return null;
+  // raw:true so Date objects come through (workbook read with cellDates:true)
   const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
   if(data.length<7)return null;
-
-  function mapId(id){
-    if(id===1||id==='1')return'IMAI';
-    if(id===31||id==='31')return'31-33';
-    if(id==null)return null;
-    const s=String(id).trim();
-    return s||null;
-  }
 
   const idRow=data[4]; // Row 5
   const scianToCol={};
   for(let c=2;c<idRow.length;c++){
-    const scian=mapId(idRow[c]);
+    const scian=mapScianId(idRow[c]);
     if(scian)scianToCol[scian]=c;
   }
 
   const result={periods:[],data:{}};
   Object.keys(scianToCol).forEach(s=>{result.data[s]=[];});
 
-  for(let r=6;r<data.length;r++){ // Data from row 7
+  for(let r=6;r<data.length;r++){
     const row=data[r];
-    const pRaw=row[0];
-    if(!pRaw)continue;
-
-    let period=null;
-    if(typeof pRaw==='number'){
-      const dt=XLSX.SSF.parse_date_code(pRaw);
-      period=dt.y+'/'+String(dt.m).padStart(2,'0');
-    }else if(pRaw instanceof Date){
-      period=pRaw.getFullYear()+'/'+String(pRaw.getMonth()+1).padStart(2,'0');
-    }else if(typeof pRaw==='string'){
-      if(/^\d{4}\/\d{2}$/.test(pRaw))period=pRaw;
-      else if(/^\d{4}-\d{2}/.test(pRaw)){const parts=pRaw.split('-');period=parts[0]+'/'+parts[1];}
-    }
+    const period=parsePeriod(row[0]);
     if(!period)continue;
 
     result.periods.push(period);
     Object.entries(scianToCol).forEach(([scian,col])=>{
       const v=row[col];
       let numVal=null;
-      if(v!==null&&v!==undefined&&v!==''){
+      if(v!=null&&v!==''&&typeof v!=='boolean'){
         const parsed=typeof v==='number'?v:parseFloat(String(v).replace(/,/g,''));
         if(!isNaN(parsed))numVal=parsed;
       }
       result.data[scian].push(numVal);
     });
   }
-  console.log(sheetName+':',result.periods.length,'periods,',Object.keys(result.data).length,'series');
+  console.log(sheetName+': '+result.periods.length+' periods, first='+result.periods[0]+', last='+result.periods[result.periods.length-1]);
   return result;
 }
 
@@ -1479,25 +1500,30 @@ function renderContribuciones(){
     lastContribData.components.push({name:'Otros',scian:'otros',contributions:otrosContributions});
   }
 
-  // Verification
+  // Verification box — note chain-linking residual is normal for IMAI
   const verifyEl=document.getElementById('contribVerify');
   if(verifyEl&&visiblePeriods.length>0){
     const lastIdx=visiblePeriods.length-1;
     const lastMainVA=mainVarAnual[lastIdx];
-    let sumContribs=0,hasAllData=true;
+    let sumContribs=0,missingCount=0;
     allComponents.forEach(scian=>{
       const c=componentContribs[scian][lastIdx];
       if(c!=null)sumContribs+=c;
-      else hasAllData=false;
+      else missingCount++;
     });
-    if(lastMainVA!=null&&hasAllData){
+    if(lastMainVA!=null&&missingCount===0){
       const diff=Math.abs(lastMainVA-sumContribs);
-      const isOk=diff<0.5;
-      verifyEl.className='contrib-verify '+(isOk?'ok':'warn');
-      verifyEl.innerHTML=`Verificacion (${visiblePeriods[lastIdx]}): Var. = ${lastMainVA.toFixed(4)}% | Suma contrib. = ${sumContribs.toFixed(4)}% | Dif = ${diff.toFixed(4)} pp`;
+      // diff < 0.5pp = excellent, < 2pp = normal chain-linking residual, >= 2pp = warn
+      const cls=diff<2?'ok':'warn';
+      const nota=diff<0.5?'✓ identidad exacta':diff<2?'residuo de encadenamiento normal':'revisar datos';
+      verifyEl.className='contrib-verify '+cls;
+      verifyEl.innerHTML=`<strong>Verificacion ${visiblePeriods[lastIdx]}:</strong> Var.${varTypeLabel}=${lastMainVA.toFixed(4)}% | Suma contrib.=${sumContribs.toFixed(4)}% | Residuo=${diff.toFixed(4)}pp — <em>${nota}</em>`;
+    }else if(missingCount>0){
+      verifyEl.className='contrib-verify warn';
+      verifyEl.innerHTML=`Verificacion: ${missingCount} componente(s) sin datos en el ultimo periodo`;
     }else{
       verifyEl.className='contrib-verify';
-      verifyEl.innerHTML='Verificacion: datos insuficientes para el ultimo periodo';
+      verifyEl.innerHTML='Verificacion: variacion total no disponible';
     }
   }
 
