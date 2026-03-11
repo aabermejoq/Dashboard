@@ -417,30 +417,28 @@ let rebaseType='A',rebaseBase=null;
  * Single canonical date parser — handles ALL formats SheetJS may produce:
  *   - string  "1993/01"  (ORG/DES/TEND cells stored as text)
  *   - string  "1993-01..." (alternative text format)
- *   - Date    JS Date object (when workbook read with cellDates:true)
- *   - number  Excel serial  (fallback, via XLSX.SSF.parse_date_code)
+ *   - Date    JS Date object (cellDates:true, from Estructura sheets)
+ *   - number  Excel serial  (fallback)
  * Always returns "YYYY/MM" or null.
+ * NOTE: Date objects from SheetJS use LOCAL time (not UTC) for Excel dates.
  */
 function parsePeriod(pRaw){
   if(pRaw==null||pRaw==='')return null;
   if(typeof pRaw==='string'){
-    // "YYYY/MM" or "YYYY/MM/DD..."
     if(/^\d{4}\/\d{2}/.test(pRaw))return pRaw.slice(0,7);
-    // "YYYY-MM" or "YYYY-MM-DD..."
     if(/^\d{4}-\d{2}/.test(pRaw))return pRaw.slice(0,4)+'/'+pRaw.slice(5,7);
     return null;
   }
   if(pRaw instanceof Date){
-    // Use UTC methods to avoid timezone day-shift at midnight
-    return pRaw.getUTCFullYear()+'/'+String(pRaw.getUTCMonth()+1).padStart(2,'0');
+    // Use LOCAL time — SheetJS creates Excel dates as local midnight
+    return pRaw.getFullYear()+'/'+String(pRaw.getMonth()+1).padStart(2,'0');
   }
   if(typeof pRaw==='number'){
-    // Excel date serial — use XLSX.SSF if available, otherwise manual calculation
     try{
       const dt=XLSX.SSF.parse_date_code(pRaw);
       if(dt&&dt.y)return dt.y+'/'+String(dt.m).padStart(2,'0');
     }catch(e){}
-    // Manual fallback: Excel epoch = 1899-12-30
+    // Manual fallback: Excel epoch = 1899-12-30 UTC
     const d=new Date(Math.round((pRaw-25569)*86400*1000));
     return d.getUTCFullYear()+'/'+String(d.getUTCMonth()+1).padStart(2,'0');
   }
@@ -461,18 +459,22 @@ async function loadExcelAndInit(){
     const resp=await fetch('IQYs/Data.xlsx');
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const buf=await resp.arrayBuffer();
-    // cellDates:true → date cells become JS Date objects (parsePeriod handles them robustly)
+    // cellDates:true → Estructura date cells become JS Date objects
     const wb=XLSX.read(buf,{type:'array',cellDates:true});
 
-    // Parse a data sheet (ORG/DES/TEND) using row 5 identifiers; data from row 7
+    /**
+     * Parse ORG/DES/TEND sheets.
+     * These have 4 content rows (INEGI header etc.) before the SCIAN ID row,
+     * so SheetJS array indices are fixed: scianRow=4, dataStart=6.
+     * Date column is stored as TEXT "1993/01" → parsePeriod handles it.
+     */
     function parseSheetByScian(sheetName){
       const ws=wb.Sheets[sheetName];
       if(!ws)return null;
-      // raw:true so Date objects and numbers come through unformatted
       const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
       if(data.length<7)return null;
 
-      const idRow=data[4]; // Row 5 (0-indexed)
+      const idRow=data[4]; // SCIAN IDs always at JS index 4 for ORG/DES/TEND
       const scianToCol={};
       for(let c=2;c<idRow.length;c++){
         const scian=mapScianId(idRow[c]);
@@ -492,7 +494,7 @@ async function loadExcelAndInit(){
           colByScian[scian].push((v!=null&&v!==''&&typeof v!=='boolean')?+v:null);
         });
       }
-      console.log(sheetName+': '+periods.length+' periods, first='+periods[0]+', last='+periods[periods.length-1]);
+      console.log(sheetName+': '+periods.length+' periods | '+periods[0]+' → '+periods[periods.length-1]);
       return{periods,colByScian};
     }
 
@@ -514,18 +516,15 @@ async function loadExcelAndInit(){
 
     parseEstructura(wb);
 
-    // ── Verification: confirm ESTRUCTURA periods align with RAW ──────────────
-    const estPeriods=ESTRUCTURA?.periods||[];
-    const rawPeriods=RAW.periods;
-    if(estPeriods.length>0){
-      const sampleRaw=rawPeriods[rawPeriods.length-1];
-      const sampleEst=estPeriods[estPeriods.length-1];
-      const alignOk=sampleRaw===sampleEst;
-      console.log(`Period alignment check: RAW[-1]="${sampleRaw}" | ESTRUCTURA[-1]="${sampleEst}" | match=${alignOk}`);
-      if(!alignOk)console.warn('⚠ Period mismatch — structure lookups will fail!');
-    }else{
-      console.warn('⚠ ESTRUCTURA empty — using synthetic weights');
-    }
+    // ── Alignment check ─────────────────────────────────────────────────────
+    ['ESTRUCTURA','ESTRUCTURA_D'].forEach(name=>{
+      const est=name==='ESTRUCTURA'?ESTRUCTURA:ESTRUCTURA_D;
+      if(!est||!est.periods.length){console.warn(name+': EMPTY — synthetic weights will be used');return;}
+      const last=est.periods[est.periods.length-1];
+      const rawLast=RAW.periods[RAW.periods.length-1];
+      const ok=last===rawLast;
+      console.log(name+': '+est.periods.length+' periods | '+est.periods[0]+' → '+last+' | align='+(ok?'✓':'✗ MISMATCH with RAW '+rawLast));
+    });
 
     document.getElementById('loadingOverlay').style.display='none';
     initDashboard();
@@ -535,29 +534,42 @@ async function loadExcelAndInit(){
   }
 }
 
-// Parse a structure sheet using row 5 identifiers — same parsePeriod as data sheets
+/**
+ * Parse a structure sheet (Estructura_O or Estructura_D).
+ * These sheets have 4 BLANK rows before the SCIAN ID row — SheetJS skips blank
+ * rows, so JS array indices differ from ORG/DES/TEND.
+ * We detect the SCIAN ID row dynamically: it's the first row that contains the
+ * value 1 (IMAI identifier) in any column from index 2 onward.
+ * Data starts 2 rows after the SCIAN ID row (SCIAN row → header row → data).
+ */
 function parseEstructuraSheet(wb,sheetName){
   const ws=wb.Sheets[sheetName];
   if(!ws)return null;
-  // raw:true so Date objects come through (workbook read with cellDates:true)
   const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
-  if(data.length<7)return null;
+  if(data.length<3)return null;
 
-  const idRow=data[4]; // Row 5
+  // Find SCIAN ID row: first row where any col >= 2 has the value 1 (IMAI)
+  let scianRowIdx=-1;
+  for(let i=0;i<Math.min(12,data.length);i++){
+    if(data[i]&&data[i].slice(2).includes(1)){scianRowIdx=i;break;}
+  }
+  if(scianRowIdx<0){console.warn(sheetName+': SCIAN ID row not found');return null;}
+
+  const idRow=data[scianRowIdx];
   const scianToCol={};
   for(let c=2;c<idRow.length;c++){
     const scian=mapScianId(idRow[c]);
     if(scian)scianToCol[scian]=c;
   }
 
+  const dataStart=scianRowIdx+2; // skip SCIAN row + header row
   const result={periods:[],data:{}};
   Object.keys(scianToCol).forEach(s=>{result.data[s]=[];});
 
-  for(let r=6;r<data.length;r++){
+  for(let r=dataStart;r<data.length;r++){
     const row=data[r];
     const period=parsePeriod(row[0]);
     if(!period)continue;
-
     result.periods.push(period);
     Object.entries(scianToCol).forEach(([scian,col])=>{
       const v=row[col];
@@ -569,7 +581,7 @@ function parseEstructuraSheet(wb,sheetName){
       result.data[scian].push(numVal);
     });
   }
-  console.log(sheetName+': '+result.periods.length+' periods, first='+result.periods[0]+', last='+result.periods[result.periods.length-1]);
+  console.log(sheetName+': scianRow='+scianRowIdx+' | '+result.periods.length+' periods | '+result.periods[0]+' → '+result.periods[result.periods.length-1]);
   return result;
 }
 
