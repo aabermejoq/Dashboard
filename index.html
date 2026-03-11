@@ -352,6 +352,7 @@
 let RAW;           // {periods:[], series:{SCIAN:{name,scian,sector,org,des,tend}}}
 let ESTRUCTURA;    // {periods:[], data:{SCIAN:[]}}  — original structure
 let ESTRUCTURA_D;  // {periods:[], data:{SCIAN:[]}}  — desestacionalizada structure
+let PIB18;         // {SCIAN: weight}  — base year 2018 fixed weights from PIB18 sheet
 
 // Series definitions - hasDesOrig indicates if DES/TEND exist
 const SERIES_DEFS = [
@@ -513,6 +514,7 @@ async function loadExcelAndInit(){
     });
 
     parseEstructura(wb);
+    parsePIB18(wb);
 
     // ── Alignment check ─────────────────────────────────────────────────────
     ['ESTRUCTURA','ESTRUCTURA_D'].forEach(name=>{
@@ -581,6 +583,32 @@ function parseEstructuraSheet(wb,sheetName){
   }
   console.log(sheetName+': scianRow='+scianRowIdx+' | '+result.periods.length+' periods | '+result.periods[0]+' → '+result.periods[result.periods.length-1]);
   return result;
+}
+
+function parsePIB18(wb){
+  const ws=wb.Sheets['PIB18'];
+  if(!ws)return;
+  const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+  // Row index 2 has: col 0 = 2018 (year label), col 1+ = weights in same SCIAN order as Estructura_O
+  const weightRow=data[2];
+  if(!weightRow)return;
+  // Get SCIAN IDs from Estructura_O header row (col offset: Estructura_O col c → PIB18 col c-1)
+  const estWs=wb.Sheets['Estructura_O']||wb.Sheets['Estructura'];
+  if(!estWs)return;
+  const estData=XLSX.utils.sheet_to_json(estWs,{header:1,defval:null,raw:true});
+  let scianRowIdx=-1;
+  for(let i=0;i<Math.min(12,estData.length);i++){
+    if(estData[i]&&estData[i].slice(2).includes(1)){scianRowIdx=i;break;}
+  }
+  if(scianRowIdx<0)return;
+  const scianRow=estData[scianRowIdx];
+  PIB18={};
+  for(let c=2;c<scianRow.length;c++){
+    const scian=mapScianId(scianRow[c]);
+    if(!scian)continue;
+    const w=weightRow[c-1]; // PIB18 col = Estructura_O col - 1
+    if(w!=null&&typeof w==='number'&&w>0)PIB18[scian]=w;
+  }
 }
 
 function parseEstructura(wb){
@@ -1290,12 +1318,31 @@ function getEstructuraValue(scian,period,estObj){
   return est.data[scian][idx];
 }
 
-// Get structure weight at period: componente / total
+/// Get structure weight at period using the correct Laspeyres formula:
+// peso_i = (PIB_2018_i × índice_i_{t-k}) / (PIB_2018_padre × índice_padre_{t-k})
+// This guarantees additive contributions because Σ PIB_i × I_i_t = PIB_padre × I_padre_t
 function getStructureWeight(compScian,parentScian,period,estObj){
-  const compVal=getEstructuraValue(compScian,period,estObj);
-  const parentVal=getEstructuraValue(parentScian,period,estObj);
-  if(compVal==null||parentVal==null||parentVal===0)return null;
-  return compVal/parentVal;
+  const pibComp=PIB18&&PIB18[compScian];
+  const pibParent=PIB18&&PIB18[parentScian];
+  if(!pibComp||!pibParent){
+    // Fallback to Estructura ratio if PIB18 not available
+    const cv=getEstructuraValue(compScian,period,estObj);
+    const pv=getEstructuraValue(parentScian,period,estObj);
+    return(cv!=null&&pv!=null&&pv!==0)?cv/pv:null;
+  }
+  // Use raw series arrays (bypass rebase) for accurate weight computation
+  const compSeries=getSeries(compScian);
+  const parentSeries=getSeries(parentScian);
+  if(!compSeries||!parentSeries)return null;
+  const usesDes=(estObj===ESTRUCTURA_D);
+  const compArr=(usesDes&&compSeries.des)?compSeries.des:compSeries.org;
+  const parentArr=(usesDes&&parentSeries.des)?parentSeries.des:parentSeries.org||compSeries.org;
+  if(!compArr||!parentArr)return null;
+  const idx=RAW.periods.indexOf(period);
+  if(idx<0)return null;
+  const cv=compArr[idx],pv=parentArr[idx];
+  if(cv==null||pv==null||pv===0)return null;
+  return(pibComp*cv)/(pibParent*pv);
 }
 
 function buildContribuciones(){
@@ -1462,29 +1509,19 @@ function renderContribuciones(){
     const mainVA=(mainCur!=null&&mainPrev!=null&&mainPrev!==0)?((mainCur-mainPrev)/mainPrev)*100:null;
     mainVarAnual.push(mainVA);
 
-    // Pass 1: compute raw Laspeyres contributions (decimal)
-    const rawContribs={};
-    let sumRaw=0,allHaveData=true;
     allComponents.forEach(scian=>{
       const compSeries=getSeries(scian);
-      if(!compSeries){rawContribs[scian]=null;allHaveData=false;return;}
+      if(!compSeries){componentContribs[scian].push(null);return;}
       const compKey=(serieKey==='des'&&compSeries.des)?'des':'org';
       const compArr=getVals(compSeries,compKey)||getVals(compSeries,'org');
-      if(!compArr){rawContribs[scian]=null;allHaveData=false;return;}
+      if(!compArr){componentContribs[scian].push(null);return;}
       const compCur=compArr[rawIdx];
       const compPrev=compArr[rawIdx-lag];
+      // Variación del componente en decimal
       const compVA=(compCur!=null&&compPrev!=null&&compPrev!==0)?(compCur-compPrev)/compPrev:null;
+      // Ponderador de Laspeyres: (PIB_2018_i × I_i_{t-k}) / (PIB_2018_padre × I_padre_{t-k})
       const peso=getStructureWeight(scian,contribMainIndicator,periodLag,estObj);
-      if(compVA!=null&&peso!=null){rawContribs[scian]=compVA*peso;sumRaw+=rawContribs[scian];}
-      else{rawContribs[scian]=null;allHaveData=false;}
-    });
-
-    // Pass 2: proportional normalization — scale so Σ contrib = mainVA exactly
-    // This corrects the chain-linking residual inherent in IMAI
-    const mainVADec=mainVA!=null?mainVA/100:null;
-    const scale=(allHaveData&&mainVADec!=null&&sumRaw!==0)?mainVADec/sumRaw:1;
-    allComponents.forEach(scian=>{
-      componentContribs[scian].push(rawContribs[scian]!=null?rawContribs[scian]*scale*100:null);
+      componentContribs[scian].push((compVA!=null&&peso!=null)?compVA*peso*100:null);
     });
   }
 
