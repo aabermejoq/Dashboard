@@ -771,8 +771,8 @@ function countConsecutiveMonths(arr,upToIdx,positive){
   for(let i=upToIdx;i>=1;i--){
     const v=calcVarMensM(arr,i);
     if(v==null)continue;
-    if(positive&&v>0.10)count++;
-    else if(!positive&&v<-0.10)count++;
+    if(positive&&v>0)count++;
+    else if(!positive&&v<0)count++;
     else break;
   }
   return count;
@@ -799,9 +799,8 @@ function getSignal(des,upToIdx){
   
   if(variations.length<3)return{label:'--',color:'#888',sub:'datos insuficientes'};
 
-  const U=0.10;
-  const pos=v=>v>U;
-  const neg=v=>v<-U;
+  const pos=v=>v>0;
+  const neg=v=>v<0;
 
   const last6=variations.slice(-6);
   const last3=variations.slice(-3);
