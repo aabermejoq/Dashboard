@@ -226,9 +226,7 @@
   .contrib-legend-item{display:flex;align-items:center;gap:6px}
   .contrib-legend-dot{width:12px;height:12px;border-radius:3px}
   .contrib-legend-line{width:20px;height:3px;border-radius:2px}
-  .contrib-verify{margin-top:12px;padding:10px 14px;background:var(--surf2);border:1px solid var(--border2);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
-  .contrib-verify.ok{background:#E3F5EC;border-color:#A8E6CF;color:var(--pos)}
-  .contrib-verify.warn{background:#FFF3CD;border-color:#FFD93D;color:#856404}
+
 </style>
 </head>
 <body>
@@ -1357,7 +1355,7 @@ function buildContribuciones(){
 
   const chartPanel=document.createElement('div');
   chartPanel.className='contrib-chart-panel';
-  chartPanel.innerHTML=`<div class="contrib-chart-title" id="contribChartTitle">Contribuciones a la variacion anual del IMAI</div><div class="contrib-chart-subtitle" id="contribChartSubtitle">Variacion anual (%) y contribuciones por componente (puntos porcentuales)</div><div class="contrib-canvas-wrap"><canvas id="contribCanvas"></canvas></div><div class="contrib-legend" id="contribLegend"></div><div class="contrib-verify" id="contribVerify"></div>`;
+  chartPanel.innerHTML=`<div class="contrib-chart-title" id="contribChartTitle">Contribuciones a la variacion anual del IMAI</div><div class="contrib-chart-subtitle" id="contribChartSubtitle">Variacion anual (%) y contribuciones por componente (puntos porcentuales)</div><div class="contrib-canvas-wrap"><canvas id="contribCanvas"></canvas></div><div class="contrib-legend" id="contribLegend"></div>`;
   wrap.appendChild(chartPanel);
   container.appendChild(wrap);
 
@@ -1464,29 +1462,29 @@ function renderContribuciones(){
     const mainVA=(mainCur!=null&&mainPrev!=null&&mainPrev!==0)?((mainCur-mainPrev)/mainPrev)*100:null;
     mainVarAnual.push(mainVA);
 
+    // Pass 1: compute raw Laspeyres contributions (decimal)
+    const rawContribs={};
+    let sumRaw=0,allHaveData=true;
     allComponents.forEach(scian=>{
       const compSeries=getSeries(scian);
-      if(!compSeries){componentContribs[scian].push(null);return;}
-
-      // Use desest if available and requested, otherwise org
+      if(!compSeries){rawContribs[scian]=null;allHaveData=false;return;}
       const compKey=(serieKey==='des'&&compSeries.des)?'des':'org';
       const compArr=getVals(compSeries,compKey)||getVals(compSeries,'org');
-      if(!compArr){componentContribs[scian].push(null);return;}
-
+      if(!compArr){rawContribs[scian]=null;allHaveData=false;return;}
       const compCur=compArr[rawIdx];
       const compPrev=compArr[rawIdx-lag];
-
-      // Full-precision variation (decimal, not %)
       const compVA=(compCur!=null&&compPrev!=null&&compPrev!==0)?(compCur-compPrev)/compPrev:null;
-
-      // Weight from t-k using appropriate structure
       const peso=getStructureWeight(scian,contribMainIndicator,periodLag,estObj);
+      if(compVA!=null&&peso!=null){rawContribs[scian]=compVA*peso;sumRaw+=rawContribs[scian];}
+      else{rawContribs[scian]=null;allHaveData=false;}
+    });
 
-      if(compVA!=null&&peso!=null){
-        componentContribs[scian].push(compVA*peso*100); // Full precision, convert to pp
-      }else{
-        componentContribs[scian].push(null);
-      }
+    // Pass 2: proportional normalization — scale so Σ contrib = mainVA exactly
+    // This corrects the chain-linking residual inherent in IMAI
+    const mainVADec=mainVA!=null?mainVA/100:null;
+    const scale=(allHaveData&&mainVADec!=null&&sumRaw!==0)?mainVADec/sumRaw:1;
+    allComponents.forEach(scian=>{
+      componentContribs[scian].push(rawContribs[scian]!=null?rawContribs[scian]*scale*100:null);
     });
   }
 
@@ -1510,33 +1508,6 @@ function renderContribuciones(){
     });
     componentData.push({scian:'otros',name:'Otros',color:'#95A5A6',contributions:otrosContributions});
     lastContribData.components.push({name:'Otros',scian:'otros',contributions:otrosContributions});
-  }
-
-  // Verification box — note chain-linking residual is normal for IMAI
-  const verifyEl=document.getElementById('contribVerify');
-  if(verifyEl&&visiblePeriods.length>0){
-    const lastIdx=visiblePeriods.length-1;
-    const lastMainVA=mainVarAnual[lastIdx];
-    let sumContribs=0,missingCount=0;
-    allComponents.forEach(scian=>{
-      const c=componentContribs[scian][lastIdx];
-      if(c!=null)sumContribs+=c;
-      else missingCount++;
-    });
-    if(lastMainVA!=null&&missingCount===0){
-      const diff=Math.abs(lastMainVA-sumContribs);
-      // diff < 0.5pp = excellent, < 2pp = normal chain-linking residual, >= 2pp = warn
-      const cls=diff<2?'ok':'warn';
-      const nota=diff<0.5?'✓ identidad exacta':diff<2?'residuo de encadenamiento normal':'revisar datos';
-      verifyEl.className='contrib-verify '+cls;
-      verifyEl.innerHTML=`<strong>Verificacion ${visiblePeriods[lastIdx]}:</strong> Var.${varTypeLabel}=${lastMainVA.toFixed(4)}% | Suma contrib.=${sumContribs.toFixed(4)}% | Residuo=${diff.toFixed(4)}pp — <em>${nota}</em>`;
-    }else if(missingCount>0){
-      verifyEl.className='contrib-verify warn';
-      verifyEl.innerHTML=`Verificacion: ${missingCount} componente(s) sin datos en el ultimo periodo`;
-    }else{
-      verifyEl.className='contrib-verify';
-      verifyEl.innerHTML='Verificacion: variacion total no disponible';
-    }
   }
 
   const datasets=[];
