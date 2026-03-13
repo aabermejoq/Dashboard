@@ -474,17 +474,36 @@ async function loadExcelAndInit(){
       const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
       if(data.length<7)return null;
 
-      const idRow=data[4]; // SCIAN IDs always at JS index 4 for ORG/DES/TEND
+      const idRow=data[4]; // SCIAN IDs at JS index 4 (fila 5) in old BIE format
       const scianToCol={};
-      for(let c=2;c<idRow.length;c++){
-        const scian=mapScianId(idRow[c]);
-        if(scian)scianToCol[scian]=c;
+      const hasScianRow=idRow&&idRow.slice(2).some(v=>v!=null&&!isNaN(+String(v).trim())&&String(v).trim()!=='');
+      if(hasScianRow){
+        for(let c=2;c<idRow.length;c++){
+          const scian=mapScianId(idRow[c]);
+          if(scian)scianToCol[scian]=c;
+        }
+      }else{
+        // Newer BIE exports omit the SCIAN ID row; use hardcoded column order
+        const FB={
+          'ORG': ['IMAI','21','211','212','213','22','221','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'],
+          'DES': ['IMAI','21','211','212','213','22','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'],
+          'TEND':['IMAI','21','211','212','213','22','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339']
+        };
+        (FB[sheetName]||FB['DES']).forEach((s,i)=>{scianToCol[s]=i+2;});
+      }
+
+      // Find first data row dynamically when SCIAN row may be absent
+      let dataStart=6;
+      if(!hasScianRow){
+        for(let r=4;r<Math.min(12,data.length);r++){
+          if(data[r]&&parsePeriod(data[r][0])!==null){dataStart=r;break;}
+        }
       }
 
       const periods=[],colByScian={};
       Object.keys(scianToCol).forEach(s=>{colByScian[s]=[];});
 
-      for(let r=6;r<data.length;r++){
+      for(let r=dataStart;r<data.length;r++){
         const row=data[r];
         const period=parsePeriod(row[0]);
         if(!period)continue;
@@ -554,16 +573,26 @@ function parseEstructuraSheet(wb,sheetName){
   for(let i=0;i<Math.min(12,data.length);i++){
     if(data[i]&&data[i].slice(2).includes(1)){scianRowIdx=i;break;}
   }
-  if(scianRowIdx<0){console.warn(sheetName+': SCIAN ID row not found');return null;}
-
-  const idRow=data[scianRowIdx];
   const scianToCol={};
-  for(let c=2;c<idRow.length;c++){
-    const scian=mapScianId(idRow[c]);
-    if(scian)scianToCol[scian]=c;
+  let dataStart;
+  if(scianRowIdx>=0){
+    const idRow=data[scianRowIdx];
+    for(let c=2;c<idRow.length;c++){
+      const scian=mapScianId(idRow[c]);
+      if(scian)scianToCol[scian]=c;
+    }
+    dataStart=scianRowIdx+2; // skip SCIAN row + header row
+  }else{
+    // Newer BIE format: no SCIAN ID row; use hardcoded column order (Estructura_O-compatible)
+    const FB=['IMAI','21','211','212','213','22','221','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'];
+    FB.forEach((s,i)=>{scianToCol[s]=i+2;});
+    // Find first data row (col 0 parseable as a period)
+    dataStart=1;
+    for(let r=0;r<Math.min(5,data.length);r++){
+      if(data[r]&&parsePeriod(data[r][0])!==null){dataStart=r;break;}
+    }
   }
 
-  const dataStart=scianRowIdx+2; // skip SCIAN row + header row
   const result={periods:[],data:{}};
   Object.keys(scianToCol).forEach(s=>{result.data[s]=[];});
 
