@@ -456,7 +456,7 @@ function mapScianId(id){
 
 async function loadExcelAndInit(){
   try{
-    const resp=await fetch('IQYs/Data.xlsx');
+    const resp=await fetch('IQYs/Data.xlsx?v='+Date.now(),{cache:'no-store'});
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const buf=await resp.arrayBuffer();
     // cellDates:true → Estructura date cells become JS Date objects
