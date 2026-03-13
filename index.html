@@ -31,24 +31,24 @@
   .base-indicator{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);padding:4px 10px;border-radius:5px;white-space:nowrap}
 
   .ctrl-panel{background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.06)}
-  .ctrl-row{display:flex;align-items:center;gap:0;padding:0 40px;border-bottom:1px solid var(--border2);min-height:62px;flex-wrap:wrap}
+  .ctrl-row{display:flex;align-items:center;gap:0;padding:0 40px;border-bottom:1px solid var(--border2);min-height:50px;flex-wrap:wrap}
   .ctrl-row:last-child{border-bottom:none}
-  .cg{display:flex;align-items:center;gap:10px;padding:14px 28px 14px 0;margin-right:28px;border-right:1px solid var(--border2);flex-shrink:0}
+  .cg{display:flex;align-items:center;gap:8px;padding:10px 20px 10px 0;margin-right:20px;border-right:1px solid var(--border2);flex-shrink:0}
   .cg:last-child{border-right:none;margin-right:0}
-  .cg-label{font-size:11px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;margin-right:8px}
+  .cg-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.9px;white-space:nowrap;margin-right:6px}
 
-  .pill-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);background:var(--surf2);box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)}
-  .pill-btn{background:transparent;border:none;color:var(--text2);padding:9px 20px;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.18s ease;border-right:1px solid var(--border);white-space:nowrap;letter-spacing:0.1px}
+  .pill-group{display:flex;gap:0;border-radius:7px;overflow:hidden;border:1.5px solid var(--border);background:var(--surf2);box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)}
+  .pill-btn{background:transparent;border:none;color:var(--text2);padding:6px 14px;cursor:pointer;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.15s ease;border-right:1px solid var(--border);white-space:nowrap}
   .pill-btn:last-child{border-right:none}
-  .pill-btn:hover{background:rgba(0,26,78,0.08);color:var(--navy);font-weight:600}
-  .pill-btn.active{background:var(--navy);color:white;font-weight:700;box-shadow:0 2px 8px rgba(0,26,78,0.3);letter-spacing:0.2px}
+  .pill-btn:hover{background:rgba(0,26,78,0.07);color:var(--navy);font-weight:600}
+  .pill-btn.active{background:var(--navy);color:white;font-weight:600;box-shadow:0 1px 6px rgba(0,26,78,0.25)}
 
-  .ctrl-row select{border:1px solid var(--border);background:var(--surf2);color:var(--text);padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;border-radius:6px;cursor:pointer;outline:none}
-  .ctrl-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap;background:var(--surf2);padding:6px 12px;border-radius:6px;border:1px solid var(--border2)}
-  .ctrl-arrow{color:var(--text4);font-size:14px;margin:0 6px}
+  .ctrl-row select{border:1px solid var(--border);background:var(--surf2);color:var(--text);padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:6px;cursor:pointer;outline:none}
+  .ctrl-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap;background:var(--surf2);padding:5px 11px;border-radius:6px;border:1px solid var(--border2)}
+  .ctrl-arrow{color:var(--text4);font-size:13px;margin:0 4px}
 
-  .action-btn{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:11px 22px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;transition:all 0.18s ease;white-space:nowrap;box-shadow:0 2px 8px rgba(0,26,78,0.2)}
-  .action-btn:hover{background:linear-gradient(135deg,var(--navy2),#003590);box-shadow:0 4px 12px rgba(0,26,78,0.3);transform:translateY(-1px)}
+  .action-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s ease;white-space:nowrap;box-shadow:0 2px 6px rgba(0,26,78,0.2)}
+  .action-btn:hover{background:linear-gradient(135deg,var(--navy2),#003590);box-shadow:0 3px 10px rgba(0,26,78,0.3);transform:translateY(-1px)}
 
   .main{padding:28px 40px 56px;max-width:1900px;margin:0 auto}
 
@@ -270,17 +270,6 @@
         <button class="pill-btn" data-grp="mode" onclick="setMode('niveles',this)">Niveles</button>
       </div>
     </div>
-    <div class="cg" style="margin-left:auto;border-right:none;padding-right:0">
-      <div class="ctrl-info" id="rangeInfo"></div>
-    </div>
-  </div>
-  <div class="ctrl-row">
-    <div class="cg">
-      <span class="cg-label">Periodo</span>
-      <select id="selFrom"></select>
-      <span class="ctrl-arrow">→</span>
-      <select id="selTo"></select>
-    </div>
     <div class="cg" id="graficasScaleCg" style="display:none">
       <span class="cg-label">Escala</span>
       <div class="pill-group">
@@ -289,8 +278,13 @@
       </div>
     </div>
     <div class="cg" style="margin-left:auto;border-right:none;padding-right:0">
-      <button class="action-btn" onclick="openRebase()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
+      <span class="cg-label" style="margin-right:6px">Periodo</span>
+      <select id="selFrom"></select>
+      <span class="ctrl-arrow">→</span>
+      <select id="selTo"></select>
+      <div class="ctrl-info" id="rangeInfo" style="margin-left:14px"></div>
+      <button class="action-btn" style="margin-left:14px" onclick="openRebase()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
         Cambiar base
       </button>
     </div>
@@ -568,27 +562,33 @@ function parseEstructuraSheet(wb,sheetName){
   const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
   if(data.length<3)return null;
 
-  // Find SCIAN ID row: first row where any col >= 2 has the value 1 (IMAI)
+  // Find SCIAN ID row: contains IMAI (value 1 or '1') and no parseable period in col 0
   let scianRowIdx=-1;
   for(let i=0;i<Math.min(12,data.length);i++){
-    if(data[i]&&data[i].slice(2).includes(1)){scianRowIdx=i;break;}
+    const row=data[i];
+    if(!row)continue;
+    if(row.some(v=>v===1||v==='1')&&parsePeriod(row[0])===null){scianRowIdx=i;break;}
   }
   const scianToCol={};
   let dataStart;
   if(scianRowIdx>=0){
     const idRow=data[scianRowIdx];
-    for(let c=2;c<idRow.length;c++){
+    // New BIE format: codes start at col 0, data offset by +2 (period+area before values)
+    // Old format: codes start at col 2, no offset needed
+    const colOffset=mapScianId(idRow[0])!==null?2:0;
+    for(let c=0;c<idRow.length;c++){
       const scian=mapScianId(idRow[c]);
-      if(scian)scianToCol[scian]=c;
+      if(scian)scianToCol[scian]=c+colOffset;
     }
     dataStart=scianRowIdx+2; // skip SCIAN row + header row
   }else{
-    // Newer BIE format: no SCIAN ID row; use hardcoded column order (Estructura_O-compatible)
-    const FB=['IMAI','21','211','212','213','22','221','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'];
+    // Fallback: hardcoded column order per sheet type
+    const FB_O=['IMAI','21','211','212','213','22','221','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'];
+    const FB_D=['IMAI','21','211','212','213','22','23','236','237','238','31-33','311','312','313','314','315','316','321','322','323','324','325','326','327','331','332','333','334','335','336','337','339'];
+    const FB=sheetName==='Estructura_D'?FB_D:FB_O;
     FB.forEach((s,i)=>{scianToCol[s]=i+2;});
-    // Find first data row (col 0 parseable as a period)
     dataStart=1;
-    for(let r=0;r<Math.min(5,data.length);r++){
+    for(let r=0;r<Math.min(8,data.length);r++){
       if(data[r]&&parsePeriod(data[r][0])!==null){dataStart=r;break;}
     }
   }
@@ -628,15 +628,19 @@ function parsePIB18(wb){
   const estData=XLSX.utils.sheet_to_json(estWs,{header:1,defval:null,raw:true});
   let scianRowIdx=-1;
   for(let i=0;i<Math.min(12,estData.length);i++){
-    if(estData[i]&&estData[i].slice(2).includes(1)){scianRowIdx=i;break;}
+    const row=estData[i];
+    if(!row)continue;
+    if(row.some(v=>v===1||v==='1')&&parsePeriod(row[0])===null){scianRowIdx=i;break;}
   }
   if(scianRowIdx<0)return;
   const scianRow=estData[scianRowIdx];
+  const colOffset=mapScianId(scianRow[0])!==null?2:0;
   PIB18={};
-  for(let c=2;c<scianRow.length;c++){
+  for(let c=0;c<scianRow.length;c++){
     const scian=mapScianId(scianRow[c]);
     if(!scian)continue;
-    const w=weightRow[c-1]; // PIB18 col = Estructura_O col - 1
+    // PIB18 col = Estructura_O data col - 1 = (c + colOffset) - 1
+    const w=weightRow[(c+colOffset)-1];
     if(w!=null&&typeof w==='number'&&w>0)PIB18[scian]=w;
   }
 }
@@ -675,7 +679,7 @@ function createSyntheticEstructura(){
 // UTILITY FUNCTIONS
 // ══════════════════════════════════════════════════════════════════════════════
 const fmt=v=>(v!=null&&isFinite(v))?v.toFixed(1):'N/D';
-const fmtP=v=>(v!=null&&isFinite(v))?((v>=0?'+':'')+v.toFixed(2)+'%'):'N/D';
+const fmtP=v=>(v!=null&&isFinite(v))?((v>=0?'+':'')+v.toFixed(1)+'%'):'N/D';
 const chgCls=v=>v==null?'neu':v>0.05?'pos':v<-0.05?'neg':'neu';
 
 function getSeries(scian){return RAW.series[scian]||null;}
