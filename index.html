@@ -30,24 +30,40 @@
   .header-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,0.45);white-space:nowrap}
   .base-indicator{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);padding:4px 10px;border-radius:5px;white-space:nowrap}
 
-  .ctrl-panel{background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.06)}
-  .ctrl-row{display:flex;align-items:center;gap:0;padding:0 40px;border-bottom:1px solid var(--border2);min-height:50px;flex-wrap:wrap}
-  .ctrl-row:last-child{border-bottom:none}
-  .cg{display:flex;align-items:center;gap:8px;padding:10px 20px 10px 0;margin-right:20px;border-right:1px solid var(--border2);flex-shrink:0}
-  .cg:last-child{border-right:none;margin-right:0}
-  .cg-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.9px;white-space:nowrap;margin-right:6px}
+  .ctrl-panel{background:var(--surface);border-bottom:2px solid var(--navy);box-shadow:0 3px 14px rgba(0,26,78,0.1)}
 
-  .pill-group{display:flex;gap:0;border-radius:7px;overflow:hidden;border:1.5px solid var(--border);background:var(--surf2);box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)}
-  .pill-btn{background:transparent;border:none;color:var(--text2);padding:6px 14px;cursor:pointer;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.15s ease;border-right:1px solid var(--border);white-space:nowrap}
-  .pill-btn:last-child{border-right:none}
-  .pill-btn:hover{background:rgba(0,26,78,0.07);color:var(--navy);font-weight:600}
-  .pill-btn.active{background:var(--navy);color:white;font-weight:600;box-shadow:0 1px 6px rgba(0,26,78,0.25)}
+  /* Row 1: view tabs + filter chips */
+  .ctrl-row-main{display:flex;align-items:stretch;padding:0 40px;min-height:46px;flex-wrap:wrap}
 
-  .ctrl-row select{border:1px solid var(--border);background:var(--surf2);color:var(--text);padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:6px;cursor:pointer;outline:none}
-  .ctrl-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap;background:var(--surf2);padding:5px 11px;border-radius:6px;border:1px solid var(--border2)}
-  .ctrl-arrow{color:var(--text4);font-size:13px;margin:0 4px}
+  /* View tabs — premium underline style */
+  .view-tab-group{display:flex;align-items:stretch;margin-right:4px}
+  .view-tab{background:transparent;border:none;color:var(--text3);padding:0 16px;cursor:pointer;font-size:12.5px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.15s;position:relative;white-space:nowrap;display:flex;align-items:center;gap:7px}
+  .view-tab::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--border);transition:all 0.15s;flex-shrink:0}
+  .view-tab:hover{color:var(--navy2)}
+  .view-tab:hover::before{background:var(--navy-lt)}
+  .view-tab.active{color:var(--navy);font-weight:700}
+  .view-tab.active::before{background:var(--navy)}
+  .view-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--navy);border-radius:2px 2px 0 0}
 
-  .action-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s ease;white-space:nowrap;box-shadow:0 2px 6px rgba(0,26,78,0.2)}
+  /* Vertical separator */
+  .ctrl-sep{width:1px;background:var(--border2);align-self:stretch;margin:8px 14px;flex-shrink:0}
+
+  /* Compact chip groups for Frecuencia / Mostrar / Escala */
+  .ctrl-chip-label{font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.9px;white-space:nowrap;margin-right:5px}
+  .ctrl-chip-group{display:flex;gap:2px;align-items:center;transition:opacity 0.2s,filter 0.2s}
+  .ctrl-chip-group.freq-disabled{opacity:0.28;pointer-events:none;filter:grayscale(0.6)}
+  .ctrl-chip{background:transparent;border:1px solid transparent;color:var(--text3);padding:5px 10px;cursor:pointer;font-size:11px;font-weight:500;font-family:'Inter',sans-serif;transition:all 0.12s;border-radius:6px;white-space:nowrap}
+  .ctrl-chip:hover{background:var(--surf2);color:var(--navy);border-color:var(--border2)}
+  .ctrl-chip.active{background:var(--navy);color:white;border-color:var(--navy);font-weight:600;box-shadow:0 1px 5px rgba(0,26,78,0.25)}
+
+  /* Row 2: period selectors */
+  .ctrl-period-row{display:flex;align-items:center;padding:0 40px;min-height:38px;background:linear-gradient(180deg,var(--surf2),var(--surface));border-top:1px solid var(--border2);gap:10px}
+  .ctrl-period-row select{border:1px solid var(--border);background:var(--surface);color:var(--text);padding:5px 9px;font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:6px;cursor:pointer;outline:none;transition:border-color 0.15s}
+  .ctrl-period-row select:hover{border-color:var(--navy-lt)}
+  .ctrl-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap;background:var(--surf3);padding:4px 10px;border-radius:6px;border:1px solid var(--border2)}
+  .ctrl-arrow{color:var(--text4);font-size:13px;margin:0 2px}
+
+  .action-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:none;color:white;padding:7px 16px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s ease;white-space:nowrap;box-shadow:0 2px 6px rgba(0,26,78,0.2)}
   .action-btn:hover{background:linear-gradient(135deg,var(--navy2),#003590);box-shadow:0 3px 10px rgba(0,26,78,0.3);transform:translateY(-1px)}
 
   .main{padding:28px 40px 56px;max-width:1900px;margin:0 auto}
@@ -245,45 +261,45 @@
 </div>
 
 <div class="ctrl-panel">
-  <div class="ctrl-row">
-    <div class="cg">
-      <span class="cg-label">Vista</span>
-      <div class="pill-group">
-        <button class="pill-btn active" data-grp="view" onclick="setView('graficas',this)">Graficas</button>
-        <button class="pill-btn" data-grp="view" onclick="setView('tablas',this)">Tablas</button>
-        <button class="pill-btn" data-grp="view" onclick="setView('mensajes',this)">Mensajes</button>
-        <button class="pill-btn" data-grp="view" onclick="setView('contribuciones',this)">Contribuciones</button>
+  <!-- Row 1: view tabs + filter chips -->
+  <div class="ctrl-row-main">
+    <div class="view-tab-group">
+      <button class="view-tab active" data-grp="view" onclick="setView('graficas',this)">Gráficas</button>
+      <button class="view-tab" data-grp="view" onclick="setView('tablas',this)">Tablas</button>
+      <button class="view-tab" data-grp="view" onclick="setView('mensajes',this)">Mensajes</button>
+      <button class="view-tab" data-grp="view" onclick="setView('contribuciones',this)">Contribuciones</button>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-chip-label">Frecuencia</span>
+    <div class="ctrl-chip-group" id="freqChipGroup">
+      <button class="ctrl-chip active" data-grp="freq" onclick="setFreq('M',this)">Mensual</button>
+      <button class="ctrl-chip" data-grp="freq" onclick="setFreq('Q',this)">Trimestral</button>
+      <button class="ctrl-chip" data-grp="freq" onclick="setFreq('A',this)">Anual</button>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-chip-label">Mostrar</span>
+    <div class="ctrl-chip-group">
+      <button class="ctrl-chip active" data-grp="mode" onclick="setMode('variaciones',this)">Variaciones</button>
+      <button class="ctrl-chip" data-grp="mode" onclick="setMode('niveles',this)">Niveles</button>
+    </div>
+    <div id="graficasScaleCg" style="display:none;align-items:center">
+      <div class="ctrl-sep"></div>
+      <span class="ctrl-chip-label">Escala</span>
+      <div class="ctrl-chip-group">
+        <button class="ctrl-chip active" id="gScaleAuto" onclick="setGraficasScale('auto',this)">Acotada</button>
+        <button class="ctrl-chip" id="gScaleFull" onclick="setGraficasScale('full',this)">Completa</button>
       </div>
     </div>
-    <div class="cg">
-      <span class="cg-label">Frecuencia</span>
-      <div class="pill-group">
-        <button class="pill-btn active" data-grp="freq" onclick="setFreq('M',this)">Mensual</button>
-        <button class="pill-btn" data-grp="freq" onclick="setFreq('Q',this)">Trimestral</button>
-        <button class="pill-btn" data-grp="freq" onclick="setFreq('A',this)">Anual</button>
-      </div>
-    </div>
-    <div class="cg">
-      <span class="cg-label">Mostrar</span>
-      <div class="pill-group">
-        <button class="pill-btn active" data-grp="mode" onclick="setMode('variaciones',this)">Variaciones</button>
-        <button class="pill-btn" data-grp="mode" onclick="setMode('niveles',this)">Niveles</button>
-      </div>
-    </div>
-    <div class="cg" id="graficasScaleCg" style="display:none">
-      <span class="cg-label">Escala</span>
-      <div class="pill-group">
-        <button class="pill-btn active" id="gScaleAuto" onclick="setGraficasScale('auto',this)">Acotada</button>
-        <button class="pill-btn" id="gScaleFull" onclick="setGraficasScale('full',this)">Completa</button>
-      </div>
-    </div>
-    <div class="cg" style="margin-left:auto;border-right:none;padding-right:0">
-      <span class="cg-label" style="margin-right:6px">Periodo</span>
-      <select id="selFrom"></select>
-      <span class="ctrl-arrow">→</span>
-      <select id="selTo"></select>
-      <div class="ctrl-info" id="rangeInfo" style="margin-left:14px"></div>
-      <button class="action-btn" style="margin-left:14px" onclick="openRebase()">
+  </div>
+  <!-- Row 2: period selectors + action -->
+  <div class="ctrl-period-row">
+    <span class="ctrl-chip-label" style="margin-right:4px">Periodo</span>
+    <select id="selFrom"></select>
+    <span class="ctrl-arrow">→</span>
+    <select id="selTo"></select>
+    <div class="ctrl-info" id="rangeInfo"></div>
+    <div style="margin-left:auto">
+      <button class="action-btn" onclick="openRebase()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
         Cambiar base
       </button>
@@ -980,7 +996,7 @@ selFrom.addEventListener('change',()=>{fromIdx=+selFrom.value;redrawAll();});
 selTo.addEventListener('change',()=>{toIdx=+selTo.value;redrawAll();});
 
 function setFreq(f,btn){document.querySelectorAll('[data-grp="freq"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFreq=f;redrawAll();}
-function setView(v,btn){document.querySelectorAll('[data-grp="view"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=v;const scaleCg=document.getElementById('graficasScaleCg');if(scaleCg)scaleCg.style.display=(v==='graficas')?'flex':'none';redrawAll();}
+function setView(v,btn){document.querySelectorAll('[data-grp="view"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=v;const scaleCg=document.getElementById('graficasScaleCg');if(scaleCg)scaleCg.style.display=(v==='graficas')?'flex':'none';const freqGrp=document.getElementById('freqChipGroup');if(freqGrp)freqGrp.classList.toggle('freq-disabled',v==='mensajes'||v==='contribuciones');redrawAll();}
 function setMode(m,btn){document.querySelectorAll('[data-grp="mode"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentMode=m;redrawAll();}
 function setGraficasScale(mode,btn){graficasScaleMode=mode;document.querySelectorAll('#gScaleAuto,#gScaleFull').forEach(b=>b.classList.remove('active'));btn.classList.add('active');redrawAll();}
 function updateInfo(){document.getElementById('rangeInfo').textContent=RAW.periods[fromIdx].replace('/','-')+' → '+RAW.periods[toIdx].replace('/','-')+' | '+(toIdx-fromIdx+1)+' obs.';}
@@ -1103,7 +1119,7 @@ function buildTable(container,seriesInSector){
       series.forEach(([lbl,arr,col])=>{
         if(!arr)return;
         rows+='<tr><td style="color:'+col+';font-weight:500">'+s.name+' <span style="opacity:.5;font-size:9px">['+s.scian+'] '+lbl+'</span></td>';
-        for(let i=0;i<aggP.length;i++){const v=arr[i];const cls=v==null?'':v>=0?'pos-cell':'neg-cell';rows+='<td class="'+cls+'">'+(v!=null?v.toFixed(2)+'%':'—')+'</td>';}
+        const decs=lbl==='Var.Anual'?1:2;for(let i=0;i<aggP.length;i++){const v=arr[i];const cls=v==null?'':v>=0?'pos-cell':'neg-cell';rows+='<td class="'+cls+'">'+(v!=null?v.toFixed(decs)+'%':'—')+'</td>';}
         rows+='</tr>';
       });
     }
