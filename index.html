@@ -1632,12 +1632,12 @@ function renderContribuciones(){
     const mainAvgBase=avgArr(mainArr,bF,bT);
     if(mainAvgBase==null||mainAvgBase===0)return;
 
-    // Barra 0: periodo base = referencia en 0
+    // Barra de referencia: periodo base = 0
     visiblePeriods.push(basePeriodLabel);
     mainVarAnual.push(0);
     allComponents.forEach(scian=>{componentContribs[scian].push(0);});
 
-    // Una barra por cada mes del periodo final
+    // Una barra por cada mes del periodo final vs el promedio base
     for(let rawIdx=eF;rawIdx<=eT&&rawIdx<=toIdx;rawIdx++){
       visiblePeriods.push(RAW.periods[rawIdx].replace('/','-'));
       const mainCur=mainArr[rawIdx];
@@ -1648,8 +1648,8 @@ function renderContribuciones(){
         const compKey=(serieKey==='des'&&compSeries.des)?'des':'org';
         const compArr2=getVals(compSeries,compKey)||getVals(compSeries,'org');
         if(!compArr2){componentContribs[scian].push(null);return;}
-        const compCur=compArr2[rawIdx];
         const compAvgBase=avgArr(compArr2,bF,bT);
+        const compCur=compArr2[rawIdx];
         const compVA=(compCur!=null&&compAvgBase!=null&&compAvgBase!==0)?(compCur-compAvgBase)/compAvgBase:null;
         const peso=getStructureWeight(scian,contribMainIndicator,RAW.periods[bF],estObj);
         componentContribs[scian].push((compVA!=null&&peso!=null)?compVA*peso*100:null);
