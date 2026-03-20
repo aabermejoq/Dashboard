@@ -234,6 +234,10 @@
   .scale-btn.active{background:var(--navy);color:white}
   .contrib-download-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;border:1px solid var(--green2);background:white;color:var(--green2);font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s}
   .contrib-download-btn:hover{background:var(--green2);color:white}
+  .periodo-group{border:1px solid var(--border2);border-radius:8px;padding:10px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .periodo-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--navy);padding-bottom:6px;border-bottom:1px solid var(--border2)}
+  .periodo-group-selects{display:flex;gap:12px;align-items:flex-end}
+  .periodo-vs{font-size:18px;font-weight:700;color:var(--text4);align-self:center;padding:0 6px;flex-shrink:0}
   .contrib-chart-panel{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
   .contrib-chart-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
   .contrib-chart-subtitle{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:20px}
@@ -1441,10 +1445,21 @@ function buildContribuciones(){
       </div>
     </div>
     <div class="contrib-config-row" id="contribBaseRow" style="display:none">
-      <div class="contrib-config-group"><div class="contrib-config-label">Periodo base: desde</div><select class="contrib-select" id="contribBaseFromSelect"></select></div>
-      <div class="contrib-config-group"><div class="contrib-config-label">hasta</div><select class="contrib-select" id="contribBaseToSelect"></select></div>
-      <div class="contrib-config-group"><div class="contrib-config-label">Periodo final: desde</div><select class="contrib-select" id="contribEndFromSelect"></select></div>
-      <div class="contrib-config-group"><div class="contrib-config-label">hasta</div><select class="contrib-select" id="contribEndToSelect"></select></div>
+      <div class="periodo-group">
+        <div class="periodo-group-label">Periodo base (referencia = 0)</div>
+        <div class="periodo-group-selects">
+          <div class="contrib-config-group"><div class="contrib-config-label">Desde</div><select class="contrib-select" id="contribBaseFromSelect"></select></div>
+          <div class="contrib-config-group"><div class="contrib-config-label">Hasta</div><select class="contrib-select" id="contribBaseToSelect"></select></div>
+        </div>
+      </div>
+      <div class="periodo-vs">vs</div>
+      <div class="periodo-group">
+        <div class="periodo-group-label">Periodo final (comparacion)</div>
+        <div class="periodo-group-selects">
+          <div class="contrib-config-group"><div class="contrib-config-label">Desde</div><select class="contrib-select" id="contribEndFromSelect"></select></div>
+          <div class="contrib-config-group"><div class="contrib-config-label">Hasta</div><select class="contrib-select" id="contribEndToSelect"></select></div>
+        </div>
+      </div>
     </div>
     <div class="contrib-config-row">
       <div class="contrib-config-group" style="width:100%"><div class="contrib-config-label">Componentes (los no seleccionados se agrupan en "Otros")</div><div class="contrib-chips" id="contribChips"></div></div>
@@ -1606,7 +1621,7 @@ function renderContribuciones(){
   const mainArr=getVals(mainSeries,serieKey)||getVals(mainSeries,'org');
 
   if(contribVarType==='P'){
-    // Personalizada: comparacion entre promedio del periodo base y promedio del periodo final
+    // Personalizada: dos barras — base (=0) y final (variacion respecto al promedio base)
     const bFromIdx=RAW.periods.indexOf(contribBasePeriodFrom||contribBasePeriod);
     const bToIdx=RAW.periods.indexOf(contribBasePeriodTo||contribBasePeriodFrom||contribBasePeriod);
     const eFromIdx=RAW.periods.indexOf(contribEndPeriodFrom||RAW.periods[toIdx]);
@@ -1617,11 +1632,16 @@ function renderContribuciones(){
     const mainAvgBase=avgArr(mainArr,bF,bT);
     if(mainAvgBase==null||mainAvgBase===0)return;
 
-    for(let rawIdx=bF;rawIdx<=eT&&rawIdx<=toIdx;rawIdx++){
-      visiblePeriods.push(RAW.periods[rawIdx]);
+    // Barra 0: periodo base = referencia en 0
+    visiblePeriods.push(basePeriodLabel);
+    mainVarAnual.push(0);
+    allComponents.forEach(scian=>{componentContribs[scian].push(0);});
+
+    // Una barra por cada mes del periodo final
+    for(let rawIdx=eF;rawIdx<=eT&&rawIdx<=toIdx;rawIdx++){
+      visiblePeriods.push(RAW.periods[rawIdx].replace('/','-'));
       const mainCur=mainArr[rawIdx];
       mainVarAnual.push(mainCur!=null?((mainCur-mainAvgBase)/mainAvgBase)*100:null);
-
       allComponents.forEach(scian=>{
         const compSeries=getSeries(scian);
         if(!compSeries){componentContribs[scian].push(null);return;}
@@ -1631,7 +1651,6 @@ function renderContribuciones(){
         const compCur=compArr2[rawIdx];
         const compAvgBase=avgArr(compArr2,bF,bT);
         const compVA=(compCur!=null&&compAvgBase!=null&&compAvgBase!==0)?(compCur-compAvgBase)/compAvgBase:null;
-        // Peso fijo usando promedio del periodo base
         const peso=getStructureWeight(scian,contribMainIndicator,RAW.periods[bF],estObj);
         componentContribs[scian].push((compVA!=null&&peso!=null)?compVA*peso*100:null);
       });
